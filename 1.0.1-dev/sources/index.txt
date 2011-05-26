@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Swauth Python
-=============
+Swauth
+======
 
     Copyright (c) 2010-2011 OpenStack, LLC
 
