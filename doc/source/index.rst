@@ -19,17 +19,48 @@ Swauth Python
     https://code.launchpad.net/~gholt/swift/deswauth/+merge/62392 for the Swift
     side of things.
 
-.. toctree::
-   :maxdepth: 2
+Quick Install
+-------------
 
-   license
+1) Install Swauth with ``sudo python setup.py install`` or ``sudo python
+   setup.py develop`` or via whatever packaging system you may be using.
 
-General
--------
+2) Alter your proxy-server.conf pipeline to have swauth instead of tempauth:
+
+    Was::
+
+        [pipeline:main]
+        pipeline = catch_errors cache tempauth proxy-server
+
+    Change To::
+
+        [pipeline:main]
+        pipeline = catch_errors cache swauth proxy-server
+
+3) Add to your proxy-server.conf the section for the Swauth WSGI filter::
+
+    [filter:swauth]
+    use = egg:swauth#swauth
+    set log_name = swauth
+    super_admin_key = swauthkey
+
+4) Restart your proxy server ``swift-init proxy reload``.
+
+5) Initialize the Swauth backing store in Swift ``swauth-prep -K swauthkey``.
+
+6) Add an account/user ``swauth-add-user -A http://127.0.0.1:8080/auth/ -K
+   swauthkey -a test tester testing``.
+
+7) Ensure it works ``st -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K
+   testing stat -v``.
+
+Contents
+--------
 
 .. toctree::
     :maxdepth: 2
 
+    license
     swauth
     middleware
 
