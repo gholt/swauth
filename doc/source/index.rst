@@ -9,7 +9,7 @@ Swauth Python
     Copyright (c) 2010-2011 OpenStack, LLC
 
     An Auth Service for Swift as WSGI Middleware that uses Swift itself as a
-    backing store.
+    backing store. Sphinx-built docs at: http://gholt.github.com/swauth/
 
     See also https://github.com/khussein/keystone for the future standard
     OpenStack auth service.
