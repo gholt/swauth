@@ -1,0 +1,5 @@
+An Auth Service for Swift as WSGI Middleware that uses Swift itself as a
+backing store.
+
+See also https://github.com/khussein/keystone for the future standard OpenStack
+auth service.
