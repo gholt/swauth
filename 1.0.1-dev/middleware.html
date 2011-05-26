@@ -8,8 +8,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>swauth.middleware &mdash; Swauth v1.0.1.dev documentation</title>
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
@@ -19,9 +19,9 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
     <link rel="top" title="Swauth v1.0.1.dev documentation" href="index.html" />
     <link rel="prev" title="swauth" href="swauth.html" /> 
   </head>
@@ -51,7 +51,7 @@
 <span id="swauth-middleware"></span><span id="swauth-middleware-module"></span><h1>swauth.middleware<a class="headerlink" href="#module-swauth.middleware" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="swauth.middleware.Swauth">
-<em class="property">class </em><tt class="descclassname">swauth.middleware.</tt><tt class="descname">Swauth</tt><big>(</big><em>app</em>, <em>conf</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">swauth.middleware.</tt><tt class="descname">Swauth</tt><big>(</big><em>app</em>, <em>conf</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>Scalable authentication and authorization system that uses Swift as its
 backing store.</p>
@@ -69,14 +69,14 @@ backing store.</p>
 </table>
 <dl class="method">
 <dt id="swauth.middleware.Swauth.authorize">
-<tt class="descname">authorize</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.authorize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.authorize" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">authorize</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.authorize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.authorize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns None if the request is authorized to continue or a standard
 WSGI response callable if not.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.credentials_match">
-<tt class="descname">credentials_match</tt><big>(</big><em>user_detail</em>, <em>key</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.credentials_match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.credentials_match" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">credentials_match</tt><big>(</big><em>user_detail</em>, <em>key</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.credentials_match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.credentials_match" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if the key is valid for the user_detail. Currently, this
 only supports plaintext key matching.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -98,14 +98,14 @@ only supports plaintext key matching.</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.denied_response">
-<tt class="descname">denied_response</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.denied_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.denied_response" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">denied_response</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.denied_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.denied_response" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a standard WSGI response callable with the status of 403 or 401
 depending on whether the REMOTE_USER is set or not.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.get_admin_detail">
-<tt class="descname">get_admin_detail</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.get_admin_detail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.get_admin_detail" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_admin_detail</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.get_admin_detail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.get_admin_detail" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the dict for the user specified as the admin in the request
 with the addition of an <cite>account</cite> key set to the admin user&#8217;s account.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -128,7 +128,7 @@ X-Auth-Admin-Key from.</li>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.get_conn">
-<tt class="descname">get_conn</tt><big>(</big><em>urlparsed=None</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.get_conn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.get_conn" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_conn</tt><big>(</big><em>urlparsed=None</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.get_conn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.get_conn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an HTTPConnection based on the urlparse result given or the
 default Swift cluster (internal url) urlparse result.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -147,7 +147,7 @@ default Swift cluster&#8217;s value</li>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.get_groups">
-<tt class="descname">get_groups</tt><big>(</big><em>env</em>, <em>token</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.get_groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.get_groups" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_groups</tt><big>(</big><em>env</em>, <em>token</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.get_groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.get_groups" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get groups for the given token.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -171,7 +171,7 @@ identifier for that user.</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.get_itoken">
-<tt class="descname">get_itoken</tt><big>(</big><em>env</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.get_itoken"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.get_itoken" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get_itoken</tt><big>(</big><em>env</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.get_itoken"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.get_itoken" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the current internal token to use for the auth system&#8217;s own
 actions with other services. Each process will create its own
 itoken and the token will be deleted and recreated based on the
@@ -183,7 +183,7 @@ token.</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.handle">
-<tt class="descname">handle</tt><big>(</big><em>env</em>, <em>start_response</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle</tt><big>(</big><em>env</em>, <em>start_response</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle" title="Permalink to this definition">¶</a></dt>
 <dd><p>WSGI entry point for auth requests (ones that match the
 self.auth_prefix).
 Wraps env in webob.Request object and passes it down.</p>
@@ -203,7 +203,7 @@ Wraps env in webob.Request object and passes it down.</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.handle_delete_account">
-<tt class="descname">handle_delete_account</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.handle_delete_account"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_delete_account" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_delete_account</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_delete_account"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_delete_account" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the DELETE v2/&lt;account&gt; call for removing an account from the
 auth system. Can only be called by a .reseller_admin.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -224,7 +224,7 @@ auth system. Can only be called by a .reseller_admin.</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.handle_delete_user">
-<tt class="descname">handle_delete_user</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.handle_delete_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_delete_user" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_delete_user</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_delete_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_delete_user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the DELETE v2/&lt;account&gt;/&lt;user&gt; call for deleting a user from an
 account.</p>
 <p>Can only be called by an account .admin.</p>
@@ -246,7 +246,7 @@ account.</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.handle_get_account">
-<tt class="descname">handle_get_account</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.handle_get_account"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_get_account" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_get_account</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_get_account"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_get_account" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the GET v2/&lt;account&gt; call for getting account information.
 Can only be called by an account .admin.</p>
 <p>On success, a JSON dictionary will be returned containing the keys
@@ -280,7 +280,7 @@ explained above.</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.handle_get_reseller">
-<tt class="descname">handle_get_reseller</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.handle_get_reseller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_get_reseller" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_get_reseller</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_get_reseller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_get_reseller" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the GET v2 call for getting general reseller information
 (currently just a list of accounts). Can only be called by a
 .reseller_admin.</p>
@@ -310,7 +310,7 @@ explained above.</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.handle_get_token">
-<tt class="descname">handle_get_token</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.handle_get_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_get_token" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_get_token</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_get_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_get_token" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the various <cite>request for token and service end point(s)</cite> calls.
 There are various formats to support the various auth servers in the
 past. Examples:</p>
@@ -367,7 +367,7 @@ above.</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.handle_get_user">
-<tt class="descname">handle_get_user</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.handle_get_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_get_user" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_get_user</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_get_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_get_user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the GET v2/&lt;account&gt;/&lt;user&gt; call for getting user information.
 Can only be called by an account .admin.</p>
 <p>On success, a JSON dict will be returned as described:</p>
@@ -420,7 +420,7 @@ explained above.</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.handle_prep">
-<tt class="descname">handle_prep</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.handle_prep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_prep" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_prep</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_prep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_prep" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the POST v2/.prep call for preparing the backing store Swift
 cluster for use with the auth subsystem. Can only be called by
 .super_admin.</p>
@@ -442,7 +442,7 @@ cluster for use with the auth subsystem. Can only be called by
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.handle_put_account">
-<tt class="descname">handle_put_account</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.handle_put_account"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_put_account" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_put_account</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_put_account"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_put_account" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the PUT v2/&lt;account&gt; call for adding an account to the auth
 system. Can only be called by a .reseller_admin.</p>
 <p>By default, a newly created UUID4 will be used with the reseller prefix
@@ -467,7 +467,7 @@ UUID4 part.</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.handle_put_user">
-<tt class="descname">handle_put_user</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.handle_put_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_put_user" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_put_user</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_put_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_put_user" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the PUT v2/&lt;account&gt;/&lt;user&gt; call for adding a user to an
 account.</p>
 <p>X-Auth-User-Key represents the user&#8217;s key, X-Auth-User-Admin may be set
@@ -493,7 +493,7 @@ may be set to <cite>true</cite> to create a .reseller_admin.</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.handle_request">
-<tt class="descname">handle_request</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.handle_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_request" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_request</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_request" title="Permalink to this definition">¶</a></dt>
 <dd><p>Entry point for auth requests (ones that match the self.auth_prefix).
 Should return a WSGI-style callable (such as webob.Response).</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -511,7 +511,7 @@ Should return a WSGI-style callable (such as webob.Response).</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.handle_set_services">
-<tt class="descname">handle_set_services</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.handle_set_services"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_set_services" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_set_services</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_set_services"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_set_services" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the POST v2/&lt;account&gt;/.services call for setting services
 information. Can only be called by a reseller .admin.</p>
 <p>In the <a class="reference internal" href="#swauth.middleware.Swauth.handle_get_account" title="swauth.middleware.Swauth.handle_get_account"><tt class="xref py py-func docutils literal"><span class="pre">handle_get_account()</span></tt></a> (GET v2/&lt;account&gt;) call, a section of
@@ -555,7 +555,7 @@ dict as described above</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.handle_validate_token">
-<tt class="descname">handle_validate_token</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.handle_validate_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_validate_token" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_validate_token</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_validate_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_validate_token" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handles the GET v2/.token/&lt;token&gt; call for validating a token, usually
 called by a service like Swift.</p>
 <p>On a successful validation, X-Auth-TTL will be set for how much longer
@@ -584,7 +584,7 @@ above.</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.is_account_admin">
-<tt class="descname">is_account_admin</tt><big>(</big><em>req</em>, <em>account</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.is_account_admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.is_account_admin" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">is_account_admin</tt><big>(</big><em>req</em>, <em>account</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.is_account_admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.is_account_admin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if the admin specified in the request represents a .admin
 for the account specified.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -604,7 +604,7 @@ for the account specified.</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.is_reseller_admin">
-<tt class="descname">is_reseller_admin</tt><big>(</big><em>req</em>, <em>admin_detail=None</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.is_reseller_admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.is_reseller_admin" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">is_reseller_admin</tt><big>(</big><em>req</em>, <em>admin_detail=None</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.is_reseller_admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.is_reseller_admin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if the admin specified in the request represents a
 .reseller_admin.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -626,7 +626,7 @@ to retrieve the admin_detail itself.</li>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.is_super_admin">
-<tt class="descname">is_super_admin</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.is_super_admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.is_super_admin" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">is_super_admin</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.is_super_admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.is_super_admin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if the admin specified in the request represents the
 .super_admin.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -645,7 +645,7 @@ to retrieve the admin_detail itself.</li>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.make_request">
-<tt class="descname">make_request</tt><big>(</big><em>env</em>, <em>method</em>, <em>path</em>, <em>body=None</em>, <em>headers=None</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.make_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.make_request" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">make_request</tt><big>(</big><em>env</em>, <em>method</em>, <em>path</em>, <em>body=None</em>, <em>headers=None</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.make_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.make_request" title="Permalink to this definition">¶</a></dt>
 <dd><p>Makes a new webob.Request based on the current env but with the
 parameters specified.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -670,14 +670,14 @@ parameters specified.</p>
 
 <dl class="method">
 <dt id="swauth.middleware.Swauth.posthooklogger">
-<tt class="descname">posthooklogger</tt><big>(</big><em>env</em>, <em>req</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#Swauth.posthooklogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.posthooklogger" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">posthooklogger</tt><big>(</big><em>env</em>, <em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.posthooklogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.posthooklogger" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="function">
 <dt id="swauth.middleware.filter_factory">
-<tt class="descclassname">swauth.middleware.</tt><tt class="descname">filter_factory</tt><big>(</big><em>global_conf</em>, <em>**local_conf</em><big>)</big><a class="reference internal" href="_modules/swauth/middleware.html#filter_factory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.filter_factory" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">swauth.middleware.</tt><tt class="descname">filter_factory</tt><big>(</big><em>global_conf</em>, <em>**local_conf</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#filter_factory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.filter_factory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a WSGI filter app for use with paste.deploy.</p>
 </dd></dl>
 
@@ -694,7 +694,7 @@ parameters specified.</p>
                         title="previous chapter">swauth</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="_sources/middleware.txt"
+    <li><a href="sources/middleware.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">

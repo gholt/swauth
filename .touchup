@@ -1,0 +1,14 @@
+#!/bin/bash
+
+rm -rf $1/static
+mv $1/_static $1/static
+find $1 -name '*.html' -exec sed -i 's/\<_static\>/static/g' {} \;
+
+rm -rf $1/modules
+mv $1/_modules $1/modules
+find $1 -name '*.html' -exec sed -i 's/\<_modules\>/modules/g' {} \;
+
+rm -rf $1/sources
+mv $1/_sources $1/sources
+find $1 -name '*.html' -exec sed -i 's/\<_sources\>/sources/g' {} \;
+find $1 -name '*.js' -exec sed -i 's/\<_sources\>/sources/g' {} \;
