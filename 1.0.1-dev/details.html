@@ -1,0 +1,241 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Implementation Details &mdash; Swauth v1.0.1.dev documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0.1.dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Swauth v1.0.1.dev documentation" href="index.html" />
+    <link rel="next" title="swauth" href="swauth.html" />
+    <link rel="prev" title="LICENSE" href="license.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="swauth.html" title="swauth"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="license.html" title="LICENSE"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Swauth v1.0.1.dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="implementation-details">
+<h1>Implementation Details<a class="headerlink" href="#implementation-details" title="Permalink to this headline">¶</a></h1>
+<p>The Swauth system is a scalable authentication and authorization system that
+uses Swift itself as its backing store. This section will describe how it
+stores its data.</p>
+<p>At the topmost level, the auth system has its own Swift account it stores its
+own account information within. This Swift account is known as
+self.auth_account in the code and its name is in the format
+self.reseller_prefix + &#8220;.auth&#8221;. In this text, we&#8217;ll refer to this account as
+&lt;auth_account&gt;.</p>
+<p>The containers whose names do not begin with a period represent the accounts
+within the auth service. For example, the &lt;auth_account&gt;/test container would
+represent the &#8220;test&#8221; account.</p>
+<p>The objects within each container represent the users for that auth service
+account. For example, the &lt;auth_account&gt;/test/bob object would represent the
+user &#8220;bob&#8221; within the auth service account of &#8220;test&#8221;. Each of these user
+objects contain a JSON dictionary of the format:</p>
+<div class="highlight-python"><pre>{"auth": "&lt;auth_type&gt;:&lt;auth_value&gt;", "groups": &lt;groups_array&gt;}</pre>
+</div>
+<p>The <cite>&lt;auth_type&gt;</cite> can only be <cite>plaintext</cite> at this time, and the <cite>&lt;auth_value&gt;</cite>
+is the plain text password itself.</p>
+<p>The <cite>&lt;groups_array&gt;</cite> contains at least two groups. The first is a unique group
+identifying that user and it&#8217;s name is of the format <cite>&lt;user&gt;:&lt;account&gt;</cite>. The
+second group is the <cite>&lt;account&gt;</cite> itself. Additional groups of <cite>.admin</cite> for
+account administrators and <cite>.reseller_admin</cite> for reseller administrators may
+exist. Here&#8217;s an example user JSON dictionary:</p>
+<div class="highlight-python"><pre>{"auth": "plaintext:testing",
+ "groups": ["name": "test:tester", "name": "test", "name": ".admin"]}</pre>
+</div>
+<p>To map an auth service account to a Swift storage account, the Service Account
+Id string is stored in the <cite>X-Container-Meta-Account-Id</cite> header for the
+&lt;auth_account&gt;/&lt;account&gt; container. To map back the other way, an
+&lt;auth_account&gt;/.account_id/&lt;account_id&gt; object is created with the contents of
+the corresponding auth service&#8217;s account name.</p>
+<p>Also, to support a future where the auth service will support multiple Swift
+clusters or even multiple services for the same auth service account, an
+&lt;auth_account&gt;/&lt;account&gt;/.services object is created with its contents having a
+JSON dictionary of the format:</p>
+<div class="highlight-python"><pre>{"storage": {"default": "local", "local": &lt;url&gt;}}</pre>
+</div>
+<p>The &#8220;default&#8221; is always &#8220;local&#8221; right now, and &#8220;local&#8221; is always the single
+Swift cluster URL; but in the future there can be more than one cluster with
+various names instead of just &#8220;local&#8221;, and the &#8220;default&#8221; key&#8217;s value will
+contain the primary cluster to use for that account. Also, there may be more
+services in addition to the current &#8220;storage&#8221; service right now.</p>
+<p>Here&#8217;s an example .services dictionary at the moment:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&quot;storage&quot;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="s">&quot;local&quot;</span><span class="p">,</span>
+     <span class="s">&quot;local&quot;</span><span class="p">:</span> <span class="s">&quot;http://127.0.0.1:8080/v1/AUTH_8980f74b1cda41e483cbe0a925f448a9&quot;</span><span class="p">}}</span>
+</pre></div>
+</div>
+<p>But, here&#8217;s an example of what the dictionary may look like in the future:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&quot;storage&quot;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="s">&quot;dfw&quot;</span><span class="p">,</span>
+     <span class="s">&quot;dfw&quot;</span><span class="p">:</span> <span class="s">&quot;http://dfw.storage.com:8080/v1/AUTH_8980f74b1cda41e483cbe0a925f448a9&quot;</span><span class="p">,</span>
+     <span class="s">&quot;ord&quot;</span><span class="p">:</span> <span class="s">&quot;http://ord.storage.com:8080/v1/AUTH_8980f74b1cda41e483cbe0a925f448a9&quot;</span><span class="p">,</span>
+     <span class="s">&quot;sat&quot;</span><span class="p">:</span> <span class="s">&quot;http://ord.storage.com:8080/v1/AUTH_8980f74b1cda41e483cbe0a925f448a9&quot;</span><span class="p">},</span>
+ <span class="s">&quot;servers&quot;</span><span class="p">:</span>
+    <span class="p">{</span><span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="s">&quot;dfw&quot;</span><span class="p">,</span>
+     <span class="s">&quot;dfw&quot;</span><span class="p">:</span> <span class="s">&quot;http://dfw.servers.com:8080/v1/AUTH_8980f74b1cda41e483cbe0a925f448a9&quot;</span><span class="p">,</span>
+     <span class="s">&quot;ord&quot;</span><span class="p">:</span> <span class="s">&quot;http://ord.servers.com:8080/v1/AUTH_8980f74b1cda41e483cbe0a925f448a9&quot;</span><span class="p">,</span>
+     <span class="s">&quot;sat&quot;</span><span class="p">:</span> <span class="s">&quot;http://ord.servers.com:8080/v1/AUTH_8980f74b1cda41e483cbe0a925f448a9&quot;</span><span class="p">}}</span>
+</pre></div>
+</div>
+<p>Lastly, the tokens themselves are stored as objects in the
+<cite>&lt;auth_account&gt;/.token_[0-f]</cite> containers. The names of the objects are the
+token strings themselves, such as <cite>AUTH_tked86bbd01864458aa2bd746879438d5a</cite>.
+The exact <cite>.token_[0-f]</cite> container chosen is based on the final digit of the
+token name, such as <cite>.token_a</cite> for the token
+<cite>AUTH_tked86bbd01864458aa2bd746879438d5a</cite>. The contents of the token objects
+are JSON dictionaries of the format:</p>
+<div class="highlight-python"><pre>{"account": &lt;account&gt;,
+ "user": &lt;user&gt;,
+ "account_id": &lt;account_id&gt;,
+ "groups": &lt;groups_array&gt;,
+ "expires": &lt;time.time() value&gt;}</pre>
+</div>
+<p>The <cite>&lt;account&gt;</cite> is the auth service account&#8217;s name for that token. The <cite>&lt;user&gt;</cite>
+is the user within the account for that token. The <cite>&lt;account_id&gt;</cite> is the
+same as the <cite>X-Container-Meta-Account-Id</cite> for the auth service&#8217;s account,
+as described above. The <cite>&lt;groups_array&gt;</cite> is the user&#8217;s groups, as described
+above with the user object. The &#8220;expires&#8221; value indicates when the token is no
+longer valid, as compared to Python&#8217;s time.time() value.</p>
+<p>Here&#8217;s an example token object&#8217;s JSON dictionary:</p>
+<div class="highlight-python"><pre>{"account": "test",
+ "user": "tester",
+ "account_id": "AUTH_8980f74b1cda41e483cbe0a925f448a9",
+ "groups": ["name": "test:tester", "name": "test", "name": ".admin"],
+ "expires": 1291273147.1624689}</pre>
+</div>
+<p>To easily map a user to an already issued token, the token name is stored in
+the user object&#8217;s <cite>X-Object-Meta-Auth-Token</cite> header.</p>
+<p>Here is an example full listing of an &lt;auth_account&gt;:</p>
+<div class="highlight-python"><pre>.account_id
+    AUTH_2282f516-559f-4966-b239-b5c88829e927
+    AUTH_f6f57a3c-33b5-4e85-95a5-a801e67505c8
+    AUTH_fea96a36-c177-4ca4-8c7e-b8c715d9d37b
+.token_0
+.token_1
+.token_2
+.token_3
+.token_4
+.token_5
+.token_6
+    AUTH_tk9d2941b13d524b268367116ef956dee6
+.token_7
+.token_8
+    AUTH_tk93627c6324c64f78be746f1e6a4e3f98
+.token_9
+.token_a
+.token_b
+.token_c
+.token_d
+.token_e
+    AUTH_tk0d37d286af2c43ffad06e99112b3ec4e
+.token_f
+    AUTH_tk766bbde93771489982d8dc76979d11cf
+reseller
+    .services
+    reseller
+test
+    .services
+    tester
+    tester3
+test2
+    .services
+    tester2</pre>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="license.html"
+                        title="previous chapter">LICENSE</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="swauth.html"
+                        title="next chapter">swauth</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/details.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="swauth.html" title="swauth"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="license.html" title="LICENSE"
+             >previous</a> |</li>
+        <li><a href="index.html">Swauth v1.0.1.dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2011, OpenStack, LLC.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>
