@@ -61,6 +61,7 @@ Contents
     :maxdepth: 2
 
     license
+    details
     swauth
     middleware
 
