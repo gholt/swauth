@@ -1,3 +1,10 @@
+swauth (1.0.2-dev)
+
+    This release is still under development. A full change log will be made at
+    release. Until then, you can see what has changed with:
+
+    git log 1.0.1..HEAD
+
 swauth (1.0.1)
 
     Initial release after separation from Swift.
