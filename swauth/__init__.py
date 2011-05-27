@@ -16,8 +16,8 @@
 import gettext
 
 
-#: Version information (major, minor, revision).
-version_info = (1, 0, 1, 'dev')
+#: Version information (major, minor, revision[, 'dev']).
+version_info = (1, 0, 1)
 #: Version string 'major.minor.revision'.
 version = __version__ = ".".join(map(str, version_info))
 gettext.install('swauth')

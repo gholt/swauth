@@ -1,4 +1,3 @@
-swauth (x.x.x)
+swauth (1.0.1)
 
-    The next Swauth version is in development. A full change log will be
-    available on release.
+    Initial release after separation from Swift.
