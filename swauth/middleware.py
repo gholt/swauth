@@ -1177,7 +1177,7 @@ class Swauth(object):
     def make_request(self, env, method, path, body=None, headers=None):
         """
         Makes a new webob.Request based on the current env but with the
-        parameters specified.
+        parameters specified. Note that this request will be preauthorized.
 
         :param env: Current WSGI environment dictionary
         :param method: HTTP method of new request
@@ -1191,6 +1191,7 @@ class Swauth(object):
         for name in ('swift.cache', 'HTTP_X_CF_TRANS_ID'):
             if name in env:
                 newenv[name] = env[name]
+        newenv['swift.authorize'] = lambda req: None
         if not headers:
             headers = {}
         if body:
