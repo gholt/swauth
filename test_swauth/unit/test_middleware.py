@@ -3216,6 +3216,50 @@ class TestAuth(unittest.TestCase):
         resp = self.test_auth.authorize(req)
         self.assertEquals(resp.status_int, 403)
 
+    def _get_token_success_v1_0_encoded(self, saved_user, saved_key, sent_user,
+                                        sent_key):
+        self.test_auth.app = FakeApp(iter([
+            # GET of user object
+            ('200 Ok', {},
+             json.dumps({"auth": "plaintext:%s" % saved_key,
+                         "groups": [{'name': saved_user}, {'name': "act"},
+                                    {'name': ".admin"}]})),
+            # GET of account
+            ('204 Ok', {'X-Container-Meta-Account-Id': 'AUTH_cfa'}, ''),
+            # PUT of new token
+            ('201 Created', {}, ''),
+            # POST of token to user object
+            ('204 No Content', {}, ''),
+            # GET of services object
+            ('200 Ok', {}, json.dumps({"storage": {"default": "local",
+             "local": "http://127.0.0.1:8080/v1/AUTH_cfa"}}))]))
+        resp = Request.blank('/auth/v1.0',
+            headers={'X-Auth-User': sent_user,
+                     'X-Auth-Key': sent_key}).get_response(self.test_auth)
+        self.assertEquals(resp.status_int, 200)
+        self.assert_(resp.headers.get('x-auth-token',
+            '').startswith('AUTH_tk'), resp.headers.get('x-auth-token'))
+        self.assertEquals(resp.headers.get('x-auth-token'),
+                          resp.headers.get('x-storage-token'))
+        self.assertEquals(resp.headers.get('x-storage-url'),
+                          'http://127.0.0.1:8080/v1/AUTH_cfa')
+        self.assertEquals(json.loads(resp.body),
+            {"storage": {"default": "local",
+             "local": "http://127.0.0.1:8080/v1/AUTH_cfa"}})
+        self.assertEquals(self.test_auth.app.calls, 5)
+
+    def test_get_token_success_v1_0_encoded1(self):
+        self._get_token_success_v1_0_encoded(
+            'act:usr', 'key', 'act%3ausr', 'key')
+
+    def test_get_token_success_v1_0_encoded2(self):
+        self._get_token_success_v1_0_encoded(
+            'act:u s r', 'key', 'act%3au%20s%20r', 'key')
+
+    def test_get_token_success_v1_0_encoded3(self):
+        self._get_token_success_v1_0_encoded(
+            'act:u s r', 'k:e:y', 'act%3au%20s%20r', 'k%3Ae%3ay')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -862,9 +862,10 @@ class Swauth(object):
         Handles the PUT v2/<account>/<user> call for adding a user to an
         account.
 
-        X-Auth-User-Key represents the user's key, X-Auth-User-Admin may be set
-        to `true` to create an account .admin, and X-Auth-User-Reseller-Admin
-        may be set to `true` to create a .reseller_admin.
+        X-Auth-User-Key represents the user's key (url encoded),
+        X-Auth-User-Admin may be set to `true` to create an account .admin, and
+        X-Auth-User-Reseller-Admin may be set to `true` to create a
+        .reseller_admin.
 
         Can only be called by an account .admin unless the user is to be a
         .reseller_admin, in which case the request must be by .super_admin.
@@ -875,7 +876,7 @@ class Swauth(object):
         # Validate path info
         account = req.path_info_pop()
         user = req.path_info_pop()
-        key = req.headers.get('x-auth-user-key')
+        key = unquote(req.headers.get('x-auth-user-key', ''))
         admin = req.headers.get('x-auth-user-admin') == 'true'
         reseller_admin = \
             req.headers.get('x-auth-user-reseller-admin') == 'true'
@@ -978,6 +979,10 @@ class Swauth(object):
                 X-Auth-User: <act>:<usr>  or  X-Storage-User: <act>:<usr>
                 X-Auth-Key: <key>         or  X-Storage-Pass: <key>
 
+        Values should be url encoded, "act%3Ausr" instead of "act:usr" for
+        example; however, for backwards compatibility the colon may be included
+        unencoded.
+
         On successful authentication, the response will have X-Auth-Token and
         X-Storage-Token set to the token to use with Swift and X-Storage-URL
         set to the URL to the default Swift cluster to use.
@@ -1017,7 +1022,7 @@ class Swauth(object):
             account = pathsegs[1]
             user = req.headers.get('x-storage-user')
             if not user:
-                user = req.headers.get('x-auth-user')
+                user = unquote(req.headers.get('x-auth-user', ''))
                 if not user or ':' not in user:
                     return HTTPUnauthorized(request=req)
                 account2, user = user.split(':', 1)
@@ -1025,15 +1030,15 @@ class Swauth(object):
                     return HTTPUnauthorized(request=req)
             key = req.headers.get('x-storage-pass')
             if not key:
-                key = req.headers.get('x-auth-key')
+                key = unquote(req.headers.get('x-auth-key', ''))
         elif pathsegs[0] in ('auth', 'v1.0'):
-            user = req.headers.get('x-auth-user')
+            user = unquote(req.headers.get('x-auth-user', ''))
             if not user:
                 user = req.headers.get('x-storage-user')
             if not user or ':' not in user:
                 return HTTPUnauthorized(request=req)
             account, user = user.split(':', 1)
-            key = req.headers.get('x-auth-key')
+            key = unquote(req.headers.get('x-auth-key', ''))
             if not key:
                 key = req.headers.get('x-storage-pass')
         else:
