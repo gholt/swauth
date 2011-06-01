@@ -38,6 +38,25 @@ from swift.common.middleware.acl import clean_acl, parse_acl, referrer_allowed
 from swift.common.utils import cache_from_env, get_logger, split_path, urlparse
 
 
+# NOTE: This should be removed after some time when anyone upgrading Swauth
+# should have also upgraded Swift.
+try:
+    # Attempt to import get_remote_client; older versions of Swift don't have
+    # this.
+    from swift.common.utils import get_remote_client
+except ImportError:
+    # Fall back to locally defined version.
+    def get_remote_client(req):
+        # remote host for zeus
+        client = req.headers.get('x-cluster-client-ip')
+        if not client and 'x-forwarded-for' in req.headers:
+            # remote host for other lbs
+            client = req.headers['x-forwarded-for'].split(',')[0].strip()
+        if not client:
+            client = req.remote_addr
+        return client
+
+
 class Swauth(object):
     """
     Scalable authentication and authorization system that uses Swift as its
@@ -101,6 +120,9 @@ class Swauth(object):
         self.timeout = int(conf.get('node_timeout', 10))
         self.itoken = None
         self.itoken_expires = None
+        self.allowed_sync_hosts = [h.strip()
+            for h in conf.get('allowed_sync_hosts', '127.0.0.1').split(',')
+            if h.strip()]
 
     def __call__(self, env, start_response):
         """
@@ -269,11 +291,20 @@ class Swauth(object):
         if '.reseller_admin' in user_groups and \
                 account != self.reseller_prefix and \
                 account[len(self.reseller_prefix)] != '.':
+            req.environ['swift_owner'] = True
             return None
         if account in user_groups and \
                 (req.method not in ('DELETE', 'PUT') or container):
             # If the user is admin for the account and is not trying to do an
             # account DELETE or PUT...
+            req.environ['swift_owner'] = True
+            return None
+        if (req.environ.get('swift_sync_key') and
+            req.environ['swift_sync_key'] ==
+                req.headers.get('x-container-sync-key', None) and
+            'x-timestamp' in req.headers and
+            (req.remote_addr in self.allowed_sync_hosts or
+             get_remote_client(req) in self.allowed_sync_hosts)):
             return None
         referrers, groups = parse_acl(getattr(req, 'acl', None))
         if referrer_allowed(req.referer, referrers):
