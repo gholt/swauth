@@ -4,5 +4,18 @@
         <ul>
             <li><a href="1.0.1-dev/">1.0.1-dev</a></li>
         </ul>
+        <p>There is a debian package repository for Lucid at http://gholt.github.com/swauth/debian/ so you can easily install Swauth on Lucid by:</p>
+        <ul>
+            <li><p>Create /etc/apt/sources.list.d/swauth.list:<br />
+                <br />
+                <code>deb http://gholt.github.com/swauth/debian lucid
+                main</code></p>
+            </li>
+            <li><p>Then:<br />
+                <br />
+                <code>sudo apt-get update</code><br />
+                <code>sudo apt-get install python-swauth swauth-doc</code></p>
+            </li>
+        </ul>
     </body>
 </html>
