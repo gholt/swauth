@@ -38,7 +38,8 @@ use = egg:swauth#swauth
 # default_swift_cluster = local#https://public.com:8080/v1#http://private.com:8080/v1
 # token_life = 86400
 # node_timeout = 10
-# Highly recommended to change this.
+# Highly recommended to change this. If you comment this out, the Swauth
+# administration features will be disabled for this proxy.
 super_admin_key = swauthkey
 
 [filter:ratelimit]

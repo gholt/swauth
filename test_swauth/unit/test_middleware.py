@@ -111,16 +111,8 @@ class TestAuth(unittest.TestCase):
         self.test_auth = \
             auth.filter_factory({'super_admin_key': 'supertest'})(FakeApp())
 
-    def test_super_admin_key_required(self):
-        app = FakeApp()
-        exc = None
-        try:
-            auth.filter_factory({})(app)
-        except ValueError, err:
-            exc = err
-        self.assertEquals(str(exc),
-                          'No super_admin_key set in conf file! Exiting.')
-        auth.filter_factory({'super_admin_key': 'supertest'})(app)
+    def test_super_admin_key_not_required(self):
+        auth.filter_factory({})(FakeApp())
 
     def test_reseller_prefix_init(self):
         app = FakeApp()
@@ -2242,6 +2234,20 @@ class TestAuth(unittest.TestCase):
                         {"name": ".admin"}],
              "auth": "plaintext:key"}))
         self.assertEquals(self.test_auth.app.calls, 1)
+
+    def test_get_user_fail_no_super_admin_key(self):
+        local_auth = auth.filter_factory({})(FakeApp(iter([
+            # GET of user object (but we should never get here)
+            ('200 Ok', {}, json.dumps(
+                {"groups": [{"name": "act:usr"}, {"name": "act"},
+                            {"name": ".admin"}],
+                 "auth": "plaintext:key"}))])))
+        resp = Request.blank('/auth/v2/act/usr',
+            headers={'X-Auth-Admin-User': '.super_admin',
+                     'X-Auth-Admin-Key': 'supertest'}
+            ).get_response(local_auth)
+        self.assertEquals(resp.status_int, 404)
+        self.assertEquals(local_auth.app.calls, 0)
 
     def test_get_user_groups_success(self):
         self.test_auth.app = FakeApp(iter([

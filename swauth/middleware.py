@@ -110,12 +110,12 @@ class Swauth(object):
                             (self.dsc_parsed2.scheme, repr(self.dsc_url2)))
         self.super_admin_key = conf.get('super_admin_key')
         if not self.super_admin_key:
-            msg = _('No super_admin_key set in conf file! Exiting.')
+            msg = _('No super_admin_key set in conf file; Swauth '
+                    'administration features will be disabled.')
             try:
-                self.logger.critical(msg)
+                self.logger.warn(msg)
             except Exception:
                 pass
-            raise ValueError(msg)
         self.token_life = int(conf.get('token_life', 86400))
         self.timeout = int(conf.get('node_timeout', 10))
         self.itoken = None
@@ -382,6 +382,8 @@ class Swauth(object):
             if req.method == 'GET':
                 handler = self.handle_get_token
         elif version == 'v2':
+            if not self.super_admin_key:
+                return HTTPNotFound(request=req)
             req.path_info_pop()
             if req.method == 'GET':
                 if not account and not user:
@@ -1076,7 +1078,8 @@ class Swauth(object):
             return HTTPBadRequest(request=req)
         if not all((account, user, key)):
             return HTTPUnauthorized(request=req)
-        if user == '.super_admin' and key == self.super_admin_key:
+        if user == '.super_admin' and self.super_admin_key and \
+                key == self.super_admin_key:
             token = self.get_itoken(req.environ)
             url = '%s/%s.auth' % (self.dsc_url, self.reseller_prefix)
             return Response(request=req,
@@ -1321,6 +1324,7 @@ class Swauth(object):
         :param returns: True if .super_admin.
         """
         return req.headers.get('x-auth-admin-user') == '.super_admin' and \
+               self.super_admin_key and \
                req.headers.get('x-auth-admin-key') == self.super_admin_key
 
     def is_reseller_admin(self, req, admin_detail=None):
