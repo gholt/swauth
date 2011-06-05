@@ -1,0 +1,737 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>swauth.middleware &mdash; Swauth v1.0.1 documentation</title>
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="Swauth v1.0.1 documentation" href="index.html" />
+    <link rel="prev" title="swauth" href="swauth.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="swauth.html" title="swauth"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Swauth v1.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-swauth.middleware">
+<span id="swauth-middleware"></span><span id="swauth-middleware-module"></span><h1>swauth.middleware<a class="headerlink" href="#module-swauth.middleware" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="swauth.middleware.Swauth">
+<em class="property">class </em><tt class="descclassname">swauth.middleware.</tt><tt class="descname">Swauth</tt><big>(</big><em>app</em>, <em>conf</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Scalable authentication and authorization system that uses Swift as its
+backing store.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>app</strong> &#8211; The next WSGI app in the pipeline</li>
+<li><strong>conf</strong> &#8211; The dict of configuration values</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="swauth.middleware.Swauth.authorize">
+<tt class="descname">authorize</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.authorize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.authorize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns None if the request is authorized to continue or a standard
+WSGI response callable if not.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.credentials_match">
+<tt class="descname">credentials_match</tt><big>(</big><em>user_detail</em>, <em>key</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.credentials_match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.credentials_match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the key is valid for the user_detail. Currently, this
+only supports plaintext key matching.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user_detail</strong> &#8211; The dict for the user.</li>
+<li><strong>key</strong> &#8211; The key to validate for the user.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if the key is valid for the user, False if not.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.denied_response">
+<tt class="descname">denied_response</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.denied_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.denied_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a standard WSGI response callable with the status of 403 or 401
+depending on whether the REMOTE_USER is set or not.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.get_admin_detail">
+<tt class="descname">get_admin_detail</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.get_admin_detail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.get_admin_detail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the dict for the user specified as the admin in the request
+with the addition of an <cite>account</cite> key set to the admin user&#8217;s account.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>req</strong> &#8211; The webob request to retrieve X-Auth-Admin-User and
+X-Auth-Admin-Key from.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The dict for the admin user with the addition of the
+<cite>account</cite> key.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.get_conn">
+<tt class="descname">get_conn</tt><big>(</big><em>urlparsed=None</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.get_conn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.get_conn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an HTTPConnection based on the urlparse result given or the
+default Swift cluster (internal url) urlparse result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>urlparsed</strong> &#8211; The result from urlparse.urlparse or None to use the
+default Swift cluster&#8217;s value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.get_groups">
+<tt class="descname">get_groups</tt><big>(</big><em>env</em>, <em>token</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.get_groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.get_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get groups for the given token.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>env</strong> &#8211; The current WSGI environment dictionary.</li>
+<li><strong>token</strong> &#8211; Token to validate and return a group string for.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None if the token is invalid or a string containing a comma
+separated list of groups the authenticated user is a member
+of. The first group in the list is also considered a unique
+identifier for that user.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.get_itoken">
+<tt class="descname">get_itoken</tt><big>(</big><em>env</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.get_itoken"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.get_itoken" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current internal token to use for the auth system&#8217;s own
+actions with other services. Each process will create its own
+itoken and the token will be deleted and recreated based on the
+token_life configuration value. The itoken information is stored in
+memcache because the auth process that is asked by Swift to validate
+the token may not be the same as the auth process that created the
+token.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.handle">
+<tt class="descname">handle</tt><big>(</big><em>env</em>, <em>start_response</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>WSGI entry point for auth requests (ones that match the
+self.auth_prefix).
+Wraps env in webob.Request object and passes it down.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>env</strong> &#8211; WSGI environment dictionary</li>
+<li><strong>start_response</strong> &#8211; WSGI callable</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.handle_delete_account">
+<tt class="descname">handle_delete_account</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_delete_account"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_delete_account" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the DELETE v2/&lt;account&gt; call for removing an account from the
+auth system. Can only be called by a .reseller_admin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>req</strong> &#8211; The webob.Request to process.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">webob.Response, 2xx on success.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.handle_delete_user">
+<tt class="descname">handle_delete_user</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_delete_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_delete_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the DELETE v2/&lt;account&gt;/&lt;user&gt; call for deleting a user from an
+account.</p>
+<p>Can only be called by an account .admin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>req</strong> &#8211; The webob.Request to process.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">webob.Response, 2xx on success.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.handle_get_account">
+<tt class="descname">handle_get_account</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_get_account"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_get_account" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the GET v2/&lt;account&gt; call for getting account information.
+Can only be called by an account .admin.</p>
+<p>On success, a JSON dictionary will be returned containing the keys
+<cite>account_id</cite>, <cite>services</cite>, and <cite>users</cite>. The <cite>account_id</cite> is the value
+used when creating service accounts. The <cite>services</cite> value is a dict as
+described in the <a class="reference internal" href="#swauth.middleware.Swauth.handle_get_token" title="swauth.middleware.Swauth.handle_get_token"><tt class="xref py py-func docutils literal"><span class="pre">handle_get_token()</span></tt></a> call. The <cite>users</cite> value is a
+list of dicts, each dict representing a user and currently only
+containing the single key <cite>name</cite>. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&quot;account_id&quot;</span><span class="p">:</span> <span class="s">&quot;AUTH_018c3946-23f8-4efb-a8fb-b67aae8e4162&quot;</span><span class="p">,</span>
+ <span class="s">&quot;services&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;storage&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="s">&quot;local&quot;</span><span class="p">,</span>
+              <span class="s">&quot;local&quot;</span><span class="p">:</span> <span class="s">&quot;http://127.0.0.1:8080/v1/AUTH_018c3946&quot;</span><span class="p">}},</span>
+ <span class="s">&quot;users&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;tester&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;tester3&quot;</span><span class="p">}]}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>req</strong> &#8211; The webob.Request to process.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">webob.Response, 2xx on success with a JSON dictionary as
+explained above.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.handle_get_reseller">
+<tt class="descname">handle_get_reseller</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_get_reseller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_get_reseller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the GET v2 call for getting general reseller information
+(currently just a list of accounts). Can only be called by a
+.reseller_admin.</p>
+<p>On success, a JSON dictionary will be returned with a single <cite>accounts</cite>
+key whose value is list of dicts. Each dict represents an account and
+currently only contains the single key <cite>name</cite>. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&quot;accounts&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;reseller&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;test&quot;</span><span class="p">},</span>
+              <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;test2&quot;</span><span class="p">}]}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>req</strong> &#8211; The webob.Request to process.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">webob.Response, 2xx on success with a JSON dictionary as
+explained above.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.handle_get_token">
+<tt class="descname">handle_get_token</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_get_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_get_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the various <cite>request for token and service end point(s)</cite> calls.
+There are various formats to support the various auth servers in the
+past. Examples:</p>
+<div class="highlight-python"><pre>GET &lt;auth-prefix&gt;/v1/&lt;act&gt;/auth
+    X-Auth-User: &lt;act&gt;:&lt;usr&gt;  or  X-Storage-User: &lt;usr&gt;
+    X-Auth-Key: &lt;key&gt;         or  X-Storage-Pass: &lt;key&gt;
+GET &lt;auth-prefix&gt;/auth
+    X-Auth-User: &lt;act&gt;:&lt;usr&gt;  or  X-Storage-User: &lt;act&gt;:&lt;usr&gt;
+    X-Auth-Key: &lt;key&gt;         or  X-Storage-Pass: &lt;key&gt;
+GET &lt;auth-prefix&gt;/v1.0
+    X-Auth-User: &lt;act&gt;:&lt;usr&gt;  or  X-Storage-User: &lt;act&gt;:&lt;usr&gt;
+    X-Auth-Key: &lt;key&gt;         or  X-Storage-Pass: &lt;key&gt;</pre>
+</div>
+<p>On successful authentication, the response will have X-Auth-Token and
+X-Storage-Token set to the token to use with Swift and X-Storage-URL
+set to the URL to the default Swift cluster to use.</p>
+<p>The response body will be set to the account&#8217;s services JSON object as
+described here:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&quot;storage&quot;</span><span class="p">:</span> <span class="p">{</span>     <span class="c"># Represents the Swift storage service end points</span>
+    <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="s">&quot;cluster1&quot;</span><span class="p">,</span> <span class="c"># Indicates which cluster is the default</span>
+    <span class="s">&quot;cluster1&quot;</span><span class="p">:</span> <span class="s">&quot;&lt;URL to use with Swift&gt;&quot;</span><span class="p">,</span>
+        <span class="c"># A Swift cluster that can be used with this account,</span>
+        <span class="c"># &quot;cluster1&quot; is the name of the cluster which is usually a</span>
+        <span class="c"># location indicator (like &quot;dfw&quot; for a datacenter region).</span>
+    <span class="s">&quot;cluster2&quot;</span><span class="p">:</span> <span class="s">&quot;&lt;URL to use with Swift&gt;&quot;</span>
+        <span class="c"># Another Swift cluster that can be used with this account,</span>
+        <span class="c"># there will always be at least one Swift cluster to use or</span>
+        <span class="c"># this whole &quot;storage&quot; dict won&#39;t be included at all.</span>
+ <span class="p">},</span>
+ <span class="s">&quot;servers&quot;</span><span class="p">:</span> <span class="p">{</span>       <span class="c"># Represents the Nova server service end points</span>
+    <span class="c"># Expected to be similar to the &quot;storage&quot; dict, but not</span>
+    <span class="c"># implemented yet.</span>
+ <span class="p">},</span>
+ <span class="c"># Possibly other service dicts, not implemented yet.</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>req</strong> &#8211; The webob.Request to process.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">webob.Response, 2xx on success with data set as explained
+above.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.handle_get_user">
+<tt class="descname">handle_get_user</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_get_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_get_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the GET v2/&lt;account&gt;/&lt;user&gt; call for getting user information.
+Can only be called by an account .admin.</p>
+<p>On success, a JSON dict will be returned as described:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&quot;groups&quot;</span><span class="p">:</span> <span class="p">[</span>  <span class="c"># List of groups the user is a member of</span>
+    <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;&lt;act&gt;:&lt;usr&gt;&quot;</span><span class="p">},</span>
+        <span class="c"># The first group is a unique user identifier</span>
+    <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;&lt;account&gt;&quot;</span><span class="p">},</span>
+        <span class="c"># The second group is the auth account name</span>
+    <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;&lt;additional-group&gt;&quot;</span><span class="p">}</span>
+        <span class="c"># There may be additional groups, .admin being a special</span>
+        <span class="c"># group indicating an account admin and .reseller_admin</span>
+        <span class="c"># indicating a reseller admin.</span>
+ <span class="p">],</span>
+ <span class="s">&quot;auth&quot;</span><span class="p">:</span> <span class="s">&quot;plaintext:&lt;key&gt;&quot;</span>
+ <span class="c"># The auth-type and key for the user; currently only plaintext is</span>
+ <span class="c"># implemented.</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&quot;groups&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;test:tester&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;test&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;.admin&quot;</span><span class="p">}],</span>
+ <span class="s">&quot;auth&quot;</span><span class="p">:</span> <span class="s">&quot;plaintext:testing&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>If the &lt;user&gt; in the request is the special user <cite>.groups</cite>, the JSON
+dict will contain a single key of <cite>groups</cite> whose value is a list of
+dicts representing the active groups within the account. Each dict
+currently has the single key <cite>name</cite>. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&quot;groups&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;.admin&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;test&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;test:tester&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;test:tester3&quot;</span><span class="p">}]}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>req</strong> &#8211; The webob.Request to process.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">webob.Response, 2xx on success with a JSON dictionary as
+explained above.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.handle_prep">
+<tt class="descname">handle_prep</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_prep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_prep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the POST v2/.prep call for preparing the backing store Swift
+cluster for use with the auth subsystem. Can only be called by
+.super_admin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>req</strong> &#8211; The webob.Request to process.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">webob.Response, 204 on success</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.handle_put_account">
+<tt class="descname">handle_put_account</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_put_account"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_put_account" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the PUT v2/&lt;account&gt; call for adding an account to the auth
+system. Can only be called by a .reseller_admin.</p>
+<p>By default, a newly created UUID4 will be used with the reseller prefix
+as the account id used when creating corresponding service accounts.
+However, you can provide an X-Account-Suffix header to replace the
+UUID4 part.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>req</strong> &#8211; The webob.Request to process.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">webob.Response, 2xx on success.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.handle_put_user">
+<tt class="descname">handle_put_user</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_put_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_put_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the PUT v2/&lt;account&gt;/&lt;user&gt; call for adding a user to an
+account.</p>
+<p>X-Auth-User-Key represents the user&#8217;s key, X-Auth-User-Admin may be set
+to <cite>true</cite> to create an account .admin, and X-Auth-User-Reseller-Admin
+may be set to <cite>true</cite> to create a .reseller_admin.</p>
+<p>Can only be called by an account .admin unless the user is to be a
+.reseller_admin, in which case the request must be by .super_admin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>req</strong> &#8211; The webob.Request to process.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">webob.Response, 2xx on success.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.handle_request">
+<tt class="descname">handle_request</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point for auth requests (ones that match the self.auth_prefix).
+Should return a WSGI-style callable (such as webob.Response).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>req</strong> &#8211; webob.Request object</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.handle_set_services">
+<tt class="descname">handle_set_services</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_set_services"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_set_services" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the POST v2/&lt;account&gt;/.services call for setting services
+information. Can only be called by a reseller .admin.</p>
+<p>In the <a class="reference internal" href="#swauth.middleware.Swauth.handle_get_account" title="swauth.middleware.Swauth.handle_get_account"><tt class="xref py py-func docutils literal"><span class="pre">handle_get_account()</span></tt></a> (GET v2/&lt;account&gt;) call, a section of
+the returned JSON dict is <cite>services</cite>. This section looks something like
+this:</p>
+<div class="highlight-python"><pre>"services": {"storage": {"default": "local",
+              "local": "http://127.0.0.1:8080/v1/AUTH_018c3946"}}</pre>
+</div>
+<p>Making use of this section is described in <a class="reference internal" href="#swauth.middleware.Swauth.handle_get_token" title="swauth.middleware.Swauth.handle_get_token"><tt class="xref py py-func docutils literal"><span class="pre">handle_get_token()</span></tt></a>.</p>
+<p>This function allows setting values within this section for the
+&lt;account&gt;, allowing the addition of new service end points or updating
+existing ones.</p>
+<p>The body of the POST request should contain a JSON dict with the
+following format:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&quot;service_name&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;end_point_name&quot;</span><span class="p">:</span> <span class="s">&quot;end_point_value&quot;</span><span class="p">}}</span>
+</pre></div>
+</div>
+<p>There can be multiple services and multiple end points in the same
+call.</p>
+<p>Any new services or end points will be added to the existing set of
+services and end points. Any existing services with the same service
+name will be merged with the new end points. Any existing end points
+with the same end point name will have their values updated.</p>
+<p>The updated services dictionary will be returned on success.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>req</strong> &#8211; The webob.Request to process.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">webob.Response, 2xx on success with the udpated services JSON
+dict as described above</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.handle_validate_token">
+<tt class="descname">handle_validate_token</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.handle_validate_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.handle_validate_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the GET v2/.token/&lt;token&gt; call for validating a token, usually
+called by a service like Swift.</p>
+<p>On a successful validation, X-Auth-TTL will be set for how much longer
+this token is valid and X-Auth-Groups will contain a comma separated
+list of groups the user belongs to.</p>
+<p>The first group listed will be a unique identifier for the user the
+token represents.</p>
+<p>.reseller_admin is a special group that indicates the user should be
+allowed to do anything on any account.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>req</strong> &#8211; The webob.Request to process.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">webob.Response, 2xx on success with data set as explained
+above.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.is_account_admin">
+<tt class="descname">is_account_admin</tt><big>(</big><em>req</em>, <em>account</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.is_account_admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.is_account_admin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the admin specified in the request represents a .admin
+for the account specified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>req</strong> &#8211; The webob.Request to check.</li>
+<li><strong>account</strong> &#8211; The account to check for .admin against.</li>
+<li><strong>returns</strong> &#8211; True if .admin.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.is_reseller_admin">
+<tt class="descname">is_reseller_admin</tt><big>(</big><em>req</em>, <em>admin_detail=None</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.is_reseller_admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.is_reseller_admin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the admin specified in the request represents a
+.reseller_admin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>req</strong> &#8211; The webob.Request to check.</li>
+<li><strong>admin_detail</strong> &#8211; The previously retrieved dict from
+<a class="reference internal" href="#swauth.middleware.Swauth.get_admin_detail" title="swauth.middleware.Swauth.get_admin_detail"><tt class="xref py py-func docutils literal"><span class="pre">get_admin_detail()</span></tt></a> or None for this function
+to retrieve the admin_detail itself.</li>
+<li><strong>returns</strong> &#8211; True if .reseller_admin.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.is_super_admin">
+<tt class="descname">is_super_admin</tt><big>(</big><em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.is_super_admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.is_super_admin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the admin specified in the request represents the
+.super_admin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>req</strong> &#8211; The webob.Request to check.</li>
+<li><strong>returns</strong> &#8211; True if .super_admin.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.make_request">
+<tt class="descname">make_request</tt><big>(</big><em>env</em>, <em>method</em>, <em>path</em>, <em>body=None</em>, <em>headers=None</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.make_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.make_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes a new webob.Request based on the current env but with the
+parameters specified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>env</strong> &#8211; Current WSGI environment dictionary</li>
+<li><strong>method</strong> &#8211; HTTP method of new request</li>
+<li><strong>path</strong> &#8211; HTTP path of new request</li>
+<li><strong>body</strong> &#8211; HTTP body of new request; None by default</li>
+<li><strong>headers</strong> &#8211; Extra HTTP headers of new request; None by default</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">webob.Request object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="swauth.middleware.Swauth.posthooklogger">
+<tt class="descname">posthooklogger</tt><big>(</big><em>env</em>, <em>req</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#Swauth.posthooklogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.Swauth.posthooklogger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="swauth.middleware.filter_factory">
+<tt class="descclassname">swauth.middleware.</tt><tt class="descname">filter_factory</tt><big>(</big><em>global_conf</em>, <em>**local_conf</em><big>)</big><a class="reference internal" href="modules/swauth/middleware.html#filter_factory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#swauth.middleware.filter_factory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a WSGI filter app for use with paste.deploy.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="swauth.html"
+                        title="previous chapter">swauth</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/middleware.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="swauth.html" title="swauth"
+             >previous</a> |</li>
+        <li><a href="index.html">Swauth v1.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2011, OpenStack, LLC.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>
