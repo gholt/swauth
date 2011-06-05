@@ -35,7 +35,8 @@ from webob.exc import HTTPAccepted, HTTPBadRequest, HTTPConflict, \
 
 from swift.common.bufferedhttp import http_connect_raw as http_connect
 from swift.common.middleware.acl import clean_acl, parse_acl, referrer_allowed
-from swift.common.utils import cache_from_env, get_logger, split_path, urlparse
+from swift.common.utils import cache_from_env, get_logger, split_path, \
+    TRUE_VALUES, urlparse
 
 
 # NOTE: This should be removed after some time when anyone upgrading Swauth
@@ -70,7 +71,7 @@ class Swauth(object):
         self.app = app
         self.conf = conf
         self.logger = get_logger(conf, log_route='swauth')
-        self.log_headers = conf.get('log_headers') == 'True'
+        self.log_headers = conf.get('log_headers', 'no').lower() in TRUE_VALUES
         self.reseller_prefix = conf.get('reseller_prefix', 'AUTH').strip()
         if self.reseller_prefix and self.reseller_prefix[-1] != '_':
             self.reseller_prefix += '_'
@@ -81,6 +82,26 @@ class Swauth(object):
             self.auth_prefix = '/' + self.auth_prefix
         if self.auth_prefix[-1] != '/':
             self.auth_prefix += '/'
+        self.swauth_remote = conf.get('swauth_remote')
+        if self.swauth_remote:
+            self.swauth_remote = self.swauth_remote.rstrip('/')
+            if not self.swauth_remote:
+                msg = _('Invalid swauth_remote set in conf file! Exiting.')
+                try:
+                    self.logger.critical(msg)
+                except Exception:
+                    pass
+                raise ValueError(msg)
+            self.swauth_remote_parsed = urlparse(self.swauth_remote)
+            if self.swauth_remote_parsed.scheme not in ('http', 'https'):
+                msg = _('Cannot handle protocol scheme %s for url %s!') % \
+                   (self.swauth_remote_parsed.scheme, repr(self.swauth_remote))
+                try:
+                    self.logger.critical(msg)
+                except Exception:
+                    pass
+                raise ValueError(msg)
+        self.swauth_remote_timeout = int(conf.get('swauth_remote_timeout', 10))
         self.auth_account = '%s.auth' % self.reseller_prefix
         self.default_swift_cluster = conf.get('default_swift_cluster',
             'local#http://127.0.0.1:8080/v1')
@@ -109,7 +130,7 @@ class Swauth(object):
             raise Exception('Cannot handle protocol scheme %s for url %s' %
                             (self.dsc_parsed2.scheme, repr(self.dsc_url2)))
         self.super_admin_key = conf.get('super_admin_key')
-        if not self.super_admin_key:
+        if not self.super_admin_key and not self.swauth_remote:
             msg = _('No super_admin_key set in conf file; Swauth '
                     'administration features will be disabled.')
             try:
@@ -146,7 +167,8 @@ class Swauth(object):
         """
         if 'HTTP_X_CF_TRANS_ID' not in env:
             env['HTTP_X_CF_TRANS_ID'] = 'tx' + str(uuid4())
-        if env.get('PATH_INFO', '').startswith(self.auth_prefix):
+        if not self.swauth_remote and \
+                env.get('PATH_INFO', '').startswith(self.auth_prefix):
             return self.handle(env, start_response)
         s3 = env.get('HTTP_AUTHORIZATION')
         token = env.get('HTTP_X_AUTH_TOKEN', env.get('HTTP_X_STORAGE_TOKEN'))
@@ -221,6 +243,11 @@ class Swauth(object):
                     groups = None
 
         if env.get('HTTP_AUTHORIZATION'):
+            if self.swauth_remote:
+                # TODO: Support S3-style authorization with swauth_remote mode
+                self.logger.warn('S3-style authorization not supported yet '
+                                 'with swauth_remote mode.')
+                return None
             account = env['HTTP_AUTHORIZATION'].split(' ')[1]
             account, user, sign = account.split(':')
             path = quote('/v1/%s/%s/%s' % (self.auth_account, account, user))
@@ -257,23 +284,45 @@ class Swauth(object):
             return groups
 
         if not groups:
-            path = quote('/v1/%s/.token_%s/%s' %
-                         (self.auth_account, token[-1], token))
-            resp = self.make_request(env, 'GET', path).get_response(self.app)
-            if resp.status_int // 100 != 2:
-                return None
-            detail = json.loads(resp.body)
-            if detail['expires'] < time():
-                self.make_request(env, 'DELETE', path).get_response(self.app)
-                return None
-            groups = [g['name'] for g in detail['groups']]
-            if '.admin' in groups:
-                groups.remove('.admin')
-                groups.append(detail['account_id'])
-            groups = ','.join(groups)
-            if memcache_client:
-                memcache_client.set(memcache_key, (detail['expires'], groups),
-                                    timeout=float(detail['expires'] - time()))
+            if self.swauth_remote:
+                with Timeout(self.swauth_remote_timeout):
+                    conn = http_connect(self.swauth_remote_parsed.hostname,
+                        self.swauth_remote_parsed.port, 'GET',
+                        '%s/v2/.token/%s' % (self.swauth_remote_parsed.path,
+                                             quote(token)),
+                        ssl=(self.swauth_remote_parsed.scheme == 'https'))
+                    resp = conn.getresponse()
+                    resp.read()
+                    conn.close()
+                if resp.status // 100 != 2:
+                    return None
+                expires_from_now = float(resp.getheader('x-auth-ttl'))
+                groups = resp.getheader('x-auth-groups')
+                if memcache_client:
+                    memcache_client.set(memcache_key,
+                                        (time() + expires_from_now, groups),
+                                        timeout=expires_from_now)
+            else:
+                path = quote('/v1/%s/.token_%s/%s' %
+                             (self.auth_account, token[-1], token))
+                resp = \
+                    self.make_request(env, 'GET', path).get_response(self.app)
+                if resp.status_int // 100 != 2:
+                    return None
+                detail = json.loads(resp.body)
+                if detail['expires'] < time():
+                    self.make_request(env, 'DELETE',
+                                      path).get_response(self.app)
+                    return None
+                groups = [g['name'] for g in detail['groups']]
+                if '.admin' in groups:
+                    groups.remove('.admin')
+                    groups.append(detail['account_id'])
+                groups = ','.join(groups)
+                if memcache_client:
+                    memcache_client.set(memcache_key,
+                        (detail['expires'], groups),
+                        timeout=float(detail['expires'] - time()))
         return groups
 
     def authorize(self, req):
