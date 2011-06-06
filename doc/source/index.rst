@@ -65,6 +65,7 @@ Contents
     details
     swauth
     middleware
+    api
 
 Indices and tables
 ------------------
