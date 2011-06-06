@@ -46,6 +46,11 @@ if __name__ == '__main__':
         'subsystem (default: http://127.0.0.1:8080/auth/)')
     parser.add_option('-K', '--admin-key', dest='admin_key',
         help='The key for .super_admin.')
+    parser.add_option('', '--purge', dest='purge_account', help='Purges all '
+        'tokens for a given account whether the tokens have expired or not.')
+    parser.add_option('', '--purge-all', dest='purge_all', action='store_true',
+        default=False, help='Purges all tokens for all accounts and users '
+        'whether the tokens have expired or not.')
     args = argv[1:]
     if not args:
         args.append('-h')
@@ -59,6 +64,38 @@ if __name__ == '__main__':
     options.token_life = timedelta(0, float(options.token_life))
     options.sleep = float(options.sleep)
     conn = Connection(options.admin_url, options.admin_user, options.admin_key)
+    if options.purge_account:
+        marker = None
+        while True:
+            if options.verbose:
+                print 'GET %s?marker=%s' % (options.purge_account, marker)
+            objs = conn.get_container(options.purge_account, marker=marker)[1]
+            if objs:
+                marker = objs[-1]['name']
+            else:
+                if options.verbose:
+                    print 'No more objects in %s' % options.purge_account
+                break
+            for obj in objs:
+                if options.verbose:
+                    print 'HEAD %s/%s' % (options.purge_account, obj['name'])
+                headers = conn.head_object(options.purge_account, obj['name'])
+                if 'x-object-meta-auth-token' in headers:
+                    token = headers['x-object-meta-auth-token']
+                    container = '.token_%s' % token[-1]
+                    if options.verbose:
+                        print '%s/%s purge account %r; deleting' % \
+                              (container, token, options.purge_account)
+                    print 'DELETE %s/%s' % (container, token)
+                    try:
+                        conn.delete_object(container, token)
+                    except ClientException, err:
+                        if err.http_status != 404:
+                            raise
+                continue
+        if options.verbose:
+            print 'Done.'
+        exit(0)
     for x in xrange(16):
         container = '.token_%x' % x
         marker = None
@@ -81,6 +118,17 @@ if __name__ == '__main__':
                     print 'No more objects in %s' % container
                 break
             for obj in objs:
+                if options.purge_all:
+                    if options.verbose:
+                        print '%s/%s purge all; deleting' % \
+                              (container, obj['name'])
+                    print 'DELETE %s/%s' % (container, obj['name'])
+                    try:
+                        conn.delete_object(container, obj['name'])
+                    except ClientException, err:
+                        if err.http_status != 404:
+                            raise
+                    continue
                 last_modified = datetime(*map(int, re.split('[^\d]',
                                               obj['last_modified'])[:-1]))
                 ago = datetime.utcnow() - last_modified

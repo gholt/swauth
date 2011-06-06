@@ -6,6 +6,14 @@ The Swauth system is a scalable authentication and authorization system that
 uses Swift itself as its backing store. This section will describe how it
 stores its data.
 
+.. note::
+
+    You can access Swauth's internal .auth account by using the account:user of
+    .super_admin:.super_admin and the super admin key you have set in your
+    configuration. Here's an example using `st` on a standard SAIO: ``st -A
+    http://127.0.0.1:8080/auth/v1.0 -U .super_admin:.super_admin -K swauthkey
+    stat``
+
 At the topmost level, the auth system has its own Swift account it stores its
 own account information within. This Swift account is known as
 self.auth_account in the code and its name is in the format
