@@ -3,37 +3,37 @@ Label: Swauth
 Suite: stable
 Codename: lucid
 Version: 5.0
-Date: Fri, 03 Jun 2011 22:13:12 UTC
+Date: Mon, 06 Jun 2011 20:57:03 UTC
 Architectures: i386 amd64
 Components: main
 Description: Swauth packages for Lucid
 MD5Sum:
- e87111fcb07cfc395ca621bff7e53029 1393 main/binary-i386/Packages
- 1a7e9bf8c4afbffe91da527f70bb37df 729 main/binary-i386/Packages.gz
+ 53c51e9732471abd7fa5f90e87746ef8 1401 main/binary-i386/Packages
+ 17e5dd3c30fc95d6298a3129ee0ee388 733 main/binary-i386/Packages.gz
  a6970fefdf554addd94070e6b813242a 132 main/binary-i386/Release
- e87111fcb07cfc395ca621bff7e53029 1393 main/binary-amd64/Packages
- 1a7e9bf8c4afbffe91da527f70bb37df 729 main/binary-amd64/Packages.gz
+ 53c51e9732471abd7fa5f90e87746ef8 1401 main/binary-amd64/Packages
+ 17e5dd3c30fc95d6298a3129ee0ee388 733 main/binary-amd64/Packages.gz
  b1284cc807cbc72181e3b7dcabf22d53 133 main/binary-amd64/Release
- d6eb1393470396b24e6603e2a485c469 1246 main/source/Sources
- 53696e249566d6e7ac6e1157582edbb6 665 main/source/Sources.gz
+ b8584a90abf3e4dc78c9eb646930ab2b 1263 main/source/Sources
+ c3ee7376b186eac113faeff3b3d965d4 669 main/source/Sources.gz
  a5a93193cad6c9503861e66d9874182d 134 main/source/Release
 SHA1:
- 911c8fed0a02dec4889867f1dd87cd54b9b84d45 1393 main/binary-i386/Packages
- 99736001dcd635f138e93b8a36f0c3a29f30da07 729 main/binary-i386/Packages.gz
+ 95e0d18a69090ab7af6bda5a9b4d241bf7552249 1401 main/binary-i386/Packages
+ 76e62a6b1d65c7711f31054f66718dc275e89d36 733 main/binary-i386/Packages.gz
  c9505ca54d4abe8bd5b5b9ad873a5aeb9b446a3b 132 main/binary-i386/Release
- 911c8fed0a02dec4889867f1dd87cd54b9b84d45 1393 main/binary-amd64/Packages
- 99736001dcd635f138e93b8a36f0c3a29f30da07 729 main/binary-amd64/Packages.gz
+ 95e0d18a69090ab7af6bda5a9b4d241bf7552249 1401 main/binary-amd64/Packages
+ 76e62a6b1d65c7711f31054f66718dc275e89d36 733 main/binary-amd64/Packages.gz
  7663f20f0e04ead4a17f7cdb374170651e771f63 133 main/binary-amd64/Release
- 2bc92f697cf5d516c625b521f8b8e6b8e961ed13 1246 main/source/Sources
- 6a4b008a330a6c4f44f942d7db0f041296dfb31a 665 main/source/Sources.gz
+ 96b70f8b98dc6d759d019dfd808d866c86b254f3 1263 main/source/Sources
+ 3f4c5aec43be1b4923efd07254dcd1c2ddd80312 669 main/source/Sources.gz
  6552ab63d70d0aae2e5b276b447a1f691f574d62 134 main/source/Release
 SHA256:
- 84fa1abf2cb6ec9f44df902dee938ae25b48b927be5b9e1556def19a85358680 1393 main/binary-i386/Packages
- 58318b26a3f0a348f914840a8a0b689c5b5bacee58a43d2fa98d7fc6b88def6c 729 main/binary-i386/Packages.gz
+ d9f2bdaba77838b64ec5275bd8b1f79aa9e7fb5565f07fdd9d6f6c867723368a 1401 main/binary-i386/Packages
+ a461ba3ef6cd8a31dbd6f044becc2cfc4d896e0ee8a025b03caf861228d35568 733 main/binary-i386/Packages.gz
  4ab3aed78e4dfb577b151f0d5f494d27bcb5f79238721b4b7c86aff560a8508f 132 main/binary-i386/Release
- 84fa1abf2cb6ec9f44df902dee938ae25b48b927be5b9e1556def19a85358680 1393 main/binary-amd64/Packages
- 58318b26a3f0a348f914840a8a0b689c5b5bacee58a43d2fa98d7fc6b88def6c 729 main/binary-amd64/Packages.gz
+ d9f2bdaba77838b64ec5275bd8b1f79aa9e7fb5565f07fdd9d6f6c867723368a 1401 main/binary-amd64/Packages
+ a461ba3ef6cd8a31dbd6f044becc2cfc4d896e0ee8a025b03caf861228d35568 733 main/binary-amd64/Packages.gz
  ae10af661c7d594db33ad43039415f3e873d1b8114f7d32c1022cfb1b511eccd 133 main/binary-amd64/Release
- 84311a1df39d7212a9125c6e9160f91b0725a2730d7e76356eabba3f67c2c236 1246 main/source/Sources
- 03d803df04da7697af070823b4ab415fbb4950d9f1b7478622f0883c470d98e4 665 main/source/Sources.gz
+ 712c3e983b3fd0e8bc7896f44e660e6d2d99b46eaaa9e300971e698cda193123 1263 main/source/Sources
+ 89f08b41c1aaf702a28b56374ef6ef263e5e51f4ac746169e7117a25368e6364 669 main/source/Sources.gz
  994930c0cc0e10ea8439c98e1e7e5442870f1ba3f85e5a673cf8f901d5ecb760 134 main/source/Release
