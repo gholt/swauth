@@ -1,9 +1,22 @@
-swauth (1.0.2-dev)
+swauth (1.0.2)
 
-    This release is still under development. A full change log will be made at
-    release. Until then, you can see what has changed with:
+    Fixed bug rejecting requests when using multiple instances of Swauth or
+    Swauth with other auth services.
 
-    git log 1.0.1..HEAD
+    Fixed bug interpreting URL-encoded user names and keys.
+
+    Added support for the Swift container sync feature.
+
+    Allowed /not/ setting super_admin_key to disable Swauth administration
+    features.
+
+    Added swauth_remote mode so the Swauth middleware for one Swift cluster
+    could be pointing to the Swauth service on another Swift cluster, sharing
+    account/user data sets.
+
+    Added ability to purge stored tokens.
+
+    Added API documentation for internal Swauth API.
 
 swauth (1.0.1)
 
