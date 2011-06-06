@@ -1,3 +1,10 @@
+swauth (1.0.3-dev)
+
+    This release is still under development. A full change log will be made at
+    release. Until then, you can see what has changed with:
+
+    git log 1.0.2..HEAD
+
 swauth (1.0.2)
 
     Fixed bug rejecting requests when using multiple instances of Swauth or
