@@ -6,11 +6,11 @@
             <li><a href="1.0.2/">1.0.2</a></li>
             <li><a href="1.0.1/">1.0.1</a></li>
         </ul>
-        <p>There is a debian package repository for Lucid at http://gholt.github.com/swauth/debian/ so you can easily install Swauth on Lucid by:</p>
+        <p>There is a debian package repository for Lucid at http://gholt.github.com/swauth/lucid/ so you can easily install Swauth on Lucid by:</p>
         <ul>
             <li><p>Create /etc/apt/sources.list.d/swauth.list:<br />
                 <br />
-                <code>deb http://gholt.github.com/swauth/debian lucid
+                <code>deb http://gholt.github.com/swauth/lucid lucid
                 main</code></p>
             </li>
             <li><p>Then:<br />
@@ -18,6 +18,10 @@
                 <code>sudo apt-get update</code><br />
                 <code>sudo apt-get install python-swauth swauth-doc</code></p>
             </li>
+        </ul>
+        <p>There are also older package repositories if you'd like to reference a specific release's collection of packages that will only change for security patches.</p>
+        <ul>
+            <li>deb http://crashsite.github.com/swift_debian/lucid-1.0.2 lucid main</li>
         </ul>
     </body>
 </html>

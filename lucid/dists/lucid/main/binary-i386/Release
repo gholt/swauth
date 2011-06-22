@@ -1,0 +1,7 @@
+Archive: stable
+Version: 5.0
+Component: main
+Origin: Swauth
+Label: Swauth
+Architecture: i386
+Description: Swauth packages for Lucid
