@@ -547,7 +547,7 @@ class Swauth(object):
             for container in sublisting:
                 if container['name'][0] != '.':
                     listing.append({'name': container['name']})
-            marker = sublisting[-1]['name']
+            marker = sublisting[-1]['name'].encode('utf-8')
         return Response(body=json.dumps({'accounts': listing}))
 
     def handle_get_account(self, req):
@@ -797,7 +797,7 @@ class Swauth(object):
             for obj in sublisting:
                 if obj['name'][0] != '.':
                     return HTTPConflict(request=req)
-            marker = sublisting[-1]['name']
+            marker = sublisting[-1]['name'].encode('utf-8')
         # Obtain the listing of services the account is on.
         path = quote('/v1/%s/%s/.services' % (self.auth_account, account))
         resp = self.make_request(req.environ, 'GET',
@@ -932,7 +932,7 @@ class Swauth(object):
                                             '%s %s' % (path, resp.status))
                         groups.update(g['name']
                             for g in json.loads(resp.body)['groups'])
-                marker = sublisting[-1]['name']
+                marker = sublisting[-1]['name'].encode('utf-8')
             body = json.dumps({'groups':
                                 [{'name': g} for g in sorted(groups)]})
         else:
