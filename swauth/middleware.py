@@ -604,7 +604,7 @@ class Swauth(object):
             for obj in sublisting:
                 if obj['name'][0] != '.':
                     listing.append({'name': obj['name']})
-            marker = sublisting[-1]['name']
+            marker = sublisting[-1]['name'].encode('utf-8')
         return Response(body=json.dumps({'account_id': account_id,
                                     'services': services, 'users': listing}))
 
