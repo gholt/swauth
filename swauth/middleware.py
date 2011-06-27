@@ -30,8 +30,8 @@ from eventlet.timeout import Timeout
 from eventlet import TimeoutError
 from webob import Response, Request
 from webob.exc import HTTPAccepted, HTTPBadRequest, HTTPConflict, \
-    HTTPCreated, HTTPForbidden, HTTPNoContent, HTTPNotFound, \
-    HTTPServiceUnavailable, HTTPUnauthorized
+    HTTPCreated, HTTPForbidden, HTTPMethodNotAllowed, HTTPMovedPermanently, \
+    HTTPNoContent, HTTPNotFound, HTTPServiceUnavailable, HTTPUnauthorized
 
 from swift.common.bufferedhttp import http_connect_raw as http_connect
 from swift.common.middleware.acl import clean_acl, parse_acl, referrer_allowed
@@ -167,9 +167,12 @@ class Swauth(object):
         """
         if 'HTTP_X_CF_TRANS_ID' not in env:
             env['HTTP_X_CF_TRANS_ID'] = 'tx' + str(uuid4())
-        if not self.swauth_remote and \
-                env.get('PATH_INFO', '').startswith(self.auth_prefix):
-            return self.handle(env, start_response)
+        if not self.swauth_remote:
+            if env.get('PATH_INFO', '') == self.auth_prefix[:-1]:
+                return HTTPMovedPermanently(add_slash=True)(env,
+                                                            start_response)
+            elif env.get('PATH_INFO', '').startswith(self.auth_prefix):
+                return self.handle(env, start_response)
         s3 = env.get('HTTP_AUTHORIZATION')
         token = env.get('HTTP_X_AUTH_TOKEN', env.get('HTTP_X_STORAGE_TOKEN'))
         if s3 or (token and token.startswith(self.reseller_prefix)):
@@ -424,7 +427,7 @@ class Swauth(object):
         handler = None
         try:
             version, account, user, _junk = split_path(req.path_info,
-                minsegs=1, maxsegs=4, rest_with_last=True)
+                minsegs=0, maxsegs=4, rest_with_last=True)
         except ValueError:
             return HTTPNotFound(request=req)
         if version in ('v1', 'v1.0', 'auth'):
@@ -460,10 +463,21 @@ class Swauth(object):
                     handler = self.handle_prep
                 elif user == '.services':
                     handler = self.handle_set_services
+        else:
+            handler = self.handle_webadmin
         if not handler:
             req.response = HTTPBadRequest(request=req)
         else:
             req.response = handler(req)
+        return req.response
+
+    def handle_webadmin(self, req):
+        if req.method not in ('GET', 'HEAD'):
+            return HTTPMethodNotAllowed(request=req)
+        subpath = req.path[len(self.auth_prefix):] or 'index.html'
+        path = quote('/v1/%s/.webadmin/%s' % (self.auth_account, subpath))
+        req.response = self.make_request(req.environ, req.method,
+                                         path).get_response(self.app)
         return req.response
 
     def handle_prep(self, req):

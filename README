@@ -38,12 +38,26 @@ Quick Install
     set log_name = swauth
     super_admin_key = swauthkey
 
-4) Restart your proxy server ``swift-init proxy reload``.
+4) Restart your proxy server ``swift-init proxy reload``
 
-5) Initialize the Swauth backing store in Swift ``swauth-prep -K swauthkey``.
+5) Initialize the Swauth backing store in Swift ``swauth-prep -K swauthkey``
 
 6) Add an account/user ``swauth-add-user -A http://127.0.0.1:8080/auth/ -K
-   swauthkey -a test tester testing``.
+   swauthkey -a test tester testing``
 
-7) Ensure it works ``st -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K
-   testing stat -v``.
+7) Ensure it works ``swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K
+   testing stat -v``
+
+
+Web Admin Install
+-----------------
+
+1)  If you installed from packages, you'll need to cd to the webadmin directory
+    the package installed. This is ``/usr/share/doc/python-swauth/webadmin``
+    with the Lucid packages. If you installed from source, you'll need to cd to
+    the webadmin directory in the source directory.
+
+2)  Upload the Web Admin files with ``swift -A http://127.0.0.1:8080/auth/v1.0
+    -U .super_admin:.super_admin -K swauthkey upload .webadmin .``
+
+3)  Open ``http://127.0.0.1:8080/auth/`` in your browser.
