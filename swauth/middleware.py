@@ -147,7 +147,7 @@ class Swauth(object):
             for h in conf.get('allowed_sync_hosts', '127.0.0.1').split(',')
             if h.strip()]
         # Get an instance of our auth_type encoder for saving and checking the user's key
-        self.auth_type = conf.get('auth_type', 'Plaintext')
+        self.auth_type = conf.get('auth_type', 'Plaintext').title()
         self.auth_encoder = getattr(swauth.authtypes, self.auth_type, None)
         self.auth_encoder.salt = conf.get('auth_type_salt', 'swauthsalt')
         if self.auth_encoder is None:
