@@ -151,9 +151,10 @@ class Swauth(object):
         # user's key
         self.auth_type = conf.get('auth_type', 'Plaintext').title()
         self.auth_encoder = getattr(swauth.authtypes, self.auth_type, None)
-        self.auth_encoder.salt = conf.get('auth_type_salt', 'swauthsalt')
         if self.auth_encoder is None:
-            self.auth_encoder = authtypes.Plaintext
+            raise Exception('Invalid auth_type in config file: %s'
+                             % self.auth_type)
+        self.auth_encoder.salt = conf.get('auth_type_salt', 'swauthsalt')
 
     def __call__(self, env, start_response):
         """
