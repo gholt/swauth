@@ -10,7 +10,7 @@
 # implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# 
+#
 # Pablo Llopis 2011
 
 
@@ -19,27 +19,29 @@ This module hosts available auth types for encoding and matching user keys.
 For adding a new auth type, simply write a class that satisfies the following
 conditions:
 
-- For the class name, apitalize first letter only. This makes sure the user 
-  can specify an all-lowercase config option such as "plaintext" or "sha1". 
+- For the class name, apitalize first letter only. This makes sure the user
+  can specify an all-lowercase config option such as "plaintext" or "sha1".
   Swauth takes care of capitalizing the first letter before instantiating it.
 - Write an encode(key) method that will take a single argument, the user's key,
-  and returns the encoded string. For plaintext, this would be "plaintext:<key>".
-- Write a match(key, creds) method that will take two arguments: the user's key, 
-  and the user's retrieved credentials. Return a boolean value that indicates
-  whether the match is True or False.
+  and returns the encoded string. For plaintext, this would be
+  "plaintext:<key>"
+- Write a match(key, creds) method that will take two arguments: the user's
+  key, and the user's retrieved credentials. Return a boolean value that
+  indicates whether the match is True or False.
 
-Note that, since some of the encodings will be hashes, swauth supports the notion
-of salts. Thus, self.salt will be set to either a user-specified salt value or to a
-default value.
+Note that, since some of the encodings will be hashes, swauth supports the
+notion of salts. Thus, self.salt will be set to either a user-specified salt
+value or to a default value.
 """
 
 import hashlib
 
+
 class Plaintext(object):
     """
     Provides a particular auth type for encoding format for encoding and
-    matching user keys. 
-    
+    matching user keys.
+
     This class must be all lowercase except for the first character, which
     must be capitalized. encode and match methods must be provided and are
     the only ones that will be used by swauth.
@@ -64,11 +66,12 @@ class Plaintext(object):
         """
         return self.encode(key) == creds
 
+
 class Sha1(object):
     """
     Provides a particular auth type for encoding format for encoding and
-    matching user keys. 
-    
+    matching user keys.
+
     This class must be all lowercase except for the first character, which
     must be capitalized. encode and match methods must be provided and are
     the only ones that will be used by swauth.
