@@ -145,6 +145,29 @@ class TestAuth(unittest.TestCase):
                                    'auth_prefix': 'test'})(app)
         self.assertEquals(ath.auth_prefix, '/test/')
 
+    def test_no_auth_type_init(self):
+        app = FakeApp()
+        ath = auth.filter_factory({})(app)
+        self.assertEquals(ath.auth_type, 'Plaintext')
+
+    def test_valid_auth_type_init(self):
+        app = FakeApp()
+        ath = auth.filter_factory({'auth_type': 'sha1'})(app)
+        self.assertEquals(ath.auth_type, 'Sha1')
+        ath = auth.filter_factory({'auth_type': 'plaintext'})(app)
+        self.assertEquals(ath.auth_type, 'Plaintext')
+
+    def test_invalid_auth_type_init(self):
+        app = FakeApp()
+        exc = None
+        try:
+            auth.filter_factory({'auth_type': 'NONEXISTANT'})(app)
+        except Exception as err:
+            exc = err
+        self.assertEquals(str(exc),
+                          'Invalid auth_type in config file: %s' %
+                          'Nonexistant')
+
     def test_default_swift_cluster_init(self):
         app = FakeApp()
         self.assertRaises(Exception, auth.filter_factory({
