@@ -79,6 +79,7 @@ Contents
     swauth
     middleware
     api
+    authtypes
 
 Indices and tables
 ------------------

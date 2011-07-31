@@ -38,6 +38,8 @@ from swift.common.middleware.acl import clean_acl, parse_acl, referrer_allowed
 from swift.common.utils import cache_from_env, get_logger, split_path, \
     TRUE_VALUES, urlparse
 
+import sys
+import swauth.authtypes
 
 # NOTE: This should be removed after some time when anyone upgrading Swauth
 # should have also upgraded Swift.
@@ -46,6 +48,7 @@ try:
     # this.
     from swift.common.utils import get_remote_client
 except ImportError:
+
     # Fall back to locally defined version.
     def get_remote_client(req):
         # remote host for zeus
@@ -144,6 +147,14 @@ class Swauth(object):
         self.allowed_sync_hosts = [h.strip()
             for h in conf.get('allowed_sync_hosts', '127.0.0.1').split(',')
             if h.strip()]
+        # Get an instance of our auth_type encoder for saving and checking the
+        # user's key
+        self.auth_type = conf.get('auth_type', 'Plaintext').title()
+        self.auth_encoder = getattr(swauth.authtypes, self.auth_type, None)
+        if self.auth_encoder is None:
+            raise Exception('Invalid auth_type in config file: %s'
+                             % self.auth_type)
+        self.auth_encoder.salt = conf.get('auth_type_salt', 'swauthsalt')
 
     def __call__(self, env, start_response):
         """
@@ -1003,8 +1014,9 @@ class Swauth(object):
             groups.append('.admin')
         if reseller_admin:
             groups.append('.reseller_admin')
+        auth_value = self.auth_encoder().encode(key)
         resp = self.make_request(req.environ, 'PUT', path,
-            json.dumps({'auth': 'plaintext:%s' % key,
+            json.dumps({'auth': auth_value,
                         'groups': [{'name': g} for g in groups]}),
             headers=headers).get_response(self.app)
         if resp.status_int == 404:
@@ -1206,8 +1218,8 @@ class Swauth(object):
             # Record the token with the user info for future use.
             path = quote('/v1/%s/%s/%s' % (self.auth_account, account, user))
             resp = self.make_request(req.environ, 'POST', path,
-                headers={'X-Object-Meta-Auth-Token': token}
-                ).get_response(self.app)
+                headers={'X-Object-Meta-Auth-Token': token}).get_response(
+                self.app)
             if resp.status_int // 100 != 2:
                 raise Exception('Could not save new token: %s %s' %
                                 (path, resp.status))
@@ -1369,14 +1381,15 @@ class Swauth(object):
 
     def credentials_match(self, user_detail, key):
         """
-        Returns True if the key is valid for the user_detail. Currently, this
-        only supports plaintext key matching.
+        Returns True if the key is valid for the user_detail.
+        It will use self.auth_encoder to check for a key match.
 
         :param user_detail: The dict for the user.
         :param key: The key to validate for the user.
         :returns: True if the key is valid for the user, False if not.
         """
-        return user_detail and user_detail.get('auth') == 'plaintext:%s' % key
+        return user_detail and self.auth_encoder().match(
+          key, user_detail.get('auth'))
 
     def is_super_admin(self, req):
         """

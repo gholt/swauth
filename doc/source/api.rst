@@ -239,9 +239,9 @@ described::
 	    # special group indicating an account admin and
 	    # .reseller_admin indicating a reseller admin.
      ],
-     "auth": "plaintext:<key>"
+     "auth": "<auth-type>:<key>"
      # The auth-type and key for the user; currently only
-     # plaintext is implemented.
+     # plaintext and sha1 are implemented as auth types.
     }
 
 For example::
