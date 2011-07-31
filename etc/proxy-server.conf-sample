@@ -41,7 +41,15 @@ use = egg:swauth#swauth
 # useful when a load balancer url should be used by users, but swauth itself is
 # behind the load balancer. Example:
 #   default_swift_cluster = local#https://public.com:8080/v1#http://private.com:8080/v1
+# Number of seconds a newly issued token should be valid for.
 #   token_life = 86400
+# Specifies how the user key is stored. The default is 'plaintext', leaving the
+# key unsecured but available for key-signing features if such are ever added.
+# An alternative is 'sha1' which stores only a one-way hash of the key leaving
+# it secure but unavailable for key-signing.
+#   auth_type = plaintext
+# Used if the auth_type is sha1 or another method that can make use of a salt.
+#   auth_type_salt = swauthsalt
 # Highly recommended to change this. If you comment this out, the Swauth
 # administration features will be disabled for this proxy.
 super_admin_key = swauthkey

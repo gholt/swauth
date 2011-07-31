@@ -19,7 +19,7 @@ This module hosts available auth types for encoding and matching user keys.
 For adding a new auth type, simply write a class that satisfies the following
 conditions:
 
-- For the class name, apitalize first letter only. This makes sure the user
+- For the class name, capitalize first letter only. This makes sure the user
   can specify an all-lowercase config option such as "plaintext" or "sha1".
   Swauth takes care of capitalizing the first letter before instantiating it.
 - Write an encode(key) method that will take a single argument, the user's key,
