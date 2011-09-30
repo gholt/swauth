@@ -1,0 +1,579 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Swauth API &mdash; Swauth v1.0.3.dev documentation</title>
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0.3.dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="Swauth v1.0.3.dev documentation" href="index.html" />
+    <link rel="next" title="swauth.authtypes" href="authtypes.html" />
+    <link rel="prev" title="swauth.middleware" href="middleware.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="authtypes.html" title="swauth.authtypes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="middleware.html" title="swauth.middleware"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Swauth v1.0.3.dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="swauth-api">
+<h1>Swauth API<a class="headerlink" href="#swauth-api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Swauth has its own internal versioned REST API for adding, removing,
+and editing accounts.  This document explains the v2 API.</p>
+<div class="section" id="authentication">
+<h3>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h3>
+<p>Each REST request against the swauth API requires the inclusion of a
+specific authorization user and key to be passed in a specific HTTP
+header.  These headers are defined as <tt class="docutils literal"><span class="pre">X-Auth-Admin-User</span></tt> and
+<tt class="docutils literal"><span class="pre">X-Auth-Admin-Key</span></tt>.</p>
+<p>Typically, these values are <tt class="docutils literal"><span class="pre">.super_admin</span></tt> (the site super admin
+user) with the key being specified in the swauth middleware
+configuration as <tt class="docutils literal"><span class="pre">super_admin_key</span></tt>.</p>
+<p>This could also be a reseller admin with the appropriate rights to
+perform actions on reseller accounts.</p>
+</div>
+<div class="section" id="endpoints">
+<h3>Endpoints<a class="headerlink" href="#endpoints" title="Permalink to this headline">¶</a></h3>
+<p>The swauth API endpoint is presented on the proxy servers, in the
+&#8220;/auth&#8221; namespace.  In addition, the API is versioned, and the version
+documented is version 2.  API versions subdivide the auth namespace by
+version, specified as a version identifier like &#8220;v2&#8221;.</p>
+<p>The auth endpoint described herein is therefore located at &#8220;/auth/v2/&#8221;
+as presented by the proxy servers.</p>
+<p>Bear in mind that in order for the auth management API to be
+presented, it must be enabled in the proxy server config by setting
+<tt class="docutils literal"><span class="pre">allow_account_managment</span></tt> to <tt class="docutils literal"><span class="pre">true</span></tt> in the <tt class="docutils literal"><span class="pre">[app:proxy-server]</span></tt>
+stanza of your proxy-server.conf.</p>
+</div>
+<div class="section" id="responses">
+<h3>Responses<a class="headerlink" href="#responses" title="Permalink to this headline">¶</a></h3>
+<p>Responses from the auth APIs are returned as a JSON structure.
+Example return values in this document are edited for readability.</p>
+</div>
+</div>
+<div class="section" id="reseller-admin-services">
+<h2>Reseller/Admin Services<a class="headerlink" href="#reseller-admin-services" title="Permalink to this headline">¶</a></h2>
+<p>Operations can be performed against the endpoint itself to perform
+general administrative operations.  Currently, the only operations
+that can be performed is a GET operation to get reseller or site admin
+information.</p>
+<div class="section" id="get-admin-info">
+<h3>Get Admin Info<a class="headerlink" href="#get-admin-info" title="Permalink to this headline">¶</a></h3>
+<p>A GET request at the swauth endpoint will return reseller information
+for the account specified in the <tt class="docutils literal"><span class="pre">X-Auth-Admin-User</span></tt> header.
+Currently, the information returned is limited to a list of accounts
+for the reseller or site admin.</p>
+<dl class="docutils">
+<dt>Valid return codes:</dt>
+<dd><ul class="first last simple">
+<li>200: Success</li>
+<li>403: Invalid X-Auth-Admin-User/X-Auth-Admin-Key</li>
+<li>5xx: Internal error</li>
+</ul>
+</dd>
+</dl>
+<p>Example Request:</p>
+<div class="highlight-python"><pre>GET /auth/&lt;api version&gt;/ HTTP/1.1
+X-Auth-Admin-User: .super_user
+X-Auth-Admin-Key: swauthkey</pre>
+</div>
+<p>Example Curl Request:</p>
+<div class="highlight-python"><pre>curl -D - https://&lt;endpoint&gt;/auth/v2/ \
+-H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-Key: swauthkey"</pre>
+</div>
+<p>Example Result:</p>
+<div class="highlight-python"><pre>HTTP/1.1 200 OK
+
+{ "accounts":
+  [
+    { "name": "account1" },
+    { "name": "account2" },
+    { "name": "account3" }
+  ]
+}</pre>
+</div>
+</div>
+</div>
+<div class="section" id="account-services">
+<h2>Account Services<a class="headerlink" href="#account-services" title="Permalink to this headline">¶</a></h2>
+<p>There are API request to get account details, create, and delete
+accounts, mapping logically to the REST verbs GET, PUT, and DELETE.
+These actions are performed against an account URI, in the following
+general request structure:</p>
+<div class="highlight-python"><pre>METHOD /auth/&lt;version&gt;/&lt;account&gt; HTTP/1.1</pre>
+</div>
+<p>The methods that can be used are detailed below.</p>
+<div class="section" id="get-account-details">
+<h3>Get Account Details<a class="headerlink" href="#get-account-details" title="Permalink to this headline">¶</a></h3>
+<p>Account details can be retrieved by performing a GET request against
+an account URI.  On success, a JSON dictionary will be returned
+containing the keys <cite>account_id</cite>, <cite>services</cite>, and <cite>users</cite>.  The
+<cite>account_id</cite> is the value used when creating service accounts.  The
+<cite>services</cite> value is a dict that represents valid storage cluster
+endpoints, and which endpoint is the default.  The &#8216;users&#8217; value is a
+list of dicts, each dict representing a user and currently only
+containing the single key &#8216;name&#8217;.</p>
+<dl class="docutils">
+<dt>Valid Responses:</dt>
+<dd><ul class="first last simple">
+<li>200: Success</li>
+<li>403: Invalid X-Auth-Admin-User/X-Auth-Admin-Key</li>
+<li>5xx: Internal error</li>
+</ul>
+</dd>
+</dl>
+<p>Example Request:</p>
+<div class="highlight-python"><pre>GET /auth/&lt;api version&gt;/&lt;account&gt; HTTP/1.1
+X-Auth-Admin-User: .super_user
+X-Auth-Admin-Key: swauthkey</pre>
+</div>
+<p>Example Curl Request:</p>
+<div class="highlight-python"><pre>curl -D - https://&lt;endpoint&gt;/auth/v2/&lt;account&gt; \
+-H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-Key: swauthkey"</pre>
+</div>
+<p>Example Response:</p>
+<div class="highlight-python"><pre>HTTP/1.1 200 OK
+
+{ "services":
+  { "storage":
+    { "default": "local",
+      "local": "https://&lt;storage endpoint&gt;/v1/&lt;account_id&gt;" },
+  },
+  "account_id": "&lt;account_id&gt;",
+  "users": [ { "name": "user1" },
+             { "name": "user2" } ]
+}</pre>
+</div>
+</div>
+<div class="section" id="create-account">
+<h3>Create Account<a class="headerlink" href="#create-account" title="Permalink to this headline">¶</a></h3>
+<p>An account can be created with a PUT request against a non-existent
+account.  By default, a newly created UUID4 will be used with the
+reseller prefix as the account ID used when creating corresponding
+service accounts.  However, you can provide an X-Account-Suffix header
+to replace the UUDI4 part.</p>
+<dl class="docutils">
+<dt>Valid return codes:</dt>
+<dd><ul class="first last simple">
+<li>200: Success</li>
+<li>403: Invalid X-Auth-Admin-User/X-Auth-Admin-Key</li>
+<li>5xx: Internal error</li>
+</ul>
+</dd>
+</dl>
+<p>Example Request:</p>
+<div class="highlight-python"><pre>GET /auth/&lt;api version&gt;/&lt;new_account&gt; HTTP/1.1
+X-Auth-Admin-User: .super_user
+X-Auth-Admin-Key: swauthkey</pre>
+</div>
+<p>Example Curl Request:</p>
+<div class="highlight-python"><pre>curl -D - https://&lt;endpoint&gt;/auth/v2/&lt;new_account&gt; \
+-H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-Key: swauthkey"</pre>
+</div>
+<p>Example Response:</p>
+<div class="highlight-python"><pre>HTTP/1.1 201 Created</pre>
+</div>
+</div>
+<div class="section" id="delete-account">
+<h3>Delete Account<a class="headerlink" href="#delete-account" title="Permalink to this headline">¶</a></h3>
+<p>An account can be deleted with a DELETE request against an existing
+account.</p>
+<dl class="docutils">
+<dt>Valid Responses:</dt>
+<dd><ul class="first last simple">
+<li>204: Success</li>
+<li>403: Invalid X-Auth-Admin-User/X-Auth-Admin-Key</li>
+<li>404: Account not found</li>
+<li>5xx: Internal error</li>
+</ul>
+</dd>
+</dl>
+<p>Example Request:</p>
+<div class="highlight-python"><pre>DELETE /auth/&lt;api version&gt;/&lt;account&gt; HTTP/1.1
+X-Auth-Admin-User: .super_user
+X-Auth-Admin-Key: swauthkey</pre>
+</div>
+<p>Example Curl Request:</p>
+<div class="highlight-python"><pre>curl -XDELETE -D - https://&lt;endpoint&gt;/auth/v2/&lt;account&gt; \
+-H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-Key: swauthkey"</pre>
+</div>
+<p>Example Response:</p>
+<div class="highlight-python"><pre>HTTP/1.1 204 No Content</pre>
+</div>
+</div>
+</div>
+<div class="section" id="user-services">
+<h2>User Services<a class="headerlink" href="#user-services" title="Permalink to this headline">¶</a></h2>
+<p>Each account in swauth contains zero or more users.  These users can
+be determined with the &#8216;Get Account Details&#8217; API request against an
+account.</p>
+<p>Users in an account can be created, modified, and detailed as
+described below by apply the appropriate REST verbs to a user URI, in
+the following general request structure:</p>
+<div class="highlight-python"><pre>METHOD /auth/&lt;version&gt;/&lt;account&gt;/&lt;user&gt; HTTP/1.1</pre>
+</div>
+<p>The methods that can be used are detailed below.</p>
+<div class="section" id="get-user-details">
+<h3>Get User Details<a class="headerlink" href="#get-user-details" title="Permalink to this headline">¶</a></h3>
+<p>User details can be retrieved by performing a GET request against
+a user URI.  On success, a JSON dictionary will be returned as
+described:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&quot;groups&quot;</span><span class="p">:</span> <span class="p">[</span>  <span class="c"># List of groups the user is a member of</span>
+    <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;&lt;act&gt;:&lt;usr&gt;&quot;</span><span class="p">},</span>
+        <span class="c"># The first group is a unique user identifier</span>
+    <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;&lt;account&gt;&quot;</span><span class="p">},</span>
+        <span class="c"># The second group is the auth account name</span>
+    <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;&lt;additional-group&gt;&quot;</span><span class="p">}</span>
+        <span class="c"># There may be additional groups, .admin being a</span>
+        <span class="c"># special group indicating an account admin and</span>
+        <span class="c"># .reseller_admin indicating a reseller admin.</span>
+ <span class="p">],</span>
+ <span class="s">&quot;auth&quot;</span><span class="p">:</span> <span class="s">&quot;&lt;auth-type&gt;:&lt;key&gt;&quot;</span>
+ <span class="c"># The auth-type and key for the user; currently only</span>
+ <span class="c"># plaintext and sha1 are implemented as auth types.</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&quot;groups&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;test:tester&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;test&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="s">&quot;.admin&quot;</span><span class="p">}],</span>
+ <span class="s">&quot;auth&quot;</span><span class="p">:</span> <span class="s">&quot;plaintext:testing&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Valid Responses:</dt>
+<dd><ul class="first last simple">
+<li>200: Success</li>
+<li>403: Invalid X-Auth-Admin-User/X-Auth-Admin-Key</li>
+<li>404: Unknown account</li>
+<li>5xx: Internal error</li>
+</ul>
+</dd>
+</dl>
+<p>Example Request:</p>
+<div class="highlight-python"><pre>GET /auth/&lt;api version&gt;/&lt;account&gt;/&lt;user&gt; HTTP/1.1
+X-Auth-Admin-User: .super_user
+X-Auth-Admin-Key: swauthkey</pre>
+</div>
+<p>Example Curl Request:</p>
+<div class="highlight-python"><pre>curl -D - https://&lt;endpoint&gt;/auth/v2/&lt;account&gt;/&lt;user&gt; \
+-H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-Key: swauthkey"</pre>
+</div>
+<p>Example Response:</p>
+<div class="highlight-python"><pre>HTTP/1.1 200 Ok
+
+{ "groups": [ { "name": "&lt;account&gt;:&lt;user&gt;" },
+              { "name": "&lt;user&gt;" },
+              { "name": ".admin" } ],
+  "auth" : "plaintext:password" }</pre>
+</div>
+</div>
+<div class="section" id="create-user">
+<h3>Create User<a class="headerlink" href="#create-user" title="Permalink to this headline">¶</a></h3>
+<p>A user can be created with a PUT request against a non-existent
+user URI.  The new user&#8217;s password must be set using the
+<tt class="docutils literal"><span class="pre">X-Auth-User-Key</span></tt> header.  The user name MUST NOT start with a
+period (&#8216;.&#8217;).  This requirement is enforced by the API, and will
+result in a 400 error.</p>
+<p>Optional Headers:</p>
+<blockquote>
+<div><ul class="simple">
+<li><tt class="docutils literal"><span class="pre">X-Auth-User-Admin:</span> <span class="pre">true</span></tt>: create the user as an account admin</li>
+<li><tt class="docutils literal"><span class="pre">X-Auth-User-Reseller-Admin:</span> <span class="pre">true</span></tt>: create the user as a reseller
+admin</li>
+</ul>
+</div></blockquote>
+<p>Reseller admin accounts can only be created by the site admin, while
+regular accounts (or account admin accounts) can be created by an
+account admin, an appropriate reseller admin, or the site admin.</p>
+<p>Note that PUT requests are idempotent, and the PUT request serves as
+both a request and modify action.</p>
+<dl class="docutils">
+<dt>Valid Responses:</dt>
+<dd><ul class="first last simple">
+<li>200: Success</li>
+<li>400: Invalid request (missing required headers)</li>
+<li>403: Invalid X-Auth-Admin-User/X-Auth-Admin-Key, or insufficient priv</li>
+<li>404: Unknown account</li>
+<li>5xx: Internal error</li>
+</ul>
+</dd>
+</dl>
+<p>Example Request:</p>
+<div class="highlight-python"><pre>PUT /auth/&lt;api version&gt;/&lt;account&gt;/&lt;user&gt; HTTP/1.1
+X-Auth-Admin-User: .super_user
+X-Auth-Admin-Key: swauthkey
+X-Auth-User-Admin: true
+X-Auth-User-Key: secret</pre>
+</div>
+<p>Example Curl Request:</p>
+<div class="highlight-python"><pre>curl -XPUT -D - https://&lt;endpoint&gt;/auth/v2/&lt;account&gt;/&lt;user&gt; \
+-H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-Key: swauthkey" \
+-H "X-Auth-User-Admin: true" \
+-H "X-Auth-User-Key: secret"</pre>
+</div>
+<p>Example Response:</p>
+<div class="highlight-python"><pre>HTTP/1.1 201 Created</pre>
+</div>
+</div>
+<div class="section" id="delete-user">
+<h3>Delete User<a class="headerlink" href="#delete-user" title="Permalink to this headline">¶</a></h3>
+<p>A user can be deleted by performing a DELETE request against a user
+URI.  This action can only be performed by an account admin,
+appropriate reseller admin, or site admin.</p>
+<dl class="docutils">
+<dt>Valid Responses:</dt>
+<dd><ul class="first last simple">
+<li>200: Success</li>
+<li>403: Invalid X-Auth-Admin-User/X-Auth-Admin-Key, or insufficient priv</li>
+<li>404: Unknown account or user</li>
+<li>5xx: Internal error</li>
+</ul>
+</dd>
+</dl>
+<p>Example Request:</p>
+<div class="highlight-python"><pre>DELETE /auth/&lt;api version&gt;/&lt;account&gt;/&lt;user&gt; HTTP/1.1
+X-Auth-Admin-User: .super_user
+X-Auth-Admin-Key: swauthkey</pre>
+</div>
+<p>Example Curl Request:</p>
+<div class="highlight-python"><pre>curl -XDELETE -D - https://&lt;endpoint&gt;/auth/v2/&lt;account&gt;/&lt;user&gt; \
+-H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-Key: swauthkey"</pre>
+</div>
+<p>Example Response:</p>
+<div class="highlight-python"><pre>HTTP/1.1 204 No Content</pre>
+</div>
+</div>
+</div>
+<div class="section" id="other-services">
+<h2>Other Services<a class="headerlink" href="#other-services" title="Permalink to this headline">¶</a></h2>
+<p>There are several other swauth functions that can be performed, mostly
+done via &#8220;pseudo-user&#8221; accounts.  These are well-known user names that
+are unable to be actually provisioned.  These pseudo-users are
+described below.</p>
+<div class="section" id="set-service-endpoints">
+<h3>Set Service Endpoints<a class="headerlink" href="#set-service-endpoints" title="Permalink to this headline">¶</a></h3>
+<p>Service endpoint information can be retrived using the <span class="target" id="id1">Get Account
+Details</span> API method.</p>
+<p>This function allows setting values within this section for
+the &lt;account&gt;, allowing the addition of new service end points
+or updating existing ones by performing a POST to the URI
+corresponding to the pseudo-user &#8221;.services&#8221;.</p>
+<p>The body of the POST request should contain a JSON dict with
+the following format:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&quot;service_name&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;end_point_name&quot;</span><span class="p">:</span> <span class="s">&quot;end_point_value&quot;</span><span class="p">}}</span>
+</pre></div>
+</div>
+<p>There can be multiple services and multiple end points in the
+same call.</p>
+<p>Any new services or end points will be added to the existing
+set of services and end points. Any existing services with the
+same service name will be merged with the new end points. Any
+existing end points with the same end point name will have
+their values updated.</p>
+<p>The updated services dictionary will be returned on success.</p>
+<p>Valid Responses:</p>
+<blockquote>
+<div><ul class="simple">
+<li>200: Success</li>
+<li>403: Invalid X-Auth-Admin-User/X-Auth-Admin-Key</li>
+<li>404: Account not found</li>
+<li>5xx: Internal error</li>
+</ul>
+</div></blockquote>
+<p>Example Request:</p>
+<div class="highlight-python"><pre>POST /auth/&lt;api version&gt;/&lt;account&gt;/.services HTTP/1.0
+X-Auth-Admin-User: .super_user
+X-Auth-Admin-Key: swauthkey
+
+{"storage": { "local": "&lt;new endpoint&gt;" }}</pre>
+</div>
+<p>Example Curl Request:</p>
+<div class="highlight-python"><pre>curl -XPOST -D - https://&lt;endpoint&gt;/auth/v2/&lt;account&gt;/.services \
+-H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-Key: swauthkey" --data-binary \
+'{ "storage": { "local": "&lt;new endpoint&gt;" }}'</pre>
+</div>
+<p>Example Response:</p>
+<div class="highlight-python"><pre>HTTP/1.1 200 OK
+
+{"storage": {"default": "local", "local": "&lt;new endpoint&gt;" }}</pre>
+</div>
+</div>
+<div class="section" id="get-account-groups">
+<h3>Get Account Groups<a class="headerlink" href="#get-account-groups" title="Permalink to this headline">¶</a></h3>
+<p>Individual user group information can be retrieved using the <a class="reference internal" href="#get-user-details">Get User Details</a> API method.</p>
+<p>This function allows retrieving all group information for all users in
+an existing account.  This can be achieved using a GET action against
+a user URI with the pseudo-user &#8221;.groups&#8221;.</p>
+<p>The JSON dictionary returned will be a &#8220;groups&#8221; dictionary similar to
+that documented in the <a class="reference internal" href="#get-user-details">Get User Details</a> method, but representing
+the summary of all groups utilized by all active users in the account.</p>
+<dl class="docutils">
+<dt>Valid Responses:</dt>
+<dd><ul class="first last simple">
+<li>200: Success</li>
+<li>403: Invalid X-Auth-Admin-User/X-Auth-Admin-Key</li>
+<li>404: Account not found</li>
+<li>5xx: Internal error</li>
+</ul>
+</dd>
+</dl>
+<p>Example Request:</p>
+<div class="highlight-python"><pre>GET /auth/&lt;api version&gt;/&lt;account&gt;/.groups
+X-Auth-Admin-User: .super_user
+X-Auth-Admin-Key: swauthkey</pre>
+</div>
+<p>Example Curl Request:</p>
+<div class="highlight-python"><pre>curl -D - https://&lt;endpoint&gt;/auth/v2/&lt;account&gt;/.groups \
+-H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-Key: swauthkey"</pre>
+</div>
+<p>Example Response:</p>
+<div class="highlight-python"><pre>HTTP/1.1 200 OK
+
+{ "groups": [ { "name": ".admin" },
+              { "name": "&lt;account&gt;" },
+              { "name": "&lt;account&gt;:user1" },
+              { "name": "&lt;account&gt;:user2" } ] }</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Swauth API</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a><ul>
+<li><a class="reference internal" href="#authentication">Authentication</a></li>
+<li><a class="reference internal" href="#endpoints">Endpoints</a></li>
+<li><a class="reference internal" href="#responses">Responses</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#reseller-admin-services">Reseller/Admin Services</a><ul>
+<li><a class="reference internal" href="#get-admin-info">Get Admin Info</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#account-services">Account Services</a><ul>
+<li><a class="reference internal" href="#get-account-details">Get Account Details</a></li>
+<li><a class="reference internal" href="#create-account">Create Account</a></li>
+<li><a class="reference internal" href="#delete-account">Delete Account</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#user-services">User Services</a><ul>
+<li><a class="reference internal" href="#get-user-details">Get User Details</a></li>
+<li><a class="reference internal" href="#create-user">Create User</a></li>
+<li><a class="reference internal" href="#delete-user">Delete User</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#other-services">Other Services</a><ul>
+<li><a class="reference internal" href="#set-service-endpoints">Set Service Endpoints</a></li>
+<li><a class="reference internal" href="#get-account-groups">Get Account Groups</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="middleware.html"
+                        title="previous chapter">swauth.middleware</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="authtypes.html"
+                        title="next chapter">swauth.authtypes</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/api.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="authtypes.html" title="swauth.authtypes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="middleware.html" title="swauth.middleware"
+             >previous</a> |</li>
+        <li><a href="index.html">Swauth v1.0.3.dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2011, OpenStack, LLC.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
