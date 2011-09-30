@@ -423,15 +423,14 @@ Example Response::
 Get Account Groups
 ------------------
     
-Individual user group information can be retrived using the _`Get User
-Details` API method.
+Individual user group information can be retrieved using the `Get User Details`_ API method.
 
 This function allows retrieving all group information for all users in
 an existing account.  This can be achieved using a GET action against
 a user URI with the pseudo-user ".groups".
 
 The JSON dictionary returned will be a "groups" dictionary similar to
-that documented in the _`Get User Details` method, but representing
+that documented in the `Get User Details`_ method, but representing
 the summary of all groups utilized by all active users in the account.
 
 Valid Responses:

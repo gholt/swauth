@@ -40,9 +40,7 @@ config file, along with the salt value in the following way::
     auth_type = <auth_type>
     auth_type_salt = <salt-value>
 
-Both fields are optional. auth_type defaults to `plaintext` and auth_type_salt
- defaults to "swauthsalt". Additional auth types can be implemented along with 
-existing ones in the authtypes.py module.
+Both fields are optional. auth_type defaults to `plaintext` and auth_type_salt defaults to "swauthsalt". Additional auth types can be implemented along with existing ones in the authtypes.py module.
 
 The `<groups_array>` contains at least two groups. The first is a unique group
 identifying that user and it's name is of the format `<user>:<account>`. The

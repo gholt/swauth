@@ -1,4 +1,4 @@
-.. _swauth_middleware_module:
+.. _swauth_authtypes_module:
 
 swauth.authtypes
 =================
