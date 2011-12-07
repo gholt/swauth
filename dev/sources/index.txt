@@ -35,9 +35,9 @@ Before discussing how to install Swauth within a Swift system, it might help to 
 
 5.  Instead of #4, Swauth can be configured to call out to another remote Swauth to perform #4 on its behalf (using the swauth_remote config value).
 
-6.  When managing accounts and users with the various ``swauth-`` command line tools, these tools are actually just performing HTTP requests against the ``/auth/`` end point referenced in #2. You can make your own tools that use the same ``API <api.html>``.
+6.  When managing accounts and users with the various ``swauth-`` command line tools, these tools are actually just performing HTTP requests against the ``/auth/`` end point referenced in #2. You can make your own tools that use the same `API <api.html>`_.
 
-7.  In the special case of creating a new account, Swauth will call out to the Swift cluster to create the actual Swift account as well as performing #4 for its own use.
+7.  In the special case of creating a new account, Swauth will do its usual WSGI-internal requests as per #4 but will also call out to the Swift cluster to create the actual Swift account.
 
     a. This Swift cluster callout is an account PUT request to the URL defined by the ``swift_default_cluster`` config value.
 
@@ -78,7 +78,7 @@ Install
 
    The ``default_swift_cluster`` setting can be confusing.
 
-    a. If you're using an all-in-one type configuration where everything will be run on the local host, you can omit the ``default_swift_cluster`` completely and it will default to ``local#http://127.0.0.1:<port>/v1``.
+    a. If you're using an all-in-one type configuration where everything will be run on the local host on port 8080, you can omit the ``default_swift_cluster`` completely and it will default to ``local#http://127.0.0.1:8080/v1``.
 
     b. If you're using a single Swift proxy you can just set the ``default_swift_cluster = cluster_name#https://<public_ip>:<port>/v1`` and that URL will be given to users as well as used by Swauth internally. (Quick note: be sure the ``http`` vs. ``https`` is set right depending on if you're using SSL.)
 

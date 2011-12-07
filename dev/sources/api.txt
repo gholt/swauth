@@ -70,13 +70,13 @@ Valid return codes:
 Example Request::
 
     GET /auth/<api version>/ HTTP/1.1
-    X-Auth-Admin-User: .super_user
+    X-Auth-Admin-User: .super_admin
     X-Auth-Admin-Key: swauthkey
 
 Example Curl Request::
 
     curl -D - https://<endpoint>/auth/v2/ \
-    -H "X-Auth-Admin-User: .super_user" \
+    -H "X-Auth-Admin-User: .super_admin" \
     -H "X-Auth-Admin-Key: swauthkey"
 
 Example Result::
@@ -124,13 +124,13 @@ Valid Responses:
 Example Request::
 
     GET /auth/<api version>/<account> HTTP/1.1
-    X-Auth-Admin-User: .super_user
+    X-Auth-Admin-User: .super_admin
     X-Auth-Admin-Key: swauthkey
 
 Example Curl Request::
 
     curl -D - https://<endpoint>/auth/v2/<account> \
-    -H "X-Auth-Admin-User: .super_user" \
+    -H "X-Auth-Admin-User: .super_admin" \
     -H "X-Auth-Admin-Key: swauthkey"
 
 Example Response::
@@ -164,13 +164,13 @@ Valid return codes:
 Example Request::
 
     GET /auth/<api version>/<new_account> HTTP/1.1
-    X-Auth-Admin-User: .super_user
+    X-Auth-Admin-User: .super_admin
     X-Auth-Admin-Key: swauthkey
 
 Example Curl Request::
 
     curl -D - https://<endpoint>/auth/v2/<new_account> \
-    -H "X-Auth-Admin-User: .super_user" \
+    -H "X-Auth-Admin-User: .super_admin" \
     -H "X-Auth-Admin-Key: swauthkey"
 
 Example Response::
@@ -193,13 +193,13 @@ Valid Responses:
 Example Request::
 
     DELETE /auth/<api version>/<account> HTTP/1.1
-    X-Auth-Admin-User: .super_user
+    X-Auth-Admin-User: .super_admin
     X-Auth-Admin-Key: swauthkey
 
 Example Curl Request::
 
     curl -XDELETE -D - https://<endpoint>/auth/v2/<account> \
-    -H "X-Auth-Admin-User: .super_user" \
+    -H "X-Auth-Admin-User: .super_admin" \
     -H "X-Auth-Admin-Key: swauthkey"
 
 Example Response::
@@ -259,13 +259,13 @@ Valid Responses:
 Example Request::
 
     GET /auth/<api version>/<account>/<user> HTTP/1.1
-    X-Auth-Admin-User: .super_user
+    X-Auth-Admin-User: .super_admin
     X-Auth-Admin-Key: swauthkey
 
 Example Curl Request::
 
     curl -D - https://<endpoint>/auth/v2/<account>/<user> \
-    -H "X-Auth-Admin-User: .super_user" \
+    -H "X-Auth-Admin-User: .super_admin" \
     -H "X-Auth-Admin-Key: swauthkey"
 
 Example Response::
@@ -310,7 +310,7 @@ Valid Responses:
 Example Request::
 
     PUT /auth/<api version>/<account>/<user> HTTP/1.1
-    X-Auth-Admin-User: .super_user
+    X-Auth-Admin-User: .super_admin
     X-Auth-Admin-Key: swauthkey
     X-Auth-User-Admin: true
     X-Auth-User-Key: secret
@@ -318,7 +318,7 @@ Example Request::
 Example Curl Request::
 
     curl -XPUT -D - https://<endpoint>/auth/v2/<account>/<user> \
-    -H "X-Auth-Admin-User: .super_user" \
+    -H "X-Auth-Admin-User: .super_admin" \
     -H "X-Auth-Admin-Key: swauthkey" \
     -H "X-Auth-User-Admin: true" \
     -H "X-Auth-User-Key: secret"
@@ -343,13 +343,13 @@ Valid Responses:
 Example Request::
 
     DELETE /auth/<api version>/<account>/<user> HTTP/1.1
-    X-Auth-Admin-User: .super_user
+    X-Auth-Admin-User: .super_admin
     X-Auth-Admin-Key: swauthkey
 
 Example Curl Request::
 
     curl -XDELETE -D - https://<endpoint>/auth/v2/<account>/<user> \
-    -H "X-Auth-Admin-User: .super_user" \
+    -H "X-Auth-Admin-User: .super_admin" \
     -H "X-Auth-Admin-Key: swauthkey"
 
 Example Response::
@@ -402,7 +402,7 @@ Valid Responses:
 Example Request::
 
     POST /auth/<api version>/<account>/.services HTTP/1.0
-    X-Auth-Admin-User: .super_user
+    X-Auth-Admin-User: .super_admin
     X-Auth-Admin-Key: swauthkey
  
     {"storage": { "local": "<new endpoint>" }}
@@ -410,7 +410,7 @@ Example Request::
 Example Curl Request::
 
     curl -XPOST -D - https://<endpoint>/auth/v2/<account>/.services \
-    -H "X-Auth-Admin-User: .super_user" \
+    -H "X-Auth-Admin-User: .super_admin" \
     -H "X-Auth-Admin-Key: swauthkey" --data-binary \
     '{ "storage": { "local": "<new endpoint>" }}'
 
@@ -442,13 +442,13 @@ Valid Responses:
 Example Request::
 
     GET /auth/<api version>/<account>/.groups
-    X-Auth-Admin-User: .super_user
+    X-Auth-Admin-User: .super_admin
     X-Auth-Admin-Key: swauthkey
 
 Example Curl Request::
 
     curl -D - https://<endpoint>/auth/v2/<account>/.groups \
-    -H "X-Auth-Admin-User: .super_user" \
+    -H "X-Auth-Admin-User: .super_admin" \
     -H "X-Auth-Admin-Key: swauthkey"
     
 Example Response::

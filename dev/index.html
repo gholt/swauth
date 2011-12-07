@@ -75,9 +75,9 @@ side of things.</p>
 </li>
 <li><p class="first">Instead of #4, Swauth can be configured to call out to another remote Swauth to perform #4 on its behalf (using the swauth_remote config value).</p>
 </li>
-<li><p class="first">When managing accounts and users with the various <tt class="docutils literal"><span class="pre">swauth-</span></tt> command line tools, these tools are actually just performing HTTP requests against the <tt class="docutils literal"><span class="pre">/auth/</span></tt> end point referenced in #2. You can make your own tools that use the same <tt class="docutils literal"><span class="pre">API</span> <span class="pre">&lt;api.html&gt;</span></tt>.</p>
+<li><p class="first">When managing accounts and users with the various <tt class="docutils literal"><span class="pre">swauth-</span></tt> command line tools, these tools are actually just performing HTTP requests against the <tt class="docutils literal"><span class="pre">/auth/</span></tt> end point referenced in #2. You can make your own tools that use the same <a class="reference external" href="api.html">API</a>.</p>
 </li>
-<li><p class="first">In the special case of creating a new account, Swauth will call out to the Swift cluster to create the actual Swift account as well as performing #4 for its own use.</p>
+<li><p class="first">In the special case of creating a new account, Swauth will do its usual WSGI-internal requests as per #4 but will also call out to the Swift cluster to create the actual Swift account.</p>
 <ol class="loweralpha simple">
 <li>This Swift cluster callout is an account PUT request to the URL defined by the <tt class="docutils literal"><span class="pre">swift_default_cluster</span></tt> config value.</li>
 <li>This callout end point is also saved when the account is created so that it can be given to the users of that account in the future.</li>
@@ -118,7 +118,7 @@ default_swift_cluster = &lt;your setting as discussed below&gt;</pre>
 <p>The <tt class="docutils literal"><span class="pre">default_swift_cluster</span></tt> setting can be confusing.</p>
 <blockquote>
 <div><ol class="loweralpha simple">
-<li>If you&#8217;re using an all-in-one type configuration where everything will be run on the local host, you can omit the <tt class="docutils literal"><span class="pre">default_swift_cluster</span></tt> completely and it will default to <tt class="docutils literal"><span class="pre">local#http://127.0.0.1:&lt;port&gt;/v1</span></tt>.</li>
+<li>If you&#8217;re using an all-in-one type configuration where everything will be run on the local host on port 8080, you can omit the <tt class="docutils literal"><span class="pre">default_swift_cluster</span></tt> completely and it will default to <tt class="docutils literal"><span class="pre">local#http://127.0.0.1:8080/v1</span></tt>.</li>
 <li>If you&#8217;re using a single Swift proxy you can just set the <tt class="docutils literal"><span class="pre">default_swift_cluster</span> <span class="pre">=</span> <span class="pre">cluster_name#https://&lt;public_ip&gt;:&lt;port&gt;/v1</span></tt> and that URL will be given to users as well as used by Swauth internally. (Quick note: be sure the <tt class="docutils literal"><span class="pre">http</span></tt> vs. <tt class="docutils literal"><span class="pre">https</span></tt> is set right depending on if you&#8217;re using SSL.)</li>
 <li>If you&#8217;re using multiple Swift proxies behind a load balancer, you&#8217;ll probably want <tt class="docutils literal"><span class="pre">default_swift_cluster</span> <span class="pre">=</span> <span class="pre">cluster_name#https://&lt;load_balancer_ip&gt;:&lt;port&gt;/v1#http://127.0.0.1:&lt;port&gt;/v1</span></tt> so that Swauth gives out the first URL but uses the second URL internally. Remember to double-check the <tt class="docutils literal"><span class="pre">http</span></tt> vs. <tt class="docutils literal"><span class="pre">https</span></tt> settings for each of the URLs; they might be different if you&#8217;re terminating SSL at the load balancer.</li>
 </ol>

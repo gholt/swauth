@@ -111,12 +111,12 @@ for the reseller or site admin.</p>
 </dl>
 <p>Example Request:</p>
 <div class="highlight-python"><pre>GET /auth/&lt;api version&gt;/ HTTP/1.1
-X-Auth-Admin-User: .super_user
+X-Auth-Admin-User: .super_admin
 X-Auth-Admin-Key: swauthkey</pre>
 </div>
 <p>Example Curl Request:</p>
 <div class="highlight-python"><pre>curl -D - https://&lt;endpoint&gt;/auth/v2/ \
--H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-User: .super_admin" \
 -H "X-Auth-Admin-Key: swauthkey"</pre>
 </div>
 <p>Example Result:</p>
@@ -162,12 +162,12 @@ containing the single key &#8216;name&#8217;.</p>
 </dl>
 <p>Example Request:</p>
 <div class="highlight-python"><pre>GET /auth/&lt;api version&gt;/&lt;account&gt; HTTP/1.1
-X-Auth-Admin-User: .super_user
+X-Auth-Admin-User: .super_admin
 X-Auth-Admin-Key: swauthkey</pre>
 </div>
 <p>Example Curl Request:</p>
 <div class="highlight-python"><pre>curl -D - https://&lt;endpoint&gt;/auth/v2/&lt;account&gt; \
--H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-User: .super_admin" \
 -H "X-Auth-Admin-Key: swauthkey"</pre>
 </div>
 <p>Example Response:</p>
@@ -202,12 +202,12 @@ to replace the UUDI4 part.</p>
 </dl>
 <p>Example Request:</p>
 <div class="highlight-python"><pre>GET /auth/&lt;api version&gt;/&lt;new_account&gt; HTTP/1.1
-X-Auth-Admin-User: .super_user
+X-Auth-Admin-User: .super_admin
 X-Auth-Admin-Key: swauthkey</pre>
 </div>
 <p>Example Curl Request:</p>
 <div class="highlight-python"><pre>curl -D - https://&lt;endpoint&gt;/auth/v2/&lt;new_account&gt; \
--H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-User: .super_admin" \
 -H "X-Auth-Admin-Key: swauthkey"</pre>
 </div>
 <p>Example Response:</p>
@@ -230,12 +230,12 @@ account.</p>
 </dl>
 <p>Example Request:</p>
 <div class="highlight-python"><pre>DELETE /auth/&lt;api version&gt;/&lt;account&gt; HTTP/1.1
-X-Auth-Admin-User: .super_user
+X-Auth-Admin-User: .super_admin
 X-Auth-Admin-Key: swauthkey</pre>
 </div>
 <p>Example Curl Request:</p>
 <div class="highlight-python"><pre>curl -XDELETE -D - https://&lt;endpoint&gt;/auth/v2/&lt;account&gt; \
--H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-User: .super_admin" \
 -H "X-Auth-Admin-Key: swauthkey"</pre>
 </div>
 <p>Example Response:</p>
@@ -293,12 +293,12 @@ described:</p>
 </dl>
 <p>Example Request:</p>
 <div class="highlight-python"><pre>GET /auth/&lt;api version&gt;/&lt;account&gt;/&lt;user&gt; HTTP/1.1
-X-Auth-Admin-User: .super_user
+X-Auth-Admin-User: .super_admin
 X-Auth-Admin-Key: swauthkey</pre>
 </div>
 <p>Example Curl Request:</p>
 <div class="highlight-python"><pre>curl -D - https://&lt;endpoint&gt;/auth/v2/&lt;account&gt;/&lt;user&gt; \
--H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-User: .super_admin" \
 -H "X-Auth-Admin-Key: swauthkey"</pre>
 </div>
 <p>Example Response:</p>
@@ -343,14 +343,14 @@ both a request and modify action.</p>
 </dl>
 <p>Example Request:</p>
 <div class="highlight-python"><pre>PUT /auth/&lt;api version&gt;/&lt;account&gt;/&lt;user&gt; HTTP/1.1
-X-Auth-Admin-User: .super_user
+X-Auth-Admin-User: .super_admin
 X-Auth-Admin-Key: swauthkey
 X-Auth-User-Admin: true
 X-Auth-User-Key: secret</pre>
 </div>
 <p>Example Curl Request:</p>
 <div class="highlight-python"><pre>curl -XPUT -D - https://&lt;endpoint&gt;/auth/v2/&lt;account&gt;/&lt;user&gt; \
--H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-User: .super_admin" \
 -H "X-Auth-Admin-Key: swauthkey" \
 -H "X-Auth-User-Admin: true" \
 -H "X-Auth-User-Key: secret"</pre>
@@ -376,12 +376,12 @@ appropriate reseller admin, or site admin.</p>
 </dl>
 <p>Example Request:</p>
 <div class="highlight-python"><pre>DELETE /auth/&lt;api version&gt;/&lt;account&gt;/&lt;user&gt; HTTP/1.1
-X-Auth-Admin-User: .super_user
+X-Auth-Admin-User: .super_admin
 X-Auth-Admin-Key: swauthkey</pre>
 </div>
 <p>Example Curl Request:</p>
 <div class="highlight-python"><pre>curl -XDELETE -D - https://&lt;endpoint&gt;/auth/v2/&lt;account&gt;/&lt;user&gt; \
--H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-User: .super_admin" \
 -H "X-Auth-Admin-Key: swauthkey"</pre>
 </div>
 <p>Example Response:</p>
@@ -427,14 +427,14 @@ their values updated.</p>
 </div></blockquote>
 <p>Example Request:</p>
 <div class="highlight-python"><pre>POST /auth/&lt;api version&gt;/&lt;account&gt;/.services HTTP/1.0
-X-Auth-Admin-User: .super_user
+X-Auth-Admin-User: .super_admin
 X-Auth-Admin-Key: swauthkey
 
 {"storage": { "local": "&lt;new endpoint&gt;" }}</pre>
 </div>
 <p>Example Curl Request:</p>
 <div class="highlight-python"><pre>curl -XPOST -D - https://&lt;endpoint&gt;/auth/v2/&lt;account&gt;/.services \
--H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-User: .super_admin" \
 -H "X-Auth-Admin-Key: swauthkey" --data-binary \
 '{ "storage": { "local": "&lt;new endpoint&gt;" }}'</pre>
 </div>
@@ -465,12 +465,12 @@ the summary of all groups utilized by all active users in the account.</p>
 </dl>
 <p>Example Request:</p>
 <div class="highlight-python"><pre>GET /auth/&lt;api version&gt;/&lt;account&gt;/.groups
-X-Auth-Admin-User: .super_user
+X-Auth-Admin-User: .super_admin
 X-Auth-Admin-Key: swauthkey</pre>
 </div>
 <p>Example Curl Request:</p>
 <div class="highlight-python"><pre>curl -D - https://&lt;endpoint&gt;/auth/v2/&lt;account&gt;/.groups \
--H "X-Auth-Admin-User: .super_user" \
+-H "X-Auth-Admin-User: .super_admin" \
 -H "X-Auth-Admin-Key: swauthkey"</pre>
 </div>
 <p>Example Response:</p>
