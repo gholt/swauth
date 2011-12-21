@@ -31,10 +31,10 @@ objects contain a JSON dictionary of the format::
 
     {"auth": "<auth_type>:<auth_value>", "groups": <groups_array>}
 
-The `<auth_type>` specifies how the user key is encoded. The default is `plaintext`, 
+The `<auth_type>` specifies how the user key is encoded. The default is `plaintext`,
 which saves the user's key in plaintext in the `<auth_value>` field.
 The value `sha1` is supported as well, which stores the user's key as a salted
-SHA1 hash. Note that using a one-way hash like SHA1 will likely inhibit future use of key-signing request types, assuming such support is added. The `<auth_type>` can be specified in the swauth section of the proxy server's 
+SHA1 hash. Note that using a one-way hash like SHA1 will likely inhibit future use of key-signing request types, assuming such support is added. The `<auth_type>` can be specified in the swauth section of the proxy server's
 config file, along with the salt value in the following way::
 
     auth_type = <auth_type>

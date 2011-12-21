@@ -73,31 +73,31 @@
             function shadow_submitter(felement, evnt, func) {
                 keycode = 0;
                 if (window.event) {
-                    keycode = window.event.keyCode; 
+                    keycode = window.event.keyCode;
                 } else if (evnt) {
-                    keycode = evnt.which; 
+                    keycode = evnt.which;
                 }
-                if (keycode == 13) { 
+                if (keycode == 13) {
                     func(felement);
-                    return false; 
+                    return false;
                 }
-                return true; 
-            } 
+                return true;
+            }
 
             function shadow_escaper(felement, evnt) {
                 keycode = 0;
                 if (window.event) {
-                    keycode = window.event.keyCode; 
+                    keycode = window.event.keyCode;
                 } else if (evnt) {
-                    keycode = evnt.which; 
+                    keycode = evnt.which;
                 }
-                if (keycode == 27) { 
+                if (keycode == 27) {
                     felement.style.display = 'none';
                     document.getElementById('d' + felement.id.substring(1)).style.display = 'inline';
                     return false;
                 }
-                return true; 
-            } 
+                return true;
+            }
 
             function creds_clicked() {
                 creds_area = document.getElementById('creds_area');
@@ -120,16 +120,16 @@
             function creds_submitter(e) {
                 keycode = 0;
                 if (window.event) {
-                    keycode = window.event.keyCode; 
+                    keycode = window.event.keyCode;
                 } else if (e) {
-                    keycode = e.which; 
+                    keycode = e.which;
                 }
-                if (keycode == 13) { 
+                if (keycode == 13) {
                     creds_clicked();
-                    return false; 
+                    return false;
                 }
-                return true; 
-            } 
+                return true;
+            }
 
             function swauth_area_reset() {
                 account_area_reset();
@@ -457,33 +457,33 @@
             function auth_submitter(e) {
                 keycode = 0;
                 if (window.event) {
-                    keycode = window.event.keyCode; 
+                    keycode = window.event.keyCode;
                 } else if (e) {
-                    keycode = e.which; 
+                    keycode = e.which;
                 }
-                if (keycode == 13) { 
+                if (keycode == 13) {
                     auth_save();
-                    return false; 
+                    return false;
                 }
-                return true; 
-            } 
+                return true;
+            }
 
             function auth_escaper(e) {
                 keycode = 0;
                 if (window.event) {
-                    keycode = window.event.keyCode; 
+                    keycode = window.event.keyCode;
                 } else if (e) {
-                    keycode = e.which; 
+                    keycode = e.which;
                 }
-                if (keycode == 27) { 
+                if (keycode == 27) {
                     field = document.getElementById('auth_update_field');
                     field.value = '';
                     field.style.display ='none';
                     document.getElementById('auth_update').style.display ='inline';
                     return false;
                 }
-                return true; 
-            } 
+                return true;
+            }
 
             function auth_save() {
                 document.getElementById('auth_update_field').style.display ='none';

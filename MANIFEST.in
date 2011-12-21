@@ -1,4 +1,4 @@
 include AUTHORS LICENSE .unittests test_swauth/__init__.py
 include CHANGELOG
-graft doc  
+graft doc
 graft etc
