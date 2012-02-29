@@ -404,7 +404,7 @@ Example Request::
     POST /auth/<api version>/<account>/.services HTTP/1.0
     X-Auth-Admin-User: .super_admin
     X-Auth-Admin-Key: swauthkey
- 
+
     {"storage": { "local": "<new endpoint>" }}
 
 Example Curl Request::
@@ -422,7 +422,7 @@ Example Response::
 
 Get Account Groups
 ------------------
-    
+
 Individual user group information can be retrieved using the `Get User Details`_ API method.
 
 This function allows retrieving all group information for all users in
@@ -450,7 +450,7 @@ Example Curl Request::
     curl -D - https://<endpoint>/auth/v2/<account>/.groups \
     -H "X-Auth-Admin-User: .super_admin" \
     -H "X-Auth-Admin-Key: swauthkey"
-    
+
 Example Response::
 
     HTTP/1.1 200 OK
