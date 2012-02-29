@@ -286,7 +286,7 @@ class Swauth(object):
 
             password = detail['auth'].split(':')[-1]
             msg = base64.urlsafe_b64decode(unquote(token))
-            s = base64.encodestring(hmac.new(detail['auth'].split(':')[-1],
+            s = base64.encodestring(hmac.new(password,
                                              msg, sha1).digest()).strip()
             if s != sign:
                 return None
