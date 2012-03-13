@@ -35,7 +35,7 @@ Before discussing how to install Swauth within a Swift system, it might help to 
 
 5.  Instead of #4, Swauth can be configured to call out to another remote Swauth to perform #4 on its behalf (using the swauth_remote config value).
 
-6.  When managing accounts and users with the various ``swauth-`` command line tools, these tools are actually just performing HTTP requests against the ``/auth/`` end point referenced in #2. You can make your own tools that use the same `API <api.html>`_.
+6.  When managing accounts and users with the various ``swauth-`` command line tools, these tools are actually just performing HTTP requests against the ``/auth/`` end point referenced in #2. You can make your own tools that use the same :ref:`API <api_top>`.
 
 7.  In the special case of creating a new account, Swauth will do its usual WSGI-internal requests as per #4 but will also call out to the Swift cluster to create the actual Swift account.
 
@@ -47,7 +47,7 @@ Before discussing how to install Swauth within a Swift system, it might help to 
 
     d. Once an account is created, the URL given to users for that account will not change, even if the ``default_swift_cluster`` config value changes. This is so that you can use multiple clusters with the same Swauth system; ``default_swift_cluster`` just points to the one where you want new users to go.
 
-    f. You can change the stored URL for an account if need be with the ``swauth-set-account-service`` command line tool or a POST request (see `API <api.html#set-service-endpoints>`_).
+    f. You can change the stored URL for an account if need be with the ``swauth-set-account-service`` command line tool or a POST request (see :ref:`API <api_set_service_endpoints>`).
 
 
 Install

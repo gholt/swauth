@@ -1,3 +1,5 @@
+.. _api_top:
+
 ----------
 Swauth API
 ----------
@@ -364,6 +366,8 @@ There are several other swauth functions that can be performed, mostly
 done via "pseudo-user" accounts.  These are well-known user names that
 are unable to be actually provisioned.  These pseudo-users are
 described below.
+
+.. _api_set_service_endpoints:
 
 Set Service Endpoints
 ---------------------
