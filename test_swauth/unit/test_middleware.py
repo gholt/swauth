@@ -190,9 +190,9 @@ class TestAuth(unittest.TestCase):
         self.assertEquals(ath.dsc_url, 'https://host/path')
         self.assertEquals(ath.dsc_url2, 'http://host2/path2')
 
-    def test_top_level_ignore(self):
+    def test_top_level_denied(self):
         resp = Request.blank('/').get_response(self.test_auth)
-        self.assertEquals(resp.status_int, 404)
+        self.assertEquals(resp.status_int, 401)
 
     def test_anon(self):
         resp = Request.blank('/v1/AUTH_account').get_response(self.test_auth)
