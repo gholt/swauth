@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>swauth.middleware &mdash; Swauth v1.0.3.dev documentation</title>
+    <title>swauth.middleware &mdash; Swauth 1.0.4.dev documentation</title>
+    
     <link rel="stylesheet" href="../../static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.3.dev',
+        VERSION:     '1.0.4.dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="../../static/jquery.js"></script>
     <script type="text/javascript" src="../../static/underscore.js"></script>
     <script type="text/javascript" src="../../static/doctools.js"></script>
-    <link rel="top" title="Swauth v1.0.3.dev documentation" href="../../index.html" />
+    <link rel="top" title="Swauth 1.0.4.dev documentation" href="../../index.html" />
     <link rel="up" title="swauth" href="../swauth.html" /> 
   </head>
   <body>
@@ -35,7 +38,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Swauth v1.0.3.dev documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Swauth 1.0.4.dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li>
           <li><a href="../swauth.html" accesskey="U">swauth</a> &raquo;</li> 
       </ul>
@@ -204,6 +207,8 @@
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;Invalid auth_type in config file: </span><span class="si">%s</span><span class="s">&#39;</span>
                              <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth_type</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">auth_encoder</span><span class="o">.</span><span class="n">salt</span> <span class="o">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;auth_type_salt&#39;</span><span class="p">,</span> <span class="s">&#39;swauthsalt&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">allow_overrides</span> <span class="o">=</span> \
+            <span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;allow_overrides&#39;</span><span class="p">,</span> <span class="s">&#39;t&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">TRUE_VALUES</span>
 
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -225,8 +230,8 @@
 <span class="sd">        will be routed through the internal auth request handler (self.handle).</span>
 <span class="sd">        This is to handle creating users, accounts, granting tokens, etc.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="s">&#39;HTTP_X_CF_TRANS_ID&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">env</span><span class="p">:</span>
-            <span class="n">env</span><span class="p">[</span><span class="s">&#39;HTTP_X_CF_TRANS_ID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;tx&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid4</span><span class="p">())</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">allow_overrides</span> <span class="ow">and</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;swift.authorize_override&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">swauth_remote</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;PATH_INFO&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth_prefix</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
                 <span class="k">return</span> <span class="n">HTTPMovedPermanently</span><span class="p">(</span><span class="n">add_slash</span><span class="o">=</span><span class="bp">True</span><span class="p">)(</span><span class="n">env</span><span class="p">,</span>
@@ -235,6 +240,9 @@
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
         <span class="n">s3</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;HTTP_AUTHORIZATION&#39;</span><span class="p">)</span>
         <span class="n">token</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;HTTP_X_AUTH_TOKEN&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;HTTP_X_STORAGE_TOKEN&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">token</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">token</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">swauth</span><span class="o">.</span><span class="n">authtypes</span><span class="o">.</span><span class="n">MAX_TOKEN_LENGTH</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">HTTPBadRequest</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="s">&#39;Token exceeds maximum length.&#39;</span><span class="p">)(</span><span class="n">env</span><span class="p">,</span>
+                                                                <span class="n">start_response</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">s3</span> <span class="ow">or</span> <span class="p">(</span><span class="n">token</span> <span class="ow">and</span> <span class="n">token</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reseller_prefix</span><span class="p">)):</span>
             <span class="c"># Note: Empty reseller_prefix will match all tokens.</span>
             <span class="n">groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_groups</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
@@ -266,7 +274,7 @@
                     <span class="n">version</span><span class="p">,</span> <span class="n">rest</span> <span class="o">=</span> <span class="n">split_path</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;PATH_INFO&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">),</span>
                                                <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="n">HTTPNotFound</span><span class="p">()(</span><span class="n">env</span><span class="p">,</span> <span class="n">start_response</span><span class="p">)</span>
+                    <span class="n">version</span><span class="p">,</span> <span class="n">rest</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span>
                 <span class="k">if</span> <span class="n">rest</span> <span class="ow">and</span> <span class="n">rest</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reseller_prefix</span><span class="p">):</span>
                     <span class="c"># Handle anonymous access to accounts I&#39;m the definitive</span>
                     <span class="c"># auth for.</span>
@@ -335,7 +343,7 @@
 
             <span class="n">password</span> <span class="o">=</span> <span class="n">detail</span><span class="p">[</span><span class="s">&#39;auth&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">urlsafe_b64decode</span><span class="p">(</span><span class="n">unquote</span><span class="p">(</span><span class="n">token</span><span class="p">))</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">encodestring</span><span class="p">(</span><span class="n">hmac</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">detail</span><span class="p">[</span><span class="s">&#39;auth&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">encodestring</span><span class="p">(</span><span class="n">hmac</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">password</span><span class="p">,</span>
                                              <span class="n">msg</span><span class="p">,</span> <span class="n">sha1</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">())</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">s</span> <span class="o">!=</span> <span class="n">sign</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">None</span>
@@ -1351,7 +1359,7 @@
 <span class="sd">        :returns: webob.Request object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">newenv</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;REQUEST_METHOD&#39;</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span> <span class="s">&#39;HTTP_USER_AGENT&#39;</span><span class="p">:</span> <span class="s">&#39;Swauth&#39;</span><span class="p">}</span>
-        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;swift.cache&#39;</span><span class="p">,</span> <span class="s">&#39;HTTP_X_CF_TRANS_ID&#39;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;swift.cache&#39;</span><span class="p">,</span> <span class="s">&#39;swift.trans_id&#39;</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">env</span><span class="p">:</span>
                 <span class="n">newenv</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
         <span class="n">newenv</span><span class="p">[</span><span class="s">&#39;swift.authorize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">req</span><span class="p">:</span> <span class="bp">None</span>
@@ -1548,7 +1556,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -1571,14 +1579,14 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Swauth v1.0.3.dev documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Swauth 1.0.4.dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li>
           <li><a href="../swauth.html" >swauth</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010-2011, OpenStack, LLC.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

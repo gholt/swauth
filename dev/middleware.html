@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>swauth.middleware &mdash; Swauth v1.0.3.dev documentation</title>
+    <title>swauth.middleware &mdash; Swauth 1.0.4.dev documentation</title>
+    
     <link rel="stylesheet" href="static/default.css" type="text/css" />
     <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '1.0.3.dev',
+        VERSION:     '1.0.4.dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,7 @@
     <script type="text/javascript" src="static/jquery.js"></script>
     <script type="text/javascript" src="static/underscore.js"></script>
     <script type="text/javascript" src="static/doctools.js"></script>
-    <link rel="top" title="Swauth v1.0.3.dev documentation" href="index.html" />
+    <link rel="top" title="Swauth 1.0.4.dev documentation" href="index.html" />
     <link rel="next" title="Swauth API" href="api.html" />
     <link rel="prev" title="swauth" href="swauth.html" /> 
   </head>
@@ -42,7 +45,7 @@
         <li class="right" >
           <a href="swauth.html" title="swauth"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Swauth v1.0.3.dev documentation</a> &raquo;</li> 
+        <li><a href="index.html">Swauth 1.0.4.dev documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -63,7 +66,7 @@ backing store.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>app</strong> &#8211; The next WSGI app in the pipeline</li>
 <li><strong>conf</strong> &#8211; The dict of configuration values</li>
 </ul>
@@ -87,13 +90,13 @@ It will use self.auth_encoder to check for a key match.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>user_detail</strong> &#8211; The dict for the user.</li>
 <li><strong>key</strong> &#8211; The key to validate for the user.</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if the key is valid for the user, False if not.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True if the key is valid for the user, False if not.</p>
 </td>
 </tr>
 </tbody>
@@ -116,10 +119,10 @@ with the addition of an <cite>account</cite> key set to the admin user&#8217;s a
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob request to retrieve X-Auth-Admin-User and
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob request to retrieve X-Auth-Admin-User and
 X-Auth-Admin-Key from.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">The dict for the admin user with the addition of the
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The dict for the admin user with the addition of the
 <cite>account</cite> key.</td>
 </tr>
 </tbody>
@@ -135,7 +138,7 @@ default Swift cluster (internal url) urlparse result.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>urlparsed</strong> &#8211; The result from urlparse.urlparse or None to use the
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>urlparsed</strong> &#8211; The result from urlparse.urlparse or None to use the
 default Swift cluster&#8217;s value</td>
 </tr>
 </tbody>
@@ -150,13 +153,13 @@ default Swift cluster&#8217;s value</td>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>env</strong> &#8211; The current WSGI environment dictionary.</li>
 <li><strong>token</strong> &#8211; Token to validate and return a group string for.</li>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None if the token is invalid or a string containing a comma
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None if the token is invalid or a string containing a comma
 separated list of groups the authenticated user is a member
 of. The first group in the list is also considered a unique
 identifier for that user.</p>
@@ -188,7 +191,7 @@ Wraps env in webob.Request object and passes it down.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>env</strong> &#8211; WSGI environment dictionary</li>
 <li><strong>start_response</strong> &#8211; WSGI callable</li>
 </ul>
@@ -207,9 +210,9 @@ auth system. Can only be called by a .reseller_admin.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success.</td>
 </tr>
 </tbody>
 </table>
@@ -225,9 +228,9 @@ account.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success.</td>
 </tr>
 </tbody>
 </table>
@@ -254,9 +257,9 @@ containing the single key <cite>name</cite>. For example:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success with a JSON dictionary as
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success with a JSON dictionary as
 explained above.</td>
 </tr>
 </tbody>
@@ -280,9 +283,9 @@ currently only contains the single key <cite>name</cite>. For example:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success with a JSON dictionary as
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success with a JSON dictionary as
 explained above.</td>
 </tr>
 </tbody>
@@ -336,9 +339,9 @@ described here:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success with data set as explained
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success with data set as explained
 above.</td>
 </tr>
 </tbody>
@@ -385,9 +388,9 @@ currently has the single key <cite>name</cite>. For example:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success with a JSON dictionary as
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success with a JSON dictionary as
 explained above.</td>
 </tr>
 </tbody>
@@ -404,9 +407,9 @@ cluster for use with the auth subsystem. Can only be called by
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 204 on success</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 204 on success</td>
 </tr>
 </tbody>
 </table>
@@ -425,9 +428,9 @@ UUID4 part.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success.</td>
 </tr>
 </tbody>
 </table>
@@ -448,9 +451,9 @@ X-Auth-User-Reseller-Admin may be set to <cite>true</cite> to create a
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success.</td>
 </tr>
 </tbody>
 </table>
@@ -465,7 +468,7 @@ Should return a WSGI-style callable (such as webob.Response).</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; webob.Request object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; webob.Request object</td>
 </tr>
 </tbody>
 </table>
@@ -502,9 +505,9 @@ with the same end point name will have their values updated.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success with the udpated services JSON
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success with the udpated services JSON
 dict as described above</td>
 </tr>
 </tbody>
@@ -527,9 +530,9 @@ allowed to do anything on any account.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>req</strong> &#8211; The webob.Request to process.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success with data set as explained
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">webob.Response, 2xx on success with data set as explained
 above.</td>
 </tr>
 </tbody>
@@ -550,7 +553,7 @@ for the account specified.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>req</strong> &#8211; The webob.Request to check.</li>
 <li><strong>account</strong> &#8211; The account to check for .admin against.</li>
 <li><strong>returns</strong> &#8211; True if .admin.</li>
@@ -570,7 +573,7 @@ for the account specified.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>req</strong> &#8211; The webob.Request to check.</li>
 <li><strong>admin_detail</strong> &#8211; The previously retrieved dict from
 <a class="reference internal" href="#swauth.middleware.Swauth.get_admin_detail" title="swauth.middleware.Swauth.get_admin_detail"><tt class="xref py py-func docutils literal"><span class="pre">get_admin_detail()</span></tt></a> or None for this function
@@ -592,7 +595,7 @@ to retrieve the admin_detail itself.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>req</strong> &#8211; The webob.Request to check.</li>
 <li><strong>returns</strong> &#8211; True if .super_admin.</li>
 </ul>
@@ -611,7 +614,7 @@ parameters specified. Note that this request will be preauthorized.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>env</strong> &#8211; Current WSGI environment dictionary</li>
 <li><strong>method</strong> &#8211; HTTP method of new request</li>
 <li><strong>path</strong> &#8211; HTTP path of new request</li>
@@ -620,7 +623,7 @@ parameters specified. Note that this request will be preauthorized.</p>
 </ul>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">webob.Request object</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">webob.Request object</p>
 </td>
 </tr>
 </tbody>
@@ -662,7 +665,7 @@ parameters specified. Note that this request will be preauthorized.</p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -691,12 +694,12 @@ parameters specified. Note that this request will be preauthorized.</p>
         <li class="right" >
           <a href="swauth.html" title="swauth"
              >previous</a> |</li>
-        <li><a href="index.html">Swauth v1.0.3.dev documentation</a> &raquo;</li> 
+        <li><a href="index.html">Swauth 1.0.4.dev documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2010-2011, OpenStack, LLC.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>
