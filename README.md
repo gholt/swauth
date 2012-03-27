@@ -40,14 +40,20 @@ Quick Install
     set log_name = swauth
     super_admin_key = swauthkey
 
-4) Restart your proxy server ``swift-init proxy reload``
+4) Be sure your proxy server allows account management:
 
-5) Initialize the Swauth backing store in Swift ``swauth-prep -K swauthkey``
+    [app:proxy-server]
+    ...
+    allow_account_management = true
 
-6) Add an account/user ``swauth-add-user -A http://127.0.0.1:8080/auth/ -K
+5) Restart your proxy server ``swift-init proxy reload``
+
+6) Initialize the Swauth backing store in Swift ``swauth-prep -K swauthkey``
+
+7) Add an account/user ``swauth-add-user -A http://127.0.0.1:8080/auth/ -K
    swauthkey -a test tester testing``
 
-7) Ensure it works ``swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K
+8) Ensure it works ``swift -A http://127.0.0.1:8080/auth/v1.0 -U test:tester -K
    testing stat -v``
 
 
