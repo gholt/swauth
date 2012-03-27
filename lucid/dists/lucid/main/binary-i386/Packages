@@ -1,37 +1,37 @@
 Package: python-swauth
 Source: swauth
-Version: 1.0.2-1
+Version: 1.0.3-1
 Architecture: all
 Maintainer: Gregory Holt <gholt@rackspace.com>
-Installed-Size: 146
+Installed-Size: 166
 Depends: python (>= 2.6), python-support (>= 0.90.0), python-openssl, python-setuptools, python-pastedeploy, python-webob (>= 0.9.7.1~hg20100111-1~racklabs1), python-simplejson, python-xattr, python-netifaces, python-greenlet (>= 0.3.1), python-eventlet (>= 0.9.8), swift-proxy (>= 1.3)
 Provides: python2.6-swauth
 Homepage: https://github.com/gholt/swauth
 Priority: optional
 Section: python
-Filename: pool/main/s/swauth/python-swauth_1.0.2-1_all.deb
-Size: 32010
-SHA256: ba318e46a58cde7667d84df15017df577a2009881134a61d73822cf30feeebab
-SHA1: 7e1aece03b89e0b4199c202d227ee02de082c6bf
-MD5sum: 5591a06a7df10df43cfee5a44328746f
+Filename: pool/main/s/swauth/python-swauth_1.0.3-1_all.deb
+Size: 39154
+SHA256: 245f7398263eadd897e5cf3d60c834a43f42869ebe8a9ff34217c55b8294a901
+SHA1: 715ebf1c1feb104bc5eae9ab80d5617a15702275
+MD5sum: d1ebcc9a272b00205a2166f337189e50
 Description: An Auth Service for Swift as WSGI Middleware that uses Swift
  itself as a backing store.
 
 Package: swauth-doc
 Source: swauth
-Version: 1.0.2-1
+Version: 1.0.3-1
 Architecture: all
 Maintainer: Gregory Holt <gholt@rackspace.com>
-Installed-Size: 241
+Installed-Size: 274
 Depends: libjs-jquery
 Homepage: https://github.com/gholt/swauth
 Priority: optional
 Section: doc
-Filename: pool/main/s/swauth/swauth-doc_1.0.2-1_all.deb
-Size: 80534
-SHA256: 7e3ed6b8a107c8ba462a43d4a59c70a27cf31de0abd77b44162f99d0ee5da46d
-SHA1: 0db017678f066a93e40e6ef890999f709c9f3a0d
-MD5sum: 70b8c8e3c1f1feb41cca4a929b25df22
+Filename: pool/main/s/swauth/swauth-doc_1.0.3-1_all.deb
+Size: 104636
+SHA256: 672b023b778680df7432353090c53c539f9f2e5d418fdd2d68238956dea27970
+SHA1: 1974ffaaa7a7f7ccfd98ed9798b9db7398efd5ff
+MD5sum: 8ac3f15f7d51f2efb05ec5588e62bbc4
 Description: The Swauth documentation
  Sphinx documentation for Swauth.
 
