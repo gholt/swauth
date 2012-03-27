@@ -24,6 +24,7 @@ from time import time
 from webob import Request, Response
 
 from swauth import middleware as auth
+from swauth.authtypes import MAX_TOKEN_LENGTH
 
 
 class FakeMemcache(object):
@@ -3492,6 +3493,18 @@ class TestAuth(unittest.TestCase):
         resp = req.get_response(self.test_auth)
         self.assertEquals(resp.status_int, 404)
         self.assertTrue('swift.authorize' not in resp.environ)
+
+    def test_token_too_long(self):
+        req = self._make_request('/v1/AUTH_account', headers={
+            'x-auth-token': 'a' * MAX_TOKEN_LENGTH})
+        resp = req.get_response(self.test_auth)
+        self.assertEquals(resp.status_int, 401)
+        self.assertNotEquals(resp.body, 'Token exceeds maximum length.')
+        req = self._make_request('/v1/AUTH_account', headers={
+            'x-auth-token': 'a' * (MAX_TOKEN_LENGTH + 1)})
+        resp = req.get_response(self.test_auth)
+        self.assertEquals(resp.status_int, 400)
+        self.assertEquals(resp.body, 'Token exceeds maximum length.')
 
 
 if __name__ == '__main__':

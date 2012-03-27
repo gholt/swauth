@@ -188,6 +188,9 @@ class Swauth(object):
                 return self.handle(env, start_response)
         s3 = env.get('HTTP_AUTHORIZATION')
         token = env.get('HTTP_X_AUTH_TOKEN', env.get('HTTP_X_STORAGE_TOKEN'))
+        if token and len(token) > swauth.authtypes.MAX_TOKEN_LENGTH:
+            return HTTPBadRequest(body='Token exceeds maximum length.')(env,
+                                                                start_response)
         if s3 or (token and token.startswith(self.reseller_prefix)):
             # Note: Empty reseller_prefix will match all tokens.
             groups = self.get_groups(env, token)

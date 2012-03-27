@@ -37,6 +37,10 @@ value or to a default value.
 import hashlib
 
 
+#: Maximum length any valid token should ever be.
+MAX_TOKEN_LENGTH = 256
+
+
 class Plaintext(object):
     """
     Provides a particular auth type for encoding format for encoding and
