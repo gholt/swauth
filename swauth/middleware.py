@@ -180,8 +180,6 @@ class Swauth(object):
         """
         if self.allow_overrides and env.get('swift.authorize_override', False):
             return self.app(env, start_response)
-        if 'HTTP_X_CF_TRANS_ID' not in env:
-            env['HTTP_X_CF_TRANS_ID'] = 'tx' + str(uuid4())
         if not self.swauth_remote:
             if env.get('PATH_INFO', '') == self.auth_prefix[:-1]:
                 return HTTPMovedPermanently(add_slash=True)(env,
@@ -1306,7 +1304,7 @@ class Swauth(object):
         :returns: webob.Request object
         """
         newenv = {'REQUEST_METHOD': method, 'HTTP_USER_AGENT': 'Swauth'}
-        for name in ('swift.cache', 'HTTP_X_CF_TRANS_ID'):
+        for name in ('swift.cache', 'swift.trans_id'):
             if name in env:
                 newenv[name] = env[name]
         newenv['swift.authorize'] = lambda req: None
