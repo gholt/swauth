@@ -155,6 +155,8 @@ class Swauth(object):
             raise Exception('Invalid auth_type in config file: %s'
                              % self.auth_type)
         self.auth_encoder.salt = conf.get('auth_type_salt', 'swauthsalt')
+        self.allow_overrides = \
+            conf.get('allow_overrides', 't').lower() in TRUE_VALUES
 
     def __call__(self, env, start_response):
         """
@@ -176,6 +178,8 @@ class Swauth(object):
         will be routed through the internal auth request handler (self.handle).
         This is to handle creating users, accounts, granting tokens, etc.
         """
+        if self.allow_overrides and env.get('swift.authorize_override', False):
+            return self.app(env, start_response)
         if 'HTTP_X_CF_TRANS_ID' not in env:
             env['HTTP_X_CF_TRANS_ID'] = 'tx' + str(uuid4())
         if not self.swauth_remote:

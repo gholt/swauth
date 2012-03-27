@@ -50,6 +50,11 @@ use = egg:swauth#swauth
 #   auth_type = plaintext
 # Used if the auth_type is sha1 or another method that can make use of a salt.
 #   auth_type_salt = swauthsalt
+# This allows middleware higher in the WSGI pipeline to override auth
+# processing, useful for middleware such as tempurl and formpost. If you know
+# you're not going to use such middleware and you want a bit of extra security,
+# you can set this to false.
+#   allow_overrides = true
 # Highly recommended to change this. If you comment this out, the Swauth
 # administration features will be disabled for this proxy.
 super_admin_key = swauthkey

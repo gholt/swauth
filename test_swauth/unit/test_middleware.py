@@ -3462,6 +3462,37 @@ class TestAuth(unittest.TestCase):
         resp = req.get_response(self.test_auth)
         self.assertEquals(resp.status_int, 204)
 
+    def _make_request(self, path, **kwargs):
+        req = Request.blank(path, **kwargs)
+        req.environ['swift.cache'] = FakeMemcache()
+        return req
+
+    def test_override_asked_for_but_not_allowed(self):
+        self.test_auth = \
+            auth.filter_factory({'allow_overrides': 'false'})(FakeApp())
+        req = self._make_request('/v1/AUTH_account',
+                                 environ={'swift.authorize_override': True})
+        resp = req.get_response(self.test_auth)
+        self.assertEquals(resp.status_int, 401)
+        self.assertEquals(resp.environ['swift.authorize'],
+                          self.test_auth.authorize)
+
+    def test_override_asked_for_and_allowed(self):
+        self.test_auth = \
+            auth.filter_factory({'allow_overrides': 'true'})(FakeApp())
+        req = self._make_request('/v1/AUTH_account',
+                                 environ={'swift.authorize_override': True})
+        resp = req.get_response(self.test_auth)
+        self.assertEquals(resp.status_int, 404)
+        self.assertTrue('swift.authorize' not in resp.environ)
+
+    def test_override_default_allowed(self):
+        req = self._make_request('/v1/AUTH_account',
+                                 environ={'swift.authorize_override': True})
+        resp = req.get_response(self.test_auth)
+        self.assertEquals(resp.status_int, 404)
+        self.assertTrue('swift.authorize' not in resp.environ)
+
 
 if __name__ == '__main__':
     unittest.main()
