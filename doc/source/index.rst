@@ -6,19 +6,14 @@
 Swauth
 ======
 
-    Copyright (c) 2010-2011 OpenStack, LLC
+    Copyright (c) 2010-2012 OpenStack, LLC
 
     An Auth Service for Swift as WSGI Middleware that uses Swift itself as a
     backing store. Sphinx-built docs at: http://gholt.github.com/swauth/
     Source available at: https://github.com/gholt/swauth
 
-    See also https://github.com/khussein/keystone for the future standard
-    OpenStack auth service.
-
-    This is currently a work in progress of pulling Swauth out of the Swift
-    repo and here into its own project. See
-    https://code.launchpad.net/~gholt/swift/deswauth/+merge/62392 for the Swift
-    side of things.
+    See also https://github.com/openstack/keystone for the standard OpenStack
+    auth service.
 
 Overview
 --------

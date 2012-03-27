@@ -2,15 +2,17 @@ Swauth
 ------
 
 An Auth Service for Swift as WSGI Middleware that uses Swift itself as a
-backing store. Sphinx-built docs at: http://gholt.github.com/swauth/
+backing store. Sphinx-built docs at: <http://gholt.github.com/swauth/>
 
-See also https://github.com/khussein/keystone for the future standard OpenStack
+See also <https://github.com/openstack/keystone> for the standard OpenStack
 auth service.
 
-This is currently a work in progress of pulling Swauth out of the Swift repo
-and here into its own project. See
-https://code.launchpad.net/~gholt/swift/deswauth/+merge/62392 for the Swift
-side of things.
+
+NOTE
+----
+
+**Be sure to review the Sphinx-built docs at:
+<http://gholt.github.com/swauth/>**
 
 
 Quick Install
@@ -21,17 +23,17 @@ Quick Install
 
 2) Alter your proxy-server.conf pipeline to have swauth instead of tempauth:
 
-    Was::
+    Was:
 
         [pipeline:main]
         pipeline = catch_errors cache tempauth proxy-server
 
-    Change To::
+    Change To:
 
         [pipeline:main]
         pipeline = catch_errors cache swauth proxy-server
 
-3) Add to your proxy-server.conf the section for the Swauth WSGI filter::
+3) Add to your proxy-server.conf the section for the Swauth WSGI filter:
 
     [filter:swauth]
     use = egg:swauth#swauth
