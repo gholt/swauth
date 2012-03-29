@@ -1,0 +1,7 @@
+Archive: stable
+Version: 5.0
+Component: main
+Origin: Swauth
+Label: Swauth
+Architecture: amd64
+Description: Swauth packages for Lucid
