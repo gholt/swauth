@@ -38,7 +38,7 @@ import hashlib
 
 
 #: Maximum length any valid token should ever be.
-MAX_TOKEN_LENGTH = 256
+MAX_TOKEN_LENGTH = 5000
 
 
 class Plaintext(object):
