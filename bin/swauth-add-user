@@ -72,11 +72,15 @@ if __name__ == '__main__':
                'X-Auth-Admin-Key': options.admin_key}
     if options.suffix:
         headers['X-Account-Suffix'] = options.suffix
-    conn = http_connect(parsed.hostname, parsed.port, 'PUT', path, headers,
+    conn = http_connect(parsed.hostname, parsed.port, 'GET', path, headers,
                         ssl=(parsed.scheme == 'https'))
     resp = conn.getresponse()
     if resp.status // 100 != 2:
-        print 'Account creation failed: %s %s' % (resp.status, resp.reason)
+        conn = http_connect(parsed.hostname, parsed.port, 'PUT', path, headers,
+                            ssl=(parsed.scheme == 'https'))
+        resp = conn.getresponse()
+        if resp.status // 100 != 2:
+            print 'Account creation failed: %s %s' % (resp.status, resp.reason)
     # Add the user
     path = '%sv2/%s/%s' % (parsed_path, account, user)
     headers = {'X-Auth-Admin-User': options.admin_user,
