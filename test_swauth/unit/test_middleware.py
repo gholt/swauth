@@ -3506,6 +3506,12 @@ class TestAuth(unittest.TestCase):
         self.assertEquals(resp.status_int, 400)
         self.assertEquals(resp.body, 'Token exceeds maximum length.')
 
+    def test_crazy_authorization(self):
+        req = self._make_request('/v1/AUTH_account', headers={
+            'authorization': 'somebody elses header value'})
+        resp = req.get_response(self.test_auth)
+        self.assertEquals(resp.status_int, 401)
+
 
 if __name__ == '__main__':
     unittest.main()

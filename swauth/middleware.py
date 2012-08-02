@@ -250,8 +250,14 @@ class Swauth(object):
                 self.logger.warn('S3-style authorization not supported yet '
                                  'with swauth_remote mode.')
                 return None
-            account = env['HTTP_AUTHORIZATION'].split(' ')[1]
-            account, user, sign = account.split(':')
+            try:
+                account = env['HTTP_AUTHORIZATION'].split(' ')[1]
+                account, user, sign = account.split(':')
+            except Exception, err:
+                self.logger.debug(
+                    'Swauth cannot parse Authorization header value %r' %
+                    env['HTTP_AUTHORIZATION'])
+                return None
             path = quote('/v1/%s/%s/%s' % (self.auth_account, account, user))
             resp = make_pre_authed_request(env, 'GET', path,
                     agent=self.agent).get_response(self.app)
