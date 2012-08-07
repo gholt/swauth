@@ -3511,6 +3511,8 @@ class TestAuth(unittest.TestCase):
             'authorization': 'somebody elses header value'})
         resp = req.get_response(self.test_auth)
         self.assertEquals(resp.status_int, 401)
+        self.assertEquals(resp.environ['swift.authorize'],
+                          self.test_auth.denied_response)
 
 
 if __name__ == '__main__':

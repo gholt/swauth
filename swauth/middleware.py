@@ -188,12 +188,14 @@ class Swauth(object):
                 env['swift.clean_acl'] = clean_acl
             else:
                 # Unauthorized token
-                if self.reseller_prefix:
+                if self.reseller_prefix and token and \
+                        token.startswith(self.reseller_prefix):
                     # Because I know I'm the definitive auth for this token, I
                     # can deny it outright.
                     return HTTPUnauthorized()(env, start_response)
-                # Because I'm not certain if I'm the definitive auth for empty
-                # reseller_prefixed tokens, I won't overwrite swift.authorize.
+                # Because I'm not certain if I'm the definitive auth, I won't
+                # overwrite swift.authorize and I'll just set a delayed denial
+                # if nothing else overrides me.
                 elif 'swift.authorize' not in env:
                     env['swift.authorize'] = self.denied_response
         else:
