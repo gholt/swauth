@@ -161,6 +161,10 @@ class Swauth(object):
         will be routed through the internal auth request handler (self.handle).
         This is to handle creating users, accounts, granting tokens, etc.
         """
+        # We're going to consider OPTIONS requests harmless and the CORS
+        # support in the Swift proxy needs to get them.
+        if env.get('REQUEST_METHOD') == 'OPTIONS':
+            return self.app(env, start_response)
         if self.allow_overrides and env.get('swift.authorize_override', False):
             return self.app(env, start_response)
         if not self.swauth_remote:
