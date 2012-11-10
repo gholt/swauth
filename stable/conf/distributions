@@ -1,8 +1,0 @@
-Origin: Swauth
-Label: Swauth
-Suite: stable
-Codename: lucid
-Version: 5.0
-Architectures: i386 amd64 source
-Components: main
-Description: Swauth packages for Lucid
