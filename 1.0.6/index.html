@@ -1,0 +1,255 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Swauth &mdash; Swauth 1.0.6 documentation</title>
+    
+    <link rel="stylesheet" href="static/default.css" type="text/css" />
+    <link rel="stylesheet" href="static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="static/jquery.js"></script>
+    <script type="text/javascript" src="static/underscore.js"></script>
+    <script type="text/javascript" src="static/doctools.js"></script>
+    <link rel="top" title="Swauth 1.0.6 documentation" href="#" />
+    <link rel="next" title="LICENSE" href="license.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="license.html" title="LICENSE"
+             accesskey="N">next</a> |</li>
+        <li><a href="#">Swauth 1.0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="swauth">
+<h1>Swauth<a class="headerlink" href="#swauth" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p>Copyright (c) 2010-2012 OpenStack, LLC</p>
+<p>An Auth Service for Swift as WSGI Middleware that uses Swift itself as a
+backing store. Sphinx-built docs at: <a class="reference external" href="http://gholt.github.com/swauth/">http://gholt.github.com/swauth/</a>
+Source available at: <a class="reference external" href="https://github.com/gholt/swauth">https://github.com/gholt/swauth</a></p>
+<p>See also <a class="reference external" href="https://github.com/openstack/keystone">https://github.com/openstack/keystone</a> for the standard OpenStack
+auth service.</p>
+</div></blockquote>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Before discussing how to install Swauth within a Swift system, it might help to understand how Swauth does it work first.</p>
+<ol class="arabic">
+<li><p class="first">Swauth is middleware installed in the Swift Proxy&#8217;s WSGI pipeline.</p>
+</li>
+<li><p class="first">It intercepts requests to <tt class="docutils literal"><span class="pre">/auth/</span></tt> (by default).</p>
+</li>
+<li><p class="first">It also uses Swift&#8217;s <a class="reference external" href="http://swift.openstack.org/development_auth.html">authorize callback</a> and <a class="reference external" href="http://swift.openstack.org/misc.html#module-swift.common.middleware.acl">acl callback</a> features to authorize Swift requests.</p>
+</li>
+<li><p class="first">Swauth will also make various internal calls to the Swift WSGI pipeline it&#8217;s installed in to manipulate containers and objects within an <tt class="docutils literal"><span class="pre">AUTH_.auth</span></tt> (by default) Swift account. These containers and objects are what store account and user information.</p>
+</li>
+<li><p class="first">Instead of #4, Swauth can be configured to call out to another remote Swauth to perform #4 on its behalf (using the swauth_remote config value).</p>
+</li>
+<li><p class="first">When managing accounts and users with the various <tt class="docutils literal"><span class="pre">swauth-</span></tt> command line tools, these tools are actually just performing HTTP requests against the <tt class="docutils literal"><span class="pre">/auth/</span></tt> end point referenced in #2. You can make your own tools that use the same <a class="reference internal" href="api.html#api-top"><em>API</em></a>.</p>
+</li>
+<li><p class="first">In the special case of creating a new account, Swauth will do its usual WSGI-internal requests as per #4 but will also call out to the Swift cluster to create the actual Swift account.</p>
+<ol class="loweralpha simple">
+<li>This Swift cluster callout is an account PUT request to the URL defined by the <tt class="docutils literal"><span class="pre">swift_default_cluster</span></tt> config value.</li>
+<li>This callout end point is also saved when the account is created so that it can be given to the users of that account in the future.</li>
+<li>Sometimes, due to public/private network routing or firewalling, the URL Swauth should use should be different than the URL Swauth should give the users later. That is why the <tt class="docutils literal"><span class="pre">default_swift_cluster</span></tt> config value can accept two URLs (first is the one for users, second is the one for Swauth).</li>
+<li>Once an account is created, the URL given to users for that account will not change, even if the <tt class="docutils literal"><span class="pre">default_swift_cluster</span></tt> config value changes. This is so that you can use multiple clusters with the same Swauth system; <tt class="docutils literal"><span class="pre">default_swift_cluster</span></tt> just points to the one where you want new users to go.</li>
+</ol>
+<ol class="loweralpha simple" start="6">
+<li>You can change the stored URL for an account if need be with the <tt class="docutils literal"><span class="pre">swauth-set-account-service</span></tt> command line tool or a POST request (see <a class="reference internal" href="api.html#api-set-service-endpoints"><em>API</em></a>).</li>
+</ol>
+</li>
+</ol>
+</div>
+<div class="section" id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Install Swauth with <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></tt> or <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">python</span>
+<span class="pre">setup.py</span> <span class="pre">develop</span></tt> or via whatever packaging system you may be using.</p>
+</li>
+<li><p class="first">Alter your <tt class="docutils literal"><span class="pre">proxy-server.conf</span></tt> pipeline to have <tt class="docutils literal"><span class="pre">swauth</span></tt> instead of <tt class="docutils literal"><span class="pre">tempauth</span></tt>:</p>
+<blockquote>
+<div><p>Was:</p>
+<div class="highlight-python"><pre>[pipeline:main]
+pipeline = catch_errors cache tempauth proxy-server</pre>
+</div>
+<p>Change To:</p>
+<div class="highlight-python"><pre>[pipeline:main]
+pipeline = catch_errors cache swauth proxy-server</pre>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Add to your <tt class="docutils literal"><span class="pre">proxy-server.conf</span></tt> the section for the Swauth WSGI filter:</p>
+<div class="highlight-python"><pre>[filter:swauth]
+use = egg:swauth#swauth
+set log_name = swauth
+super_admin_key = swauthkey
+default_swift_cluster = &lt;your setting as discussed below&gt;</pre>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">default_swift_cluster</span></tt> setting can be confusing.</p>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li>If you&#8217;re using an all-in-one type configuration where everything will be run on the local host on port 8080, you can omit the <tt class="docutils literal"><span class="pre">default_swift_cluster</span></tt> completely and it will default to <tt class="docutils literal"><span class="pre">local#http://127.0.0.1:8080/v1</span></tt>.</li>
+<li>If you&#8217;re using a single Swift proxy you can just set the <tt class="docutils literal"><span class="pre">default_swift_cluster</span> <span class="pre">=</span> <span class="pre">cluster_name#https://&lt;public_ip&gt;:&lt;port&gt;/v1</span></tt> and that URL will be given to users as well as used by Swauth internally. (Quick note: be sure the <tt class="docutils literal"><span class="pre">http</span></tt> vs. <tt class="docutils literal"><span class="pre">https</span></tt> is set right depending on if you&#8217;re using SSL.)</li>
+<li>If you&#8217;re using multiple Swift proxies behind a load balancer, you&#8217;ll probably want <tt class="docutils literal"><span class="pre">default_swift_cluster</span> <span class="pre">=</span> <span class="pre">cluster_name#https://&lt;load_balancer_ip&gt;:&lt;port&gt;/v1#http://127.0.0.1:&lt;port&gt;/v1</span></tt> so that Swauth gives out the first URL but uses the second URL internally. Remember to double-check the <tt class="docutils literal"><span class="pre">http</span></tt> vs. <tt class="docutils literal"><span class="pre">https</span></tt> settings for each of the URLs; they might be different if you&#8217;re terminating SSL at the load balancer.</li>
+</ol>
+</div></blockquote>
+<p>Also see the <tt class="docutils literal"><span class="pre">proxy-server.conf-sample</span></tt> for more config options, such as the ability to have a remote Swauth in a multiple Swift cluster configuration.</p>
+</li>
+<li><p class="first">Be sure your Swift proxy allows account management in the <tt class="docutils literal"><span class="pre">proxy-server.conf</span></tt>:</p>
+<div class="highlight-python"><pre>[app:proxy-server]
+...
+allow_account_management = true</pre>
+</div>
+<p>For greater security, you can leave this off any public proxies and just have one or two private proxies with it turned on.</p>
+</li>
+<li><p class="first">Restart your proxy server <tt class="docutils literal"><span class="pre">swift-init</span> <span class="pre">proxy</span> <span class="pre">reload</span></tt></p>
+</li>
+<li><p class="first">Initialize the Swauth backing store in Swift <tt class="docutils literal"><span class="pre">swauth-prep</span> <span class="pre">-K</span> <span class="pre">swauthkey</span></tt></p>
+</li>
+<li><p class="first">Add an account/user <tt class="docutils literal"><span class="pre">swauth-add-user</span> <span class="pre">-A</span> <span class="pre">http[s]://&lt;host&gt;:&lt;port&gt;/auth/</span> <span class="pre">-K</span>
+<span class="pre">swauthkey</span> <span class="pre">-a</span> <span class="pre">test</span> <span class="pre">tester</span> <span class="pre">testing</span></tt></p>
+</li>
+<li><p class="first">Ensure it works <tt class="docutils literal"><span class="pre">swift</span> <span class="pre">-A</span> <span class="pre">http[s]://&lt;host&gt;:&lt;port&gt;/auth/v1.0</span> <span class="pre">-U</span> <span class="pre">test:tester</span> <span class="pre">-K</span> <span class="pre">testing</span> <span class="pre">stat</span> <span class="pre">-v</span></tt></p>
+</li>
+</ol>
+<p>If anything goes wrong, it&#8217;s best to start checking the proxy server logs. The client command line utilities often don&#8217;t get enough information to help. I will often just <tt class="docutils literal"><span class="pre">tail</span> <span class="pre">-F</span></tt> the appropriate proxy log (<tt class="docutils literal"><span class="pre">/var/log/syslog</span></tt> or however you have it configured) and then run the Swauth command to see exactly what requests are happening to try to determine where things fail.</p>
+<p>General note, I find I occasionally just forget to reload the proxies after a config change; so that&#8217;s the first thing you might try. Or, if you suspect the proxies aren&#8217;t reloading properly, you might try <tt class="docutils literal"><span class="pre">swift-init</span> <span class="pre">proxy</span> <span class="pre">stop</span></tt>, ensure all the processes died, then <tt class="docutils literal"><span class="pre">swift-init</span> <span class="pre">proxy</span> <span class="pre">start</span></tt>.</p>
+<p>Also, it&#8217;s quite common to get the <tt class="docutils literal"><span class="pre">/auth/v1.0</span></tt> vs. just <tt class="docutils literal"><span class="pre">/auth/</span></tt> URL paths confused. Usual rule is: Swauth tools use just <tt class="docutils literal"><span class="pre">/auth/</span></tt> and Swift tools use <tt class="docutils literal"><span class="pre">/auth/v1.0</span></tt>.</p>
+</div>
+<div class="section" id="web-admin-install">
+<h2>Web Admin Install<a class="headerlink" href="#web-admin-install" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>If you installed from packages, you&#8217;ll need to cd to the webadmin directory
+the package installed. This is <tt class="docutils literal"><span class="pre">/usr/share/doc/python-swauth/webadmin</span></tt>
+with the Lucid packages. If you installed from source, you&#8217;ll need to cd to
+the webadmin directory in the source directory.</li>
+<li>Upload the Web Admin files with <tt class="docutils literal"><span class="pre">swift</span> <span class="pre">-A</span> <span class="pre">http[s]://&lt;host&gt;:&lt;port&gt;/auth/v1.0</span>
+<span class="pre">-U</span> <span class="pre">.super_admin:.super_admin</span> <span class="pre">-K</span> <span class="pre">swauthkey</span> <span class="pre">upload</span> <span class="pre">.webadmin</span> <span class="pre">.</span></tt></li>
+<li>Open <tt class="docutils literal"><span class="pre">http[s]://&lt;host&gt;:&lt;port&gt;/auth/</span></tt> in your browser.</li>
+</ol>
+</div>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="license.html">LICENSE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="details.html">Implementation Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="swauth.html">swauth</a></li>
+<li class="toctree-l1"><a class="reference internal" href="middleware.html">swauth.middleware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Swauth API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#reseller-admin-services">Reseller/Admin Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#account-services">Account Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#user-services">User Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#other-services">Other Services</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="authtypes.html">swauth.authtypes</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Swauth</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#install">Install</a></li>
+<li><a class="reference internal" href="#web-admin-install">Web Admin Install</a></li>
+<li><a class="reference internal" href="#contents">Contents</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="license.html"
+                        title="next chapter">LICENSE</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="license.html" title="LICENSE"
+             >next</a> |</li>
+        <li><a href="#">Swauth 1.0.6 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2011, OpenStack, LLC.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
