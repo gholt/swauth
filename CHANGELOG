@@ -1,3 +1,14 @@
+swauth (1.0.6)
+
+    Apparently I haven't been keeping up with this CHANGELOG. I'll try to be
+    better onward.
+
+    This release added passing OPTIONS requests through untouched, needed for
+    CORS support in Swift.
+
+    Also, Swauth is a bit more restrictive in deciding when it's the definitive
+    auth for a request.
+
 swauth (1.0.3-dev)
 
     This release is still under development. A full change log will be made at
