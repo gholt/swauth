@@ -1,0 +1,68 @@
+swauth (1.0.6-1) lucid; urgency=low
+
+  * This release added passing OPTIONS requests through untouched, needed for
+    CORS support in Swift.
+
+  * Also, Swauth is a bit more restrictive in deciding when it's the definitive
+    auth for a request.
+
+ -- Gregory Holt <gholt@rackspace.com>  Sat, 10 Nov 2012 01:15:44 +0000
+
+swauth (1.0.5-1) lucid; urgency=low
+
+  * Fixed bug in Authorization header parsing.
+
+  * Fixed bug in swauth-add-user <https://github.com/gholt/swauth/issues/34>.
+
+  * Max token length allowed increased to 5000.
+
+ -- Gregory Holt <gholt@rackspace.com>  Thu, 02 Aug 2012 16:29:07 +0000
+
+swauth (1.0.4-1) lucid; urgency=low
+
+  * Refactored to use Swift's make_pre_authed_request. This will help
+    standardize what is copied on subrequests.
+
+ -- Gregory Holt <gholt@rackspace.com>  Thu, 29 Mar 2012 08:47:43 +0000
+
+swauth (1.0.3-1) lucid; urgency=low
+
+  * First edition of webadmin.
+
+  * Support for multiple auth types. Default 'plaintext' and 'sha1' for now.
+
+  * Support for Swift's TempURL and FormPost.
+
+  * Many code and doc fixes. (UTF-8, PEP8, Deny on / instead of 404,
+    Keystone/Deswauth links, HTTP_X_CF_TRANS_ID now swift.trans_id, limit max
+    token length)
+
+ -- Gregory Holt <gholt@rackspace.com>  Tue, 27 Mar 2012 03:15:56 +0000
+
+swauth (1.0.2-1) lucid; urgency=low
+
+  * Fixed bug rejecting requests when using multiple instances of Swauth or
+    Swauth with other auth services.
+
+  * Fixed bug interpreting URL-encoded user names and keys.
+
+  * Added support for the Swift container sync feature.
+
+  * Allowed /not/ setting super_admin_key to disable Swauth administration
+    features.
+
+  * Added swauth_remote mode so the Swauth middleware for one Swift cluster
+    could be pointing to the Swauth service on another Swift cluster, sharing
+    account/user data sets.
+
+  * Added ability to purge stored tokens.
+
+  * Added API documentation for internal Swauth API.
+
+ -- Greg <gholt@rackspace.com>  Mon, 06 Jun 2011 20:34:02 +0000
+
+swauth (1.0.1) lucid; urgency=low
+
+  * Initial release after separation from Swift.
+
+ -- Greg <gholt@rackspace.com>  Fri, 27 May 2011 00:24:53 +0000
