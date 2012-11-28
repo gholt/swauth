@@ -821,6 +821,39 @@ class TestAuth(unittest.TestCase):
              "local": "http://127.0.0.1:8080/v1/AUTH_cfa"}})
         self.assertEquals(self.test_auth.app.calls, 3)
 
+    def test_get_token_success_existing_token_but_request_new_one(self):
+        self.test_auth.app = FakeApp(iter([
+            # GET of user object
+            ('200 Ok', {'X-Object-Meta-Auth-Token': 'AUTH_tktest'},
+             json.dumps({"auth": "plaintext:key",
+                         "groups": [{'name': "act:usr"}, {'name': "act"},
+                                    {'name': ".admin"}]})),
+            # DELETE of expired token
+            ('204 No Content', {}, ''),
+            # GET of account
+            ('204 Ok', {'X-Container-Meta-Account-Id': 'AUTH_cfa'}, ''),
+            # PUT of new token
+            ('201 Created', {}, ''),
+            # POST of token to user object
+            ('204 No Content', {}, ''),
+            # GET of services object
+            ('200 Ok', {}, json.dumps({"storage": {"default": "local",
+             "local": "http://127.0.0.1:8080/v1/AUTH_cfa"}}))]))
+        resp = Request.blank('/auth/v1.0',
+            headers={'X-Auth-User': 'act:usr',
+                     'X-Auth-Key': 'key',
+                     'X-Auth-New-Token': 'true'}).get_response(self.test_auth)
+        self.assertEquals(resp.status_int, 200)
+        self.assertNotEquals(resp.headers.get('x-auth-token'), 'AUTH_tktest')
+        self.assertEquals(resp.headers.get('x-auth-token'),
+                          resp.headers.get('x-storage-token'))
+        self.assertEquals(resp.headers.get('x-storage-url'),
+                          'http://127.0.0.1:8080/v1/AUTH_cfa')
+        self.assertEquals(json.loads(resp.body),
+            {"storage": {"default": "local",
+             "local": "http://127.0.0.1:8080/v1/AUTH_cfa"}})
+        self.assertEquals(self.test_auth.app.calls, 6)
+
     def test_get_token_success_existing_token_expired(self):
         self.test_auth.app = FakeApp(iter([
             # GET of user object
