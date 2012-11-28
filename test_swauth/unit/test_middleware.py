@@ -21,7 +21,7 @@ import unittest
 from contextlib import contextmanager
 from time import time
 
-from webob import Request, Response
+from swift.common.swob import Request, Response
 
 from swauth import middleware as auth
 from swauth.authtypes import MAX_TOKEN_LENGTH

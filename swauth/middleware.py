@@ -28,10 +28,10 @@ import base64
 
 from eventlet.timeout import Timeout
 from eventlet import TimeoutError
-from webob import Response, Request
-from webob.exc import HTTPAccepted, HTTPBadRequest, HTTPConflict, \
+from swift.common.swob import HTTPAccepted, HTTPBadRequest, HTTPConflict, \
     HTTPCreated, HTTPForbidden, HTTPMethodNotAllowed, HTTPMovedPermanently, \
-    HTTPNoContent, HTTPNotFound, HTTPServiceUnavailable, HTTPUnauthorized
+    HTTPNoContent, HTTPNotFound, HTTPServiceUnavailable, HTTPUnauthorized, \
+    Request, Response
 
 from swift.common.bufferedhttp import http_connect_raw as http_connect
 from swift.common.middleware.acl import clean_acl, parse_acl, referrer_allowed
@@ -396,7 +396,7 @@ class Swauth(object):
         """
         WSGI entry point for auth requests (ones that match the
         self.auth_prefix).
-        Wraps env in webob.Request object and passes it down.
+        Wraps env in swob.Request object and passes it down.
 
         :param env: WSGI environment dictionary
         :param start_response: WSGI callable
@@ -431,9 +431,9 @@ class Swauth(object):
     def handle_request(self, req):
         """
         Entry point for auth requests (ones that match the self.auth_prefix).
-        Should return a WSGI-style callable (such as webob.Response).
+        Should return a WSGI-style callable (such as swob.Response).
 
-        :param req: webob.Request object
+        :param req: swob.Request object
         """
         req.start_time = time()
         handler = None
@@ -498,8 +498,8 @@ class Swauth(object):
         cluster for use with the auth subsystem. Can only be called by
         .super_admin.
 
-        :param req: The webob.Request to process.
-        :returns: webob.Response, 204 on success
+        :param req: The swob.Request to process.
+        :returns: swob.Response, 204 on success
         """
         if not self.is_super_admin(req):
             return HTTPForbidden(request=req)
@@ -537,8 +537,8 @@ class Swauth(object):
             {"accounts": [{"name": "reseller"}, {"name": "test"},
                           {"name": "test2"}]}
 
-        :param req: The webob.Request to process.
-        :returns: webob.Response, 2xx on success with a JSON dictionary as
+        :param req: The swob.Request to process.
+        :returns: swob.Response, 2xx on success with a JSON dictionary as
                   explained above.
         """
         if not self.is_reseller_admin(req):
@@ -579,8 +579,8 @@ class Swauth(object):
                            "local": "http://127.0.0.1:8080/v1/AUTH_018c3946"}},
               "users": [{"name": "tester"}, {"name": "tester3"}]}
 
-        :param req: The webob.Request to process.
-        :returns: webob.Response, 2xx on success with a JSON dictionary as
+        :param req: The swob.Request to process.
+        :returns: swob.Response, 2xx on success with a JSON dictionary as
                   explained above.
         """
         account = req.path_info_pop()
@@ -653,8 +653,8 @@ class Swauth(object):
 
         The updated services dictionary will be returned on success.
 
-        :param req: The webob.Request to process.
-        :returns: webob.Response, 2xx on success with the udpated services JSON
+        :param req: The swob.Request to process.
+        :returns: swob.Response, 2xx on success with the udpated services JSON
                   dict as described above
         """
         if not self.is_reseller_admin(req):
@@ -700,8 +700,8 @@ class Swauth(object):
         However, you can provide an X-Account-Suffix header to replace the
         UUID4 part.
 
-        :param req: The webob.Request to process.
-        :returns: webob.Response, 2xx on success.
+        :param req: The swob.Request to process.
+        :returns: swob.Response, 2xx on success.
         """
         if not self.is_reseller_admin(req):
             return HTTPForbidden(request=req)
@@ -783,8 +783,8 @@ class Swauth(object):
         Handles the DELETE v2/<account> call for removing an account from the
         auth system. Can only be called by a .reseller_admin.
 
-        :param req: The webob.Request to process.
-        :returns: webob.Response, 2xx on success.
+        :param req: The swob.Request to process.
+        :returns: swob.Response, 2xx on success.
         """
         if not self.is_reseller_admin(req):
             return HTTPForbidden(request=req)
@@ -903,8 +903,8 @@ class Swauth(object):
             {"groups": [{"name": ".admin"}, {"name": "test"},
                         {"name": "test:tester"}, {"name": "test:tester3"}]}
 
-        :param req: The webob.Request to process.
-        :returns: webob.Response, 2xx on success with a JSON dictionary as
+        :param req: The swob.Request to process.
+        :returns: swob.Response, 2xx on success with a JSON dictionary as
                   explained above.
         """
         account = req.path_info_pop()
@@ -979,8 +979,8 @@ class Swauth(object):
         Can only be called by an account .admin unless the user is to be a
         .reseller_admin, in which case the request must be by .super_admin.
 
-        :param req: The webob.Request to process.
-        :returns: webob.Response, 2xx on success.
+        :param req: The swob.Request to process.
+        :returns: swob.Response, 2xx on success.
         """
         # Validate path info
         account = req.path_info_pop()
@@ -1035,8 +1035,8 @@ class Swauth(object):
 
         Can only be called by an account .admin.
 
-        :param req: The webob.Request to process.
-        :returns: webob.Response, 2xx on success.
+        :param req: The swob.Request to process.
+        :returns: swob.Response, 2xx on success.
         """
         # Validate path info
         account = req.path_info_pop()
@@ -1118,8 +1118,8 @@ class Swauth(object):
              # Possibly other service dicts, not implemented yet.
             }
 
-        :param req: The webob.Request to process.
-        :returns: webob.Response, 2xx on success with data set as explained
+        :param req: The swob.Request to process.
+        :returns: swob.Response, 2xx on success with data set as explained
                   above.
         """
         # Validate the request info
@@ -1254,8 +1254,8 @@ class Swauth(object):
         .reseller_admin is a special group that indicates the user should be
         allowed to do anything on any account.
 
-        :param req: The webob.Request to process.
-        :returns: webob.Response, 2xx on success with data set as explained
+        :param req: The swob.Request to process.
+        :returns: swob.Response, 2xx on success with data set as explained
                   above.
         """
         token = req.path_info_pop()
@@ -1334,7 +1334,7 @@ class Swauth(object):
         Returns the dict for the user specified as the admin in the request
         with the addition of an `account` key set to the admin user's account.
 
-        :param req: The webob request to retrieve X-Auth-Admin-User and
+        :param req: The swob request to retrieve X-Auth-Admin-User and
                     X-Auth-Admin-Key from.
         :returns: The dict for the admin user with the addition of the
                   `account` key.
@@ -1373,7 +1373,7 @@ class Swauth(object):
         Returns True if the admin specified in the request represents the
         .super_admin.
 
-        :param req: The webob.Request to check.
+        :param req: The swob.Request to check.
         :param returns: True if .super_admin.
         """
         return req.headers.get('x-auth-admin-user') == '.super_admin' and \
@@ -1385,7 +1385,7 @@ class Swauth(object):
         Returns True if the admin specified in the request represents a
         .reseller_admin.
 
-        :param req: The webob.Request to check.
+        :param req: The swob.Request to check.
         :param admin_detail: The previously retrieved dict from
                              :func:`get_admin_detail` or None for this function
                              to retrieve the admin_detail itself.
@@ -1405,7 +1405,7 @@ class Swauth(object):
         Returns True if the admin specified in the request represents a .admin
         for the account specified.
 
-        :param req: The webob.Request to check.
+        :param req: The swob.Request to check.
         :param account: The account to check for .admin against.
         :param returns: True if .admin.
         """
