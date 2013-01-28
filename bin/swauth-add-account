@@ -58,7 +58,8 @@ if __name__ == '__main__':
         parsed_path += '/'
     path = '%sv2/%s' % (parsed_path, account)
     headers = {'X-Auth-Admin-User': options.admin_user,
-               'X-Auth-Admin-Key': options.admin_key}
+               'X-Auth-Admin-Key': options.admin_key,
+               'Content-Length': '0'}
     if options.suffix:
         headers['X-Account-Suffix'] = options.suffix
     conn = http_connect(parsed.hostname, parsed.port, 'PUT', path, headers,

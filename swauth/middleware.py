@@ -735,7 +735,8 @@ class Swauth(object):
         try:
             conn = self.get_conn()
             conn.request('PUT', path,
-                        headers={'X-Auth-Token': self.get_itoken(req.environ)})
+                        headers={'X-Auth-Token': self.get_itoken(req.environ),
+                                 'Content-Length': '0'})
             resp = conn.getresponse()
             resp.read()
             if resp.status // 100 != 2:
