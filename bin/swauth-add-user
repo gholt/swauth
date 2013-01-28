@@ -76,6 +76,7 @@ if __name__ == '__main__':
                         ssl=(parsed.scheme == 'https'))
     resp = conn.getresponse()
     if resp.status // 100 != 2:
+        headers['Content-Length'] = '0'
         conn = http_connect(parsed.hostname, parsed.port, 'PUT', path, headers,
                             ssl=(parsed.scheme == 'https'))
         resp = conn.getresponse()
@@ -85,7 +86,8 @@ if __name__ == '__main__':
     path = '%sv2/%s/%s' % (parsed_path, account, user)
     headers = {'X-Auth-Admin-User': options.admin_user,
                'X-Auth-Admin-Key': options.admin_key,
-               'X-Auth-User-Key': password}
+               'X-Auth-User-Key': password,
+               'Content-Length': '0'}
     if options.admin:
         headers['X-Auth-User-Admin'] = 'true'
     if options.reseller_admin:
