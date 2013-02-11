@@ -4,19 +4,9 @@ Priority: optional
 Maintainer: Gregory Holt <gholt@rackspace.com>
 Uploaders: Gregory Holt <gholt@rackspace.com>
 Build-Depends: debhelper (>= 7.0.50~),
- python-all,
  python-support (>= 0.90),
- python-openssl,
  python-setuptools,
- python-simplejson,
- python-xattr,
- python-netifaces,
- python-greenlet (>= 0.3.1),
- python-eventlet (>= 0.9.8),
- python-nose,
- python-pastedeploy,
- python-sphinx (>= 1.0),
- swift-proxy (>=1.7.6)
+ python-sphinx (>= 1.0)
 Standards-Version: 3.9.1
 XS-Python-Version: >= 2.6
 Homepage: https://github.com/gholt/swauth
