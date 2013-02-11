@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: Gregory Holt <gholt@rackspace.com>
 Uploaders: Gregory Holt <gholt@rackspace.com>
 Build-Depends: debhelper (>= 7.0.50~),
+ python-all,
  python-support (>= 0.90),
  python-setuptools,
  python-sphinx (>= 1.0)
