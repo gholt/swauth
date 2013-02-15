@@ -1245,6 +1245,13 @@ class Swauth(object):
             # Save token info
             path = quote('/v1/%s/.token_%s/%s' %
                          (self.auth_account, token[-1], token))
+            
+            if self.conf.get('user_set_tokenlifetime', False):
+                try:
+                    self.token_life = int(req.headers.get('x-auth-token-lifetime'))
+                except (TypeError, ValueError):
+                    pass
+
             resp = self.make_pre_authed_request(
                 req.environ, 'PUT', path,
                 json.dumps({'account': account, 'user': user,
