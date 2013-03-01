@@ -27,6 +27,10 @@ from swauth import middleware as auth
 from swauth.authtypes import MAX_TOKEN_LENGTH
 
 
+DEFAULT_TOKEN_LIFE = 86400
+MAX_TOKEN_LIFE = 100000
+
+
 class FakeMemcache(object):
 
     def __init__(self):
@@ -110,7 +114,10 @@ class TestAuth(unittest.TestCase):
 
     def setUp(self):
         self.test_auth = \
-            auth.filter_factory({'super_admin_key': 'supertest'})(FakeApp())
+            auth.filter_factory({
+                'super_admin_key': 'supertest',
+                'token_life': str(DEFAULT_TOKEN_LIFE),
+                'max_token_life': str(MAX_TOKEN_LIFE)})(FakeApp())
 
     def test_super_admin_key_not_required(self):
         auth.filter_factory({})(FakeApp())
@@ -688,6 +695,80 @@ class TestAuth(unittest.TestCase):
             headers={'X-Auth-User': 'act:usr',
                      'X-Auth-Key': 'key'}).get_response(self.test_auth)
         self.assertEquals(resp.status_int, 200)
+        self.assert_(resp.headers.get('x-auth-token',
+            '').startswith('AUTH_tk'), resp.headers.get('x-auth-token'))
+        self.assertEquals(resp.headers.get('x-auth-token'),
+                          resp.headers.get('x-storage-token'))
+        self.assertEquals(resp.headers.get('x-storage-url'),
+                          'http://127.0.0.1:8080/v1/AUTH_cfa')
+        self.assertEquals(json.loads(resp.body),
+            {"storage": {"default": "local",
+             "local": "http://127.0.0.1:8080/v1/AUTH_cfa"}})
+        self.assertEquals(self.test_auth.app.calls, 5)
+
+    def test_get_token_success_v1_0_with_user_token_life(self):
+        self.test_auth.app = FakeApp(iter([
+            # GET of user object
+            ('200 Ok', {},
+             json.dumps({"auth": "plaintext:key",
+                         "groups": [{'name': "act:usr"}, {'name': "act"},
+                                    {'name': ".admin"}]})),
+            # GET of account
+            ('204 Ok', {'X-Container-Meta-Account-Id': 'AUTH_cfa'}, ''),
+            # PUT of new token
+            ('201 Created', {}, ''),
+            # POST of token to user object
+            ('204 No Content', {}, ''),
+            # GET of services object
+            ('200 Ok', {}, json.dumps({"storage": {"default": "local",
+             "local": "http://127.0.0.1:8080/v1/AUTH_cfa"}}))]))
+        resp = Request.blank('/auth/v1.0',
+            headers={'X-Auth-User': 'act:usr',
+                     'X-Auth-Key': 'key',
+                     'X-Auth-Token-Lifetime': 10}).get_response(self.test_auth)
+        self.assertEquals(resp.status_int, 200)
+        left = int(resp.headers['x-auth-token-expires'])
+        self.assertTrue(left > 0, '%d > 0' % left)
+        self.assertTrue(left <= 10, '%d <= 10' % left)
+        self.assert_(resp.headers.get('x-auth-token',
+            '').startswith('AUTH_tk'), resp.headers.get('x-auth-token'))
+        self.assertEquals(resp.headers.get('x-auth-token'),
+                          resp.headers.get('x-storage-token'))
+        self.assertEquals(resp.headers.get('x-storage-url'),
+                          'http://127.0.0.1:8080/v1/AUTH_cfa')
+        self.assertEquals(json.loads(resp.body),
+            {"storage": {"default": "local",
+             "local": "http://127.0.0.1:8080/v1/AUTH_cfa"}})
+        self.assertEquals(self.test_auth.app.calls, 5)
+
+    def test_get_token_success_v1_0_with_user_token_life_past_max(self):
+        self.test_auth.app = FakeApp(iter([
+            # GET of user object
+            ('200 Ok', {},
+             json.dumps({"auth": "plaintext:key",
+                         "groups": [{'name': "act:usr"}, {'name': "act"},
+                                    {'name': ".admin"}]})),
+            # GET of account
+            ('204 Ok', {'X-Container-Meta-Account-Id': 'AUTH_cfa'}, ''),
+            # PUT of new token
+            ('201 Created', {}, ''),
+            # POST of token to user object
+            ('204 No Content', {}, ''),
+            # GET of services object
+            ('200 Ok', {}, json.dumps({"storage": {"default": "local",
+             "local": "http://127.0.0.1:8080/v1/AUTH_cfa"}}))]))
+        req = Request.blank(
+            '/auth/v1.0',
+            headers={'X-Auth-User': 'act:usr',
+                     'X-Auth-Key': 'key',
+                     'X-Auth-Token-Lifetime': MAX_TOKEN_LIFE * 10})
+        resp = req.get_response(self.test_auth)
+        self.assertEquals(resp.status_int, 200)
+        left = int(resp.headers['x-auth-token-expires'])
+        self.assertTrue(left > DEFAULT_TOKEN_LIFE,
+                        '%d > %d' % (left, DEFAULT_TOKEN_LIFE))
+        self.assertTrue(left <= MAX_TOKEN_LIFE,
+                        '%d <= %d' % (left, MAX_TOKEN_LIFE))
         self.assert_(resp.headers.get('x-auth-token',
             '').startswith('AUTH_tk'), resp.headers.get('x-auth-token'))
         self.assertEquals(resp.headers.get('x-auth-token'),
