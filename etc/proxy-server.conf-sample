@@ -41,8 +41,10 @@ use = egg:swauth#swauth
 # useful when a load balancer url should be used by users, but swauth itself is
 # behind the load balancer. Example:
 #   default_swift_cluster = local#https://public.com:8080/v1#http://private.com:8080/v1
-# Number of seconds a newly issued token should be valid for.
+# Number of seconds a newly issued token should be valid for, by default.
 #   token_life = 86400
+# Maximum number of seconds a newly issued token can be valid for.
+#   max_token_life = <same as token_life>
 # Specifies how the user key is stored. The default is 'plaintext', leaving the
 # key unsecured but available for key-signing features if such are ever added.
 # An alternative is 'sha1' which stores only a one-way hash of the key leaving
