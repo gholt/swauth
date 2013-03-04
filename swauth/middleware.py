@@ -122,6 +122,7 @@ class Swauth(object):
             except Exception:
                 pass
         self.token_life = int(conf.get('token_life', 86400))
+        self.max_token_life = int(conf.get('max_token_life', self.token_life))
         self.timeout = int(conf.get('node_timeout', 10))
         self.itoken = None
         self.itoken_expires = None
@@ -1203,6 +1204,7 @@ class Swauth(object):
             return HTTPUnauthorized(request=req)
         # See if a token already exists and hasn't expired
         token = None
+        expires = None
         candidate_token = resp.headers.get('x-object-meta-auth-token')
         if candidate_token:
             path = quote('/v1/%s/.token_%s/%s' %
@@ -1219,6 +1221,7 @@ class Swauth(object):
                         token_detail = json.loads(resp.body)
                         if token_detail['expires'] > time():
                             token = candidate_token
+                            expires = token_detail['expires']
                         else:
                             delete_token = True
                     elif resp.status_int != 404:
@@ -1245,19 +1248,20 @@ class Swauth(object):
             # Save token info
             path = quote('/v1/%s/.token_%s/%s' %
                          (self.auth_account, token[-1], token))
-            
-            if self.conf.get('user_set_tokenlifetime', False):
-                try:
-                    self.token_life = int(req.headers.get('x-auth-token-lifetime'))
-                except (TypeError, ValueError):
-                    pass
-
+            try:
+                token_life = min(
+                    int(req.headers.get('x-auth-token-lifetime',
+                                        self.token_life)),
+                    self.max_token_life)
+            except ValueError:
+                token_life = self.token_life
+            expires = int(time() + token_life)
             resp = self.make_pre_authed_request(
                 req.environ, 'PUT', path,
                 json.dumps({'account': account, 'user': user,
                 'account_id': account_id,
                 'groups': user_detail['groups'],
-                'expires': time() + self.token_life})).get_response(self.app)
+                'expires': expires})).get_response(self.app)
             if resp.status_int // 100 != 2:
                 raise Exception('Could not create new token: %s %s' %
                                 (path, resp.status))
@@ -1281,6 +1285,7 @@ class Swauth(object):
         url = detail['storage'][detail['storage']['default']]
         return Response(request=req, body=resp.body,
             headers={'x-auth-token': token, 'x-storage-token': token,
+                     'x-auth-token-expires': str(int(expires - time())),
                      'x-storage-url': url})
 
     def handle_validate_token(self, req):
