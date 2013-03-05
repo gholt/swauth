@@ -1,3 +1,17 @@
+swauth (1.0.7-1) lucid; urgency=low
+
+  * New X-Auth-Token-Lifetime header a user can set to how long they'd like
+    their token to be good for.
+
+  * New max_token_life config value for capping the above.
+
+  * New X-Auth-Token-Expires header returned with the get token request.
+
+  * Switchover to swift.common.swob instead of WebOb; requires Swift >= 1.7.6
+    now.
+
+ -- Gregory Holt <gholt@rackspace.com>  Sat, 05 Mar 2013 18:54:00 +0000
+
 swauth (1.0.6-1) lucid; urgency=low
 
   * This release added passing OPTIONS requests through untouched, needed for
