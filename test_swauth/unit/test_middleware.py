@@ -471,6 +471,16 @@ class TestAuth(unittest.TestCase):
         req.acl = '.r:.example.com,.rlistings'
         self.assertEquals(self.test_auth.authorize(req), None)
 
+    def test_detect_reseller_request(self):
+        req = self._make_request('/v1/AUTH_admin', 
+                                 headers={'X-Auth-Token': 'AUTH_t'})
+        cache_key = 'AUTH_/auth/AUTH_t'
+        cache_entry = (time()+3600, '.reseller_admin')
+        req.environ['swift.cache'].set(cache_key, cache_entry)
+        resp = req.get_response(self.test_auth)
+        print req.environ
+        self.assertTrue(req.environ.get('reseller_request', False))
+
     def test_account_put_permissions(self):
         req = Request.blank('/v1/AUTH_new', environ={'REQUEST_METHOD': 'PUT'})
         req.remote_user = 'act:usr,act'
