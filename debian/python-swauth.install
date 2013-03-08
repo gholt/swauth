@@ -1,9 +1,0 @@
-usr/lib/python*/dist-packages/*
-usr/bin/swauth-add-account
-usr/bin/swauth-add-user
-usr/bin/swauth-cleanup-tokens
-usr/bin/swauth-delete-account
-usr/bin/swauth-delete-user
-usr/bin/swauth-list
-usr/bin/swauth-prep
-usr/bin/swauth-set-account-service

@@ -1,9 +1,0 @@
-Document: swauth-doc
-Title: Swauth Documentation
-Author: OpenStack
-Abstract: Sphinx documentation for Swauth
-Section: Network/File Transfer
-
-Format: HTML
-Index: /usr/share/doc/swauth-doc/html/index.html
-Files: /usr/share/doc/swauth-doc/html/*
