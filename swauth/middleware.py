@@ -210,6 +210,8 @@ class Swauth(object):
                     '%s,%s' % (user, 's3' if s3 else token)
                 env['swift.authorize'] = self.authorize
                 env['swift.clean_acl'] = clean_acl
+                if '.reseller_admin' in groups:
+                    env['reseller_request'] = True
             else:
                 # Unauthorized token
                 if self.reseller_prefix and token and \
