@@ -39,16 +39,16 @@ class FakeMemcache(object):
     def get(self, key):
         return self.store.get(key)
 
-    def set(self, key, value, timeout=0):
+    def set(self, key, value, timeout=0, time=0):
         self.store[key] = value
         return True
 
-    def incr(self, key, timeout=0):
+    def incr(self, key, timeout=0, time=0):
         self.store[key] = self.store.setdefault(key, 0) + 1
         return self.store[key]
 
     @contextmanager
-    def soft_lock(self, key, timeout=0, retries=5):
+    def soft_lock(self, key, timeout=0, retries=5, time=0):
         yield True
 
     def delete(self, key):
