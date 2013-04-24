@@ -39,16 +39,16 @@ class FakeMemcache(object):
     def get(self, key):
         return self.store.get(key)
 
-    def set(self, key, value, timeout=0):
+    def set(self, key, value, timeout=0, time=0):
         self.store[key] = value
         return True
 
-    def incr(self, key, timeout=0):
+    def incr(self, key, timeout=0, time=0):
         self.store[key] = self.store.setdefault(key, 0) + 1
         return self.store[key]
 
     @contextmanager
-    def soft_lock(self, key, timeout=0, retries=5):
+    def soft_lock(self, key, timeout=0, retries=5, time=0):
         yield True
 
     def delete(self, key):
@@ -470,6 +470,15 @@ class TestAuth(unittest.TestCase):
         req.referer = 'http://www.example.com/index.html'
         req.acl = '.r:.example.com,.rlistings'
         self.assertEquals(self.test_auth.authorize(req), None)
+
+    def test_detect_reseller_request(self):
+        req = self._make_request('/v1/AUTH_admin', 
+                                 headers={'X-Auth-Token': 'AUTH_t'})
+        cache_key = 'AUTH_/auth/AUTH_t'
+        cache_entry = (time()+3600, '.reseller_admin')
+        req.environ['swift.cache'].set(cache_key, cache_entry)
+        resp = req.get_response(self.test_auth)
+        self.assertTrue(req.environ.get('reseller_request'))
 
     def test_account_put_permissions(self):
         req = Request.blank('/v1/AUTH_new', environ={'REQUEST_METHOD': 'PUT'})
