@@ -1,4 +1,4 @@
-# Copyright (c) 2010-2011 OpenStack, LLC.
+# Copyright (c) 2010-2013 OpenStack, LLC.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ import gettext
 
 
 #: Version information (major, minor, revision[, 'dev']).
-version_info = (1, 0, 8)
+version_info = (1, 0, 9, 'dev')
 #: Version string 'major.minor.revision'.
 version = __version__ = ".".join(map(str, version_info))
 gettext.install('swauth')
