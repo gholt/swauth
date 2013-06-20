@@ -25,8 +25,7 @@ from optparse import OptionParser
 from sys import argv, exit
 from time import sleep, time
 
-from swift.common.client import Connection, ClientException
-
+from swiftclient.client import Connection, ClientException
 
 if __name__ == '__main__':
     gettext.install('swauth', unicode=1)
