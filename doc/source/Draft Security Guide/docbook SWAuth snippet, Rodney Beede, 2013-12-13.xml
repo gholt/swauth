@@ -1,0 +1,120 @@
+        <section xml:id="ch027_storage-idpH123">
+            <title>SWAuth</title>
+            <para>SWAuth is another popular alternative to Keystone.
+            In contrast to Keystone it stores the user accounts,
+            credentials, and metadata in object storage itself.  More
+            specifics about where the objects are stored can be found
+            on the SWAuth website at
+            <link xlink:href="http://gholt.github.io/swauth/">http://gholt.github.io/swauth/</link>.</para>
+            <para>SWAuth has these types of roles (or groups) for a
+            user:</para>
+            <informaltable>
+                <tbody>
+                    <tr>
+                        <td>.super_admin</td>
+                        <td>Can perform any action on any
+                        OpenStack Account, Container, or Object</td>
+                    </tr>
+                    <tr>
+                        <td>.reseller_admin</td>
+                        <td>Can perform most actions on
+                        any OpenStack Account, Container, or Object.
+                        Cannot create other reseller admins.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>.admin</td>
+                        <td>Can perform actions limited to
+                        the single OpenStack Account it belongs to</td>
+                    </tr>
+                    <tr>
+                        <td>Regular User</td>
+                        <td>Can access containers or
+                        objects they have permission to in the
+                        OpenStack Account to which they belong
+                        </td>
+                    </tr>
+                </tbody>
+            </informaltable>
+            <para>The following table provides a matrix of what each
+            role/group can do:</para>
+            <figure>
+                <title>Object storage SWAuth role matrix</title>
+                <mediaobject>
+                    <imageobject role="html">
+                        <imagedata contentdepth="393"
+                            contentwidth="1047"
+                            fileref="static/swift_swauth_roles_matrix.png"
+                            format="PNG" scalefit="1"/>
+                    </imageobject>
+                    <imageobject role="fo">
+                        <imagedata contentdepth="100%"
+                            fileref="static/swift_swauth_roles_matrix.png"
+                            format="PNG" scalefit="1" width="100%"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>
+            <warning><para>The super admin key is stored in
+            <filename>/etc/swift/proxy-server.conf</filename> and MUST
+            be protected!  See the File Permissions section for
+            guidance on protecting this file.  Frequent changing of
+            this key is recommended.</para></warning>
+            <para>One approach for administration is to create an
+            OpenStack Object Storage Account called "CloudAdmins" and
+            create reseller_admin users in that account.  Each user
+            will be able to do administrative functions in all the
+            other accounts.  Creating a reseller_admin will require
+            the super admin key.</para>
+            <para>Another useful way to secure the super admin key is
+            to have it exist only on the proxy server and retrieve the
+            key on-demand via ssh or by running the command on the
+            proxy server itself and using a grep to extract the key on
+            the fly.</para>
+            <section xml:id="ch027_storage-idpH1234">
+                <title>Protecting cloud administration</title>
+                <para>When using SWAuth you can actually designate
+                that certain proxy service nodes are to NOT allow
+                administrator API calls.  This is useful if you have
+                Proxy service nodes on the public Internet and wish to
+                restrict administration functions to only special
+                Proxy service nodes on a private network.  This is
+                done by setting the
+                <code>allow_account_managment</code> to false in your
+                <filename>proxy-server.conf</filename>.</para>
+                <para>Another important consideration is that the
+                SWAuth command line tools expose the user credentials
+                on the command-line.  The system from which they are
+                executed must be secure to prevent disclosure in the
+                process list to other uses.  Another option is to use
+                the SWAuth admin REST API to implement your own admin
+                CLI tools that don’t expose the key as a command-line
+                option.</para>
+            </section>
+            <section xml:id="ch027_storage-idpH12345">
+                <title>Salting and hashing passwords</title>
+                <para>SWAuth by default stores passwords in
+                clear-text.  It also offers a sha1 hashing provider,
+                but the salt used is global.  Additionally, no
+                iterations or key stretching is performed.  This is a
+                limitation of SWAuth.</para>
+                <para>You may optionally add-in your own hashing code
+                or provider as a hook to SWAuth.  See the
+                <link xlink:href="http://gholt.github.io/swauth/dev/authtypes.html">SWAuth code and site</link>
+                for details.</para>
+                <para>If you use the global salt be sure to secure it
+                and back it up.  If you have multiple proxy nodes each
+                one has to have a copy so that may be good enough for
+                you.  If you ever lose it or change it then all
+                existing user passwords will not work and will have to
+                be reset.</para>
+                <para>You should make sure the salt you choose is
+                generated using a cryptographically secure random
+                number generator and of sufficient length.  At least
+                20 characters is recommended.</para>
+                <para>The salt is stored in the
+                <filename>/etc/swift/proxy-server.conf</filename>
+                file which must be secured with proper ACLs.  See the
+                File Permissions section for guidance.</para>
+            </section>
+        </section><!-- SWAuth -->
+    </section><!-- Object Storage Authentication -->
