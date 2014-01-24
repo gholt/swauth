@@ -49,7 +49,7 @@ account administrators and `.reseller_admin` for reseller administrators may
 exist. Here's an example user JSON dictionary::
 
     {"auth": "plaintext:testing",
-     "groups": ["name": "test:tester", "name": "test", "name": ".admin"]}
+     "groups": [{"name": "test:tester"}, {"name": "test"}, {"name": ".admin"}]}
 
 To map an auth service account to a Swift storage account, the Service Account
 Id string is stored in the `X-Container-Meta-Account-Id` header for the
@@ -115,7 +115,7 @@ Here's an example token object's JSON dictionary::
     {"account": "test",
      "user": "tester",
      "account_id": "AUTH_8980f74b1cda41e483cbe0a925f448a9",
-     "groups": ["name": "test:tester", "name": "test", "name": ".admin"],
+     "groups": [{"name": "test:tester"}, {"name": "test"}, {"name": ".admin"}],
      "expires": 1291273147.1624689}
 
 To easily map a user to an already issued token, the token name is stored in
