@@ -142,7 +142,7 @@ Example Response::
     { "services":
       { "storage":
         { "default": "local",
-          "local": "https://<storage endpoint>/v1/<account_id>" },
+          "local": "https://<storage endpoint>/v1/<account_id>" }
       },
       "account_id": "<account_id>",
       "users": [ { "name": "user1" },
