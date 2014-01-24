@@ -66,22 +66,23 @@ if __name__ == '__main__':
         parsed_path = '/'
     elif parsed_path[-1] != '/':
         parsed_path += '/'
-    # Ensure the account exists
-    path = '%sv2/%s' % (parsed_path, account)
-    headers = {'X-Auth-Admin-User': options.admin_user,
-               'X-Auth-Admin-Key': options.admin_key}
-    if options.suffix:
-        headers['X-Account-Suffix'] = options.suffix
-    conn = http_connect(parsed.hostname, parsed.port, 'GET', path, headers,
-                        ssl=(parsed.scheme == 'https'))
-    resp = conn.getresponse()
-    if resp.status // 100 != 2:
-        headers['Content-Length'] = '0'
-        conn = http_connect(parsed.hostname, parsed.port, 'PUT', path, headers,
+    # Ensure the account exists if user is NOT trying to change his password
+    if not options.admin_user == (account + ':' + user):
+        path = '%sv2/%s' % (parsed_path, account)
+        headers = {'X-Auth-Admin-User': options.admin_user,
+                   'X-Auth-Admin-Key': options.admin_key}
+        if options.suffix:
+            headers['X-Account-Suffix'] = options.suffix
+        conn = http_connect(parsed.hostname, parsed.port, 'GET', path, headers,
                             ssl=(parsed.scheme == 'https'))
         resp = conn.getresponse()
         if resp.status // 100 != 2:
-            print 'Account creation failed: %s %s' % (resp.status, resp.reason)
+            headers['Content-Length'] = '0'
+            conn = http_connect(parsed.hostname, parsed.port, 'PUT', path, headers,
+                                ssl=(parsed.scheme == 'https'))
+            resp = conn.getresponse()
+            if resp.status // 100 != 2:
+                print 'Account creation failed: %s %s' % (resp.status, resp.reason)
     # Add the user
     path = '%sv2/%s/%s' % (parsed_path, account, user)
     headers = {'X-Auth-Admin-User': options.admin_user,
