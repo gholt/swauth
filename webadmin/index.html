@@ -167,7 +167,7 @@
                 swauth_area_reset();
                 request = new XMLHttpRequest();
                 request.onreadystatechange = swauth_area_load2;
-                request.open('GET', '/auth/v2/', true);
+                request.open('GET', './v2/', true);
                 request.setRequestHeader('X-Auth-Admin-User', creds_user);
                 request.setRequestHeader('X-Auth-Admin-Key', creds_key);
                 request.send();
@@ -205,7 +205,7 @@
             function add_account_save() {
                 request = new XMLHttpRequest();
                 request.onreadystatechange = add_account_save2;
-                request.open('PUT', '/auth/v2/' + document.getElementById('add_account_name').value, true);
+                request.open('PUT', './v2/' + document.getElementById('add_account_name').value, true);
                 request.setRequestHeader('X-Auth-Admin-User', creds_user);
                 request.setRequestHeader('X-Auth-Admin-Key', creds_key);
                 request.setRequestHeader('X-Account-Suffix', document.getElementById('add_account_suffix').value);
@@ -230,7 +230,7 @@
                 account = account_element.innerHTML;
                 request = new XMLHttpRequest();
                 request.onreadystatechange = account_area_load2;
-                request.open('GET', '/auth/v2/' + account, true);
+                request.open('GET', './v2/' + account, true);
                 request.setRequestHeader('X-Auth-Admin-User', creds_user);
                 request.setRequestHeader('X-Auth-Admin-Key', creds_key);
                 request.send();
@@ -293,7 +293,7 @@
                 services[service][endpoint] = field.value;
                 request = new XMLHttpRequest();
                 request.onreadystatechange = endpoint_save2;
-                request.open('POST', '/auth/v2/' + account + '/.services', true);
+                request.open('POST', './v2/' + account + '/.services', true);
                 request.setRequestHeader('X-Auth-Admin-User', creds_user);
                 request.setRequestHeader('X-Auth-Admin-Key', creds_key);
                 request.send(JSON.stringify(services));
@@ -329,7 +329,7 @@
             function add_user_save() {
                 request = new XMLHttpRequest();
                 request.onreadystatechange = add_user_save2;
-                request.open('PUT', '/auth/v2/' + account + '/' + document.getElementById('add_user_name').value, true);
+                request.open('PUT', './v2/' + account + '/' + document.getElementById('add_user_name').value, true);
                 request.setRequestHeader('X-Auth-Admin-User', creds_user);
                 request.setRequestHeader('X-Auth-Admin-Key', creds_key);
                 request.setRequestHeader('X-Auth-User-Key', document.getElementById('add_user_key').value);
@@ -355,7 +355,7 @@
             function delete_account() {
                 request = new XMLHttpRequest();
                 request.onreadystatechange = delete_account2;
-                request.open('DELETE', '/auth/v2/' + account, true);
+                request.open('DELETE', './v2/' + account, true);
                 request.setRequestHeader('X-Auth-Admin-User', creds_user);
                 request.setRequestHeader('X-Auth-Admin-Key', creds_key);
                 request.send();
@@ -379,7 +379,7 @@
                 user = user_element.innerHTML;
                 request = new XMLHttpRequest();
                 request.onreadystatechange = user_area_load2;
-                request.open('GET', '/auth/v2/' + account + '/' + user, true);
+                request.open('GET', './v2/' + account + '/' + user, true);
                 request.setRequestHeader('X-Auth-Admin-User', creds_user);
                 request.setRequestHeader('X-Auth-Admin-Key', creds_key);
                 request.send();
@@ -414,7 +414,7 @@
             function delete_user() {
                 request = new XMLHttpRequest();
                 request.onreadystatechange = delete_user2;
-                request.open('DELETE', '/auth/v2/' + account + '/' + user, true);
+                request.open('DELETE', './v2/' + account + '/' + user, true);
                 request.setRequestHeader('X-Auth-Admin-User', creds_user);
                 request.setRequestHeader('X-Auth-Admin-Key', creds_key);
                 request.send();
@@ -490,7 +490,7 @@
                 if (document.getElementById('auth_update_field').value) {
                     request = new XMLHttpRequest();
                     request.onreadystatechange = auth_save2;
-                    request.open('GET', '/auth/v2/' + account + '/' + user, true);
+                    request.open('GET', './v2/' + account + '/' + user, true);
                     request.setRequestHeader('X-Auth-Admin-User', creds_user);
                     request.setRequestHeader('X-Auth-Admin-Key', creds_key);
                     request.send();
@@ -503,7 +503,7 @@
                         data = JSON.parse(request.responseText);
                         request = new XMLHttpRequest();
                         request.onreadystatechange = auth_save3;
-                        request.open('PUT', '/auth/v2/' + account_element.innerHTML + '/' + user_element.innerHTML, true);
+                        request.open('PUT', './v2/' + account_element.innerHTML + '/' + user_element.innerHTML, true);
                         request.setRequestHeader('X-Auth-Admin-User', creds_user);
                         request.setRequestHeader('X-Auth-Admin-Key', creds_key);
                         request.setRequestHeader('X-Auth-User-Key', document.getElementById('auth_update_field').value);
