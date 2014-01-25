@@ -275,7 +275,7 @@ Example Response::
     HTTP/1.1 200 Ok
 
     { "groups": [ { "name": "<account>:<user>" },
-                  { "name": "<user>" },
+                  { "name": "<account>" },
                   { "name": ".admin" } ],
       "auth" : "plaintext:password" }
 
