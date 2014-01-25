@@ -165,13 +165,13 @@ Valid return codes:
 
 Example Request::
 
-    GET /auth/<api version>/<new_account> HTTP/1.1
+    PUT /auth/<api version>/<new_account> HTTP/1.1
     X-Auth-Admin-User: .super_admin
     X-Auth-Admin-Key: swauthkey
 
 Example Curl Request::
 
-    curl -D - https://<endpoint>/auth/v2/<new_account> \
+    curl -XPUT -D - https://<endpoint>/auth/v2/<new_account> \
     -H "X-Auth-Admin-User: .super_admin" \
     -H "X-Auth-Admin-Key: swauthkey"
 
