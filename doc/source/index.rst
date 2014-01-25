@@ -42,7 +42,7 @@ Before discussing how to install Swauth within a Swift system, it might help to 
 
     d. Once an account is created, the URL given to users for that account will not change, even if the ``default_swift_cluster`` config value changes. This is so that you can use multiple clusters with the same Swauth system; ``default_swift_cluster`` just points to the one where you want new users to go.
 
-    f. You can change the stored URL for an account if need be with the ``swauth-set-account-service`` command line tool or a POST request (see :ref:`API <api_set_service_endpoints>`).
+    e. You can change the stored URL for an account if need be with the ``swauth-set-account-service`` command line tool or a POST request (see :ref:`API <api_set_service_endpoints>`).
 
 
 Install
