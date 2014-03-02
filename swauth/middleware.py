@@ -1103,7 +1103,7 @@ class Swauth(object):
             return HTTPBadRequest(request=req)
 
         # if user to be deleted is reseller_admin, then requesting
-        # user must also be a reseller_admin
+        # user must be the super_admin
         is_reseller_admin = self.is_user_reseller_admin(req, account, user)
         if not is_reseller_admin and not req.credentials_valid:
             # if user to be deleted can't be found, return 404
