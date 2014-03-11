@@ -3888,6 +3888,14 @@ class TestAuth(unittest.TestCase):
         self.assertEquals(resp.environ['swift.authorize'],
                           self.test_auth.denied_response)
 
+    def test_default_storage_policy(self):
+        ath = auth.filter_factory({})(FakeApp())
+        self.assertEquals(ath.default_storage_policy, None)
+
+        ath = \
+            auth.filter_factory({'default_storage_policy': 'ssd'})(FakeApp())
+        self.assertEquals(ath.default_storage_policy, 'ssd')
+
 
 if __name__ == '__main__':
     unittest.main()

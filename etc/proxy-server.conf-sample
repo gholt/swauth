@@ -57,6 +57,11 @@ use = egg:swauth#swauth
 # you're not going to use such middleware and you want a bit of extra security,
 # you can set this to false.
 #   allow_overrides = true
+# This allows swauth to PUT authentication related objects over a specific
+# storage policy instead of the default one. When this is set, all requests
+# sent by swauth will contain X-Storage-Policy header with its value set
+# to the value specified here.
+#   default_storage_policy =
 # Highly recommended to change this. If you comment this out, the Swauth
 # administration features will be disabled for this proxy.
 super_admin_key = swauthkey
