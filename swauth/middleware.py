@@ -145,6 +145,7 @@ class Swauth(object):
             conf.get('allow_overrides', 't').lower() in TRUE_VALUES
         self.agent = '%(orig)s Swauth'
         self.swift_source = 'SWTH'
+        self.default_storage_policy = conf.get('default_storage_policy', None)
 
     def make_pre_authed_request(self, env, method=None, path=None, body=None,
                                 headers=None):
@@ -159,6 +160,12 @@ class Swauth(object):
         Since we're doing this anyway, we may as well set the user
         agent too since we always do that.
         """
+        if self.default_storage_policy:
+            sp = self.default_storage_policy
+            if headers:
+                headers.update({'X-Storage-Policy': sp})
+            else:
+                headers = {'X-Storage-Policy': sp}
         subreq = swift.common.wsgi.make_pre_authed_request(
             env, method=method, path=path, body=body, headers=headers,
             agent=self.agent)
