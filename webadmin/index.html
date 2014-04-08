@@ -333,10 +333,10 @@
                 request.setRequestHeader('X-Auth-Admin-User', creds_user);
                 request.setRequestHeader('X-Auth-Admin-Key', creds_key);
                 request.setRequestHeader('X-Auth-User-Key', document.getElementById('add_user_key').value);
-                if (document.getElementById('add_user_admin').value) {
+                if (document.getElementById('add_user_admin').checked) {
                     request.setRequestHeader('X-Auth-User-Admin', 'true');
                 }
-                if (document.getElementById('add_user_reseller_admin').value) {
+                if (document.getElementById('add_user_reseller_admin').checked) {
                     request.setRequestHeader('X-Auth-User-Reseller-Admin', 'true');
                 }
                 request.send();
