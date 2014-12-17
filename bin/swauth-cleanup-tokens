@@ -18,6 +18,7 @@ try:
     import simplejson as json
 except ImportError:
     import json
+from getpass import getpass
 import gettext
 import re
 from datetime import datetime, timedelta
@@ -56,6 +57,8 @@ if __name__ == '__main__':
     (options, args) = parser.parse_args(args)
     if len(args) != 0:
         parser.parse_args(['-h'])
+    if not options.admin_key:
+        options.admin_key = getpass()
     options.admin_url = options.admin_url.rstrip('/')
     if not options.admin_url.endswith('/v1.0'):
         options.admin_url += '/v1.0'

@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from getpass import getpass
 import gettext
 from optparse import OptionParser
 from os.path import basename
@@ -40,6 +41,8 @@ if __name__ == '__main__':
     (options, args) = parser.parse_args(args)
     if len(args) != 1:
         parser.parse_args(['-h'])
+    if not options.admin_key:
+        options.admin_key = getpass()
     account = args[0]
     parsed = urlparse(options.admin_url)
     if parsed.scheme not in ('http', 'https'):
