@@ -18,6 +18,7 @@ try:
     import simplejson as json
 except ImportError:
     import json
+from getpass import getpass
 import gettext
 from optparse import OptionParser
 from os.path import basename
@@ -60,6 +61,8 @@ If the [user] is '.groups', the active groups for the account will be listed.
     (options, args) = parser.parse_args(args)
     if len(args) > 2:
         parser.parse_args(['-h'])
+    if not options.admin_key:
+        options.admin_key = getpass()
     parsed = urlparse(options.admin_url)
     if parsed.scheme not in ('http', 'https'):
         raise Exception('Cannot handle protocol scheme %s for url %s' %
