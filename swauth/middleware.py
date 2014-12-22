@@ -192,6 +192,8 @@ class Swauth(object):
         will be routed through the internal auth request handler (self.handle).
         This is to handle creating users, accounts, granting tokens, etc.
         """
+        if 'keystone.identity' in env:
+            return self.app(env, start_response)
         # We're going to consider OPTIONS requests harmless and the CORS
         # support in the Swift proxy needs to get them.
         if env.get('REQUEST_METHOD') == 'OPTIONS':
