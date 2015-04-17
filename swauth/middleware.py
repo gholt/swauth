@@ -757,24 +757,7 @@ class Swauth(object):
         account = req.path_info_pop()
         if req.path_info or not account or account[0] == '.':
             return HTTPBadRequest(request=req)
-        # Ensure the container in the main auth account exists (this
-        # container represents the new account)
-        path = quote('/v1/%s/%s' % (self.auth_account, account))
-        resp = self.make_pre_authed_request(
-            req.environ, 'HEAD', path).get_response(self.app)
-        if resp.status_int == 404:
-            resp = self.make_pre_authed_request(
-                req.environ, 'PUT', path).get_response(self.app)
-            if resp.status_int // 100 != 2:
-                raise Exception('Could not create account within main auth '
-                    'account: %s %s' % (path, resp.status))
-        elif resp.status_int // 100 == 2:
-            if 'x-container-meta-account-id' in resp.headers:
-                # Account was already created
-                return HTTPAccepted(request=req)
-        else:
-            raise Exception('Could not verify account within main auth '
-                'account: %s %s' % (path, resp.status))
+
         account_suffix = req.headers.get('x-account-suffix')
         if not account_suffix:
             account_suffix = str(uuid4())
@@ -798,6 +781,24 @@ class Swauth(object):
                  'host': self.dsc_parsed2.hostname,
                  'port': self.dsc_parsed2.port, 'path': path})
             raise
+        # Ensure the container in the main auth account exists (this
+        # container represents the new account)
+        path = quote('/v1/%s/%s' % (self.auth_account, account))
+        resp = self.make_pre_authed_request(
+            req.environ, 'HEAD', path).get_response(self.app)
+        if resp.status_int == 404:
+            resp = self.make_pre_authed_request(
+                req.environ, 'PUT', path).get_response(self.app)
+            if resp.status_int // 100 != 2:
+                raise Exception('Could not create account within main auth '
+                    'account: %s %s' % (path, resp.status))
+        elif resp.status_int // 100 == 2:
+            if 'x-container-meta-account-id' in resp.headers:
+                # Account was already created
+                return HTTPAccepted(request=req)
+        else:
+            raise Exception('Could not verify account within main auth '
+                'account: %s %s' % (path, resp.status))
         # Record the mapping from account id back to account name
         path = quote('/v1/%s/.account_id/%s%s' %
                      (self.auth_account, self.reseller_prefix, account_suffix))
