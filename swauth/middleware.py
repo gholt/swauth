@@ -471,11 +471,11 @@ class Swauth(object):
                 response = self.handle_request(req)(env, start_response)
                 self.posthooklogger(env, req)
                 return response
-        except (Exception, TimeoutError):
+        except (Exception, TimeoutError) as e:
             print "EXCEPTION IN handle: %s: %s" % (format_exc(), env)
             start_response('500 Server Error',
                            [('Content-Type', 'text/plain')])
-            return ['Internal server error.\n']
+            return ["Internal server error: %s\n" % (e)]
 
     def handle_request(self, req):
         """
