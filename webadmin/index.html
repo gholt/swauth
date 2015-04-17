@@ -47,6 +47,13 @@
             var account_area_selected_background = '#aaccff';
             var endpoints;
 
+            function msg_http_error(request) {
+                return 'Server returned status:\n' +
+                    request.status + ' ' + request.statusText +
+                    '\n\nDetail:\n' +
+                    request.responseText;
+            }
+
             function get_bounds(element) {
                 bounds = {};
                 bounds.top = 0;
@@ -102,15 +109,25 @@
             function creds_clicked() {
                 creds_area = document.getElementById('creds_area');
                 if (creds_logged_in) {
+                    creds_area.innerHTML = 'User: <input id="creds_user" type="text" size="10" /> &nbsp; Key: <input id="creds_key" type="password" size="10" onkeypress="return creds_submitter(event)" /> &nbsp; <input type="button" onclick="return creds_clicked();" value="Login" />';
+                    document.getElementById('swauth_area').innerHTML = '';
+                    document.getElementById('creds_user').value = creds_user;
+
+                    creds_logged_in = false;
                     creds_user = '';
                     creds_key = '';
-                    creds_area.innerHTML = 'User: <input id="creds_user" type="text" size="10" /> &nbsp; Key: <input id="creds_key" type="password" size="10" onkeypress="return creds_submitter(event)" />';
-                    document.getElementById('swauth_area').innerHTML = '';
-                    creds_logged_in = false;
                     document.getElementById("creds_user").focus();
                 } else {
                     creds_user = document.getElementById('creds_user').value;
                     creds_key = document.getElementById('creds_key').value;
+                    if (!creds_user) {
+                        alert('Please fill user');
+                        return;
+                    }
+                    if (!creds_key) {
+                        alert('Please fill key');
+                        return;
+                    }
                     creds_area.innerHTML = '<div>Logged in as ' + creds_user + ' <span id="logout" onclick="creds_clicked()">Logout</span></div>';
                     creds_logged_in = true;
                     swauth_area_load();
@@ -185,7 +202,7 @@
                         content += '</table>';
                         swauth_area.innerHTML = content;
                     } else {
-                        swauth_area.innerHTML = 'Server returned status: ' + request.status + ' ' + request.statusText;
+                        swauth_area.innerHTML = msg_http_error(request);
                     }
                 }
             }
@@ -217,7 +234,7 @@
                     if (request.status >= 200 && request.status <= 299) {
                         swauth_area_load();
                     } else {
-                        alert('Server returned status: ' + request.status + ' ' + request.statusText);
+                        alert(msg_http_error(request));
                     }
                 }
             }
@@ -271,7 +288,7 @@
                         content += '</table>';
                         account_area.innerHTML = content;
                     } else {
-                        account_area.innerHTML = 'Server returned status: ' + request.status + ' ' + request.statusText;
+                        account_area.innerHTML = msg_http_error(request);
                     }
                     bounds = get_bounds(document.getElementById('account_' + account_selection));
                     account_area.style.position = 'absolute';
@@ -304,7 +321,7 @@
                     if (request.status >= 200 && request.status <= 299) {
                         account_area_load(account_selection);
                     } else {
-                        alert('Server returned status: ' + request.status + ' ' + request.statusText);
+                        alert(msg_http_error(request));
                     }
                 }
             }
@@ -347,12 +364,18 @@
                     if (request.status >= 200 && request.status <= 299) {
                         account_area_load(account_selection);
                     } else {
-                        alert('Server returned status: ' + request.status + ' ' + request.statusText);
+                        alert(msg_http_error(request));
                     }
                 }
             }
 
             function delete_account() {
+                var user = document.getElementById('user_0');
+                if (user) {
+                    alert('Remove all users first');
+                    return;
+                }
+
                 request = new XMLHttpRequest();
                 request.onreadystatechange = delete_account2;
                 request.open('DELETE', './v2/' + account, true);
@@ -366,7 +389,7 @@
                     if (request.status >= 200 && request.status <= 299) {
                         swauth_area_load();
                     } else {
-                        alert('Server returned status: ' + request.status + ' ' + request.statusText);
+                        alert(msg_http_error(request));
                     }
                 }
             }
@@ -402,7 +425,7 @@
                         content += '</table>';
                         user_area.innerHTML = content;
                     } else {
-                        user_area.innerHTML = 'Server returned status: ' + request.status + ' ' + request.statusText;
+                        user_area.innerHTML = msg_http_error(request);
                     }
                     bounds = get_bounds(document.getElementById('user_' + user_selection));
                     user_area.style.position = 'absolute';
@@ -425,7 +448,7 @@
                     if (request.status >= 200 && request.status <= 299) {
                     account_area_load(account_selection);
                     } else {
-                        alert('Server returned status: ' + request.status + ' ' + request.statusText);
+                        alert(msg_http_error(request));
                     }
                 }
             }
@@ -524,7 +547,7 @@
                         }
                         request.send();
                     } else {
-                        alert('Server returned status: ' + request.status + ' ' + request.statusText);
+                        alert(msg_http_error(request));
                     }
                 }
             }
@@ -534,7 +557,7 @@
                     if (request.status >= 200 && request.status <= 299) {
                         user_area_load(user_selection);
                     } else {
-                        alert('Server returned status: ' + request.status + ' ' + request.statusText);
+                        alert(msg_http_error(request));
                     }
                 }
             }
