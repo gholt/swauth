@@ -47,11 +47,9 @@ use = egg:swauth#swauth
 #   max_token_life = <same as token_life>
 # Specifies how the user key is stored. The default is 'plaintext', leaving the
 # key unsecured but available for key-signing features if such are ever added.
-# An alternative is 'sha1' which stores only a one-way hash of the key leaving
+# An alternative is 'sha512' which stores only a one-way hash of the key leaving
 # it secure but unavailable for key-signing.
 #   auth_type = plaintext
-# Used if the auth_type is sha1 or another method that can make use of a salt.
-#   auth_type_salt = swauthsalt
 # This allows middleware higher in the WSGI pipeline to override auth
 # processing, useful for middleware such as tempurl and formpost. If you know
 # you're not going to use such middleware and you want a bit of extra security,

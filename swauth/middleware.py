@@ -140,7 +140,6 @@ class Swauth(object):
         if self.auth_encoder is None:
             raise Exception('Invalid auth_type in config file: %s'
                              % self.auth_type)
-        self.auth_encoder.salt = conf.get('auth_type_salt', 'swauthsalt')
         self.allow_overrides = \
             conf.get('allow_overrides', 't').lower() in TRUE_VALUES
         self.agent = '%(orig)s Swauth'
