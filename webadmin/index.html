@@ -110,8 +110,8 @@
                 creds_area = document.getElementById('creds_area');
                 if (creds_logged_in) {
                     creds_area.innerHTML = 'User: <input id="creds_user" type="text" size="10" /> &nbsp; Key: <input id="creds_key" type="password" size="10" onkeypress="return creds_submitter(event)" /> &nbsp; <input type="button" onclick="return creds_clicked();" value="Login" />';
-                    document.getElementById('swauth_area').innerHTML = '';
                     document.getElementById('creds_user').value = creds_user;
+                    swauth_area_reset();
 
                     creds_logged_in = false;
                     creds_user = '';
