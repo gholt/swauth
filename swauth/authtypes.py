@@ -111,8 +111,8 @@ class Sha1(object):
         :returns: True if the supplied key is valid, False otherwise
         """
 
-        [type, rest] = creds.split(':')
-        [salt, enc] = rest.split('$')
+        type, rest = creds.split(':')
+        salt, enc = rest.split('$')
 
         return self.encode_w_salt(salt, key) == creds
 
@@ -159,7 +159,7 @@ class Sha512(object):
         :returns: True if the supplied key is valid, False otherwise
         """
 
-        [type, rest] = creds.split(':')
-        [salt, enc] = rest.split('$')
+        type, rest = creds.split(':')
+        salt, enc = rest.split('$')
 
         return self.encode_w_salt(salt, key) == creds
